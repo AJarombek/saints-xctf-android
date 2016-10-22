@@ -3,4 +3,9 @@
     <string name="saintsxctf">SaintsXCTF</string>
     <string name="log_in">Log In</string>
     <string name="sign_up">Sign Up</string>
+    <string name="newlog">newlog</string>
+    <string name="home">home</string>
+    <string name="profile">profile</string>
+    <string name="group">group</string>
+    <string name="settings">settings</string>
 </resources>
