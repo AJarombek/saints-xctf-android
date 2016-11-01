@@ -13,4 +13,17 @@
     <string name="date">Date:</string>
     <string name="_01_01_2017">01-01-2017</string>
     <string name="workout_type">Workout Type:</string>
+    
+    <string-array name="log_type_array">
+        <item>Run</item>
+        <item>Bike</item>
+        <item>Swim</item>
+        <item>Other</item>
+    </string-array>
+    
+    <string-array name="log_metric_array">
+        <item>Miles</item>
+        <item>Kilometers</item>
+        <item>Meters</item>
+    </string-array>
 </resources>
