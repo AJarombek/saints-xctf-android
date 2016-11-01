@@ -8,4 +8,9 @@
     <string name="profile">profile</string>
     <string name="group">group</string>
     <string name="settings">settings</string>
+    <string name="run_name">Run Name:</string>
+    <string name="location">Location:</string>
+    <string name="date">Date:</string>
+    <string name="_01_01_2017">01-01-2017</string>
+    <string name="workout_type">Workout Type:</string>
 </resources>
