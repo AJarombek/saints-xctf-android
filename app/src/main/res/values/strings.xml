@@ -21,6 +21,7 @@
     <string name="title_log_dialog">Enter a Log</string>
     <string name="title_settings_dialog">Change Settings</string>
     <string name="title_pickgroup_dialog">Pick Groups</string>
+    <string name="feel">Feel:</string>
 
     <string-array name="log_type_array">
         <item>Run</item>
