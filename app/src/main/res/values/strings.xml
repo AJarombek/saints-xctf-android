@@ -29,7 +29,7 @@
         <item>Swim</item>
         <item>Other</item>
     </string-array>
-    
+
     <string-array name="log_metric_array">
         <item>Miles</item>
         <item>Kilometers</item>
