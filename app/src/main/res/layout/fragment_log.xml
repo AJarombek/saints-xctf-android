@@ -64,7 +64,7 @@
         android:id="@+id/log_date_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pick Date"
+        android:text="@string/pick_date"
         android:layout_gravity="center_vertical|end"
         android:layout_column="1"
         android:layout_row="2"/>
@@ -104,7 +104,7 @@
         android:id="@+id/log_distance_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Distance: "
+        android:text="@string/distance"
         android:textSize="18sp"
         android:layout_gravity="center_vertical|end"
         android:layout_column="0"
@@ -123,7 +123,7 @@
         android:id="@+id/log_metric_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Metric: "
+        android:text="@string/metric"
         android:textSize="18sp"
         android:layout_gravity="center_vertical|end"
         android:layout_column="2"
@@ -141,7 +141,7 @@
         android:id="@+id/log_time_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Time: "
+        android:text="@string/time"
         android:textSize="18sp"
         android:layout_gravity="center_vertical|end"
         android:layout_column="0"
@@ -180,21 +180,30 @@
         android:id="@+id/log_description_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Description: "
+        android:text="@string/description"
         android:textSize="18sp"
         android:layout_gravity="center_vertical|end"
         android:layout_column="0"
         android:layout_row="6"/>
 
-    <Spinner
+    <EditText
         android:id="@+id/log_description"
         android:inputType="text"
+        android:lines="2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="1"
-        android:layout_columnSpan="3"
+        android:layout_columnSpan="2"
         android:layout_rowSpan="2"
         android:layout_row="6"
         android:layout_gravity="center_vertical|fill_horizontal"/>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:id="@+id/logView"
+        android:layout_column="0"
+        android:layout_columnSpan="2"
+        android:layout_gravity="fill_horizontal"/>
 
 </GridLayout>

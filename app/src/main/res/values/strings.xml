@@ -13,7 +13,15 @@
     <string name="date">Date:</string>
     <string name="_01_01_2017">01-01-2017</string>
     <string name="workout_type">Workout Type:</string>
-    
+    <string name="pick_date">Pick Date</string>
+    <string name="distance">Distance:</string>
+    <string name="metric">Metric:</string>
+    <string name="time">Time:</string>
+    <string name="description">Description:</string>
+    <string name="title_log_dialog">Enter a Log</string>
+    <string name="title_settings_dialog">Change Settings</string>
+    <string name="title_pickgroup_dialog">Pick Groups</string>
+
     <string-array name="log_type_array">
         <item>Run</item>
         <item>Bike</item>
