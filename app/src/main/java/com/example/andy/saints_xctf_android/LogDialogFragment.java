@@ -13,8 +13,6 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-// class for the Select Color dialog
-
 /**
  * Class for the Log DialogFragment which is used for creating new exercise logs
  * @author Andrew Jarombek

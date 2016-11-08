@@ -15,10 +15,10 @@ import android.view.ViewGroup;
  * @author Andrew Jarombek
  * @since 11/7/2016 -
  */
-public class MainFragment extends Fragment {
+public class HomeFragment extends Fragment {
 
     private View v;
-    private static final String TAG = "MainFragment: ";
+    private static final String TAG = "HomeFragment: ";
 
     /**
      * Android onCreateView method
@@ -31,7 +31,7 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.main, container, false);
+        View view = inflater.inflate(R.layout.home, container, false);
         Log.d(TAG, "Inside onCreateView.");
 
         setHasOptionsMenu(true);
