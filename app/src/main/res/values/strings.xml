@@ -22,6 +22,11 @@
     <string name="title_settings_dialog">Change Settings</string>
     <string name="title_pickgroup_dialog">Pick Groups</string>
     <string name="feel">Feel:</string>
+    <string name="password">Password: </string>
+    <string name="username">Username: </string>
+    <string name="first_name">First Name:</string>
+    <string name="confirm_password">Confirm Password:</string>
+    <string name="last_name">Last Name:</string>
 
     <string-array name="log_type_array">
         <item>Run</item>
