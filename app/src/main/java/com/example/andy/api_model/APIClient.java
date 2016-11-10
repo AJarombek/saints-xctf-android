@@ -2,6 +2,8 @@ package com.example.andy.api_model;
 
 import android.util.Log;
 
+import java.util.List;
+
 /**
  * Class used to hit endpoints on the REST API
  * @author Andrew Jarombek
@@ -11,58 +13,70 @@ public class APIClient {
 
     private static final String TAG = "APIRequest: ";
 
-    public static String usersGetRequest() {
-        return getRequest("localhost/saints-xctf/api/api.php/users");
+    public static List<User> usersGetRequest() {
+        String response = getRequest("localhost/saints-xctf/api/api.php/users");
+        return JSONConverter.toUserList(response);
     }
 
-    public static String userGetRequest(String username) {
-        return getRequest("localhost/saints-xctf/api/api.php/users/" + username);
+    public static User userGetRequest(String username) {
+        String response = getRequest("localhost/saints-xctf/api/api.php/users/" + username);
+        return JSONConverter.toUser(response);
     }
 
-    public static String logsGetRequest() {
-        return getRequest("localhost/saints-xctf/api/api.php/logs");
+    public static List<com.example.andy.api_model.Log> logsGetRequest() {
+        String response = getRequest("localhost/saints-xctf/api/api.php/logs");
+        return JSONConverter.toLogList(response);
     }
 
-    public static String logGetRequest(int logno) {
-        return getRequest("localhost/saints-xctf/api/api.php/logs/" + logno);
+    public static com.example.andy.api_model.Log logGetRequest(int logno) {
+        String response = getRequest("localhost/saints-xctf/api/api.php/logs/" + logno);
+        return JSONConverter.toLog(response);
     }
 
-    public static String groupsGetRequest() {
-        return getRequest("localhost/saints-xctf/api/api.php/groups");
+    public static List<Group> groupsGetRequest() {
+        String response = getRequest("localhost/saints-xctf/api/api.php/groups");
+        return JSONConverter.toGroupList(response);
     }
 
-    public static String groupGetRequest(String groupname) {
-        return getRequest("localhost/saints-xctf/api/api.php/groups/" + groupname);
+    public static Group groupGetRequest(String groupname) {
+        String response = getRequest("localhost/saints-xctf/api/api.php/groups/" + groupname);
+        return JSONConverter.toGroup(response);
     }
 
-    public static String logfeedGetRequest(String[] params) {
+    public static List<com.example.andy.api_model.Log> logfeedGetRequest(String[] params) {
         String paramtype = params[0];
         String sortparam = params[1];
         String limit = params[2];
         String offset = params[3];
 
-        return getRequest("localhost/saints-xctf/api/api.php/logfeed/" + paramtype + "/"
+        String response = getRequest("localhost/saints-xctf/api/api.php/logfeed/" + paramtype + "/"
                             + sortparam + "/" + limit + "/" + offset);
+        return JSONConverter.toLogList(response);
     }
 
-    public static String userPostRequest(String user) {
-        return postRequest("localhost/saints-xctf/api/api.php/user", user);
+    public static User userPostRequest(String user) {
+        String response = postRequest("localhost/saints-xctf/api/api.php/user", user);
+        return JSONConverter.toUser(response);
     }
 
-    public static String logPostRequest(String log) {
-        return postRequest("localhost/saints-xctf/api/api.php/log", log);
+    public static com.example.andy.api_model.Log logPostRequest(String log) {
+        String response = postRequest("localhost/saints-xctf/api/api.php/log", log);
+        return JSONConverter.toLog(response);
     }
 
-    public static String userPutRequest(String username, String user) {
-        return putRequest("localhost/saints-xctf/api/api.php/users/" + username, user);
+    public static User userPutRequest(String username, String user) {
+        String response = putRequest("localhost/saints-xctf/api/api.php/users/" + username, user);
+        return JSONConverter.toUser(response);
     }
 
-    public static String logPutRequest(int logno, String log) {
-        return putRequest("localhost/saints-xctf/api/api.php/logs/" + logno, log);
+    public static com.example.andy.api_model.Log logPutRequest(int logno, String log) {
+        String response = putRequest("localhost/saints-xctf/api/api.php/logs/" + logno, log);
+        return JSONConverter.toLog(response);
     }
 
-    public static String groupPutRequest(String groupname, String group) {
-        return putRequest("localhost/saints-xctf/api/api.php/groups/" + groupname, group);
+    public static Group groupPutRequest(String groupname, String group) {
+        String response = putRequest("localhost/saints-xctf/api/api.php/groups/" + groupname, group);
+        return JSONConverter.toGroup(response);
     }
 
     public static boolean userDeleteRequest(String username) {
