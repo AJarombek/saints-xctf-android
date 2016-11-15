@@ -2,12 +2,18 @@ package com.example.andy.saints_xctf_android;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.EditText;
+
+import com.example.andy.api_model.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for the Login DialogFragment which is used as a form to login users
@@ -46,10 +52,27 @@ public class LoginDialogFragment extends DialogFragment {
         builder.setPositiveButton("Log In", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                String username = login_username.getText().toString();
+                String password = login_password.getText().toString();
 
+                LoginTask loginTask = new LoginTask();
+                loginTask.execute(username, password);
             }
         });
 
         return builder.create();
+    }
+
+    class LoginTask extends AsyncTask<String, Void, User> {
+
+        @Override
+        protected User doInBackground(String... params) {
+
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+            super.onPostExecute(user);
+        }
     }
 }
