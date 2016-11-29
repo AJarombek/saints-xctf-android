@@ -14,7 +14,7 @@ public class APIClient {
 
     private static final String TAG = "APIRequest: ";
 
-    public static List<User> usersGetRequest() {
+    public static List<User> usersGetRequest() throws IOException {
         String response = getRequest("localhost/saints-xctf/api/api.php/users");
         return JSONConverter.toUserList(response);
     }
@@ -24,27 +24,28 @@ public class APIClient {
         return JSONConverter.toUser(response);
     }
 
-    public static List<com.example.andy.api_model.Log> logsGetRequest() {
+    public static List<com.example.andy.api_model.Log> logsGetRequest() throws IOException {
         String response = getRequest("localhost/saints-xctf/api/api.php/logs");
         return JSONConverter.toLogList(response);
     }
 
-    public static com.example.andy.api_model.Log logGetRequest(int logno) {
+    public static com.example.andy.api_model.Log logGetRequest(int logno) throws IOException {
         String response = getRequest("localhost/saints-xctf/api/api.php/logs/" + logno);
         return JSONConverter.toLog(response);
     }
 
-    public static List<Group> groupsGetRequest() {
+    public static List<Group> groupsGetRequest() throws IOException {
         String response = getRequest("localhost/saints-xctf/api/api.php/groups");
         return JSONConverter.toGroupList(response);
     }
 
-    public static Group groupGetRequest(String groupname) {
+    public static Group groupGetRequest(String groupname) throws IOException {
         String response = getRequest("localhost/saints-xctf/api/api.php/groups/" + groupname);
         return JSONConverter.toGroup(response);
     }
 
-    public static List<com.example.andy.api_model.Log> logfeedGetRequest(String[] params) {
+    public static List<com.example.andy.api_model.Log> logfeedGetRequest(String[] params)
+            throws IOException {
         String paramtype = params[0];
         String sortparam = params[1];
         String limit = params[2];
@@ -60,7 +61,7 @@ public class APIClient {
         return JSONConverter.toUser(response);
     }
 
-    public static com.example.andy.api_model.Log logPostRequest(String log) {
+    public static com.example.andy.api_model.Log logPostRequest(String log) throws IOException {
         String response = postRequest("localhost/saints-xctf/api/api.php/log", log);
         return JSONConverter.toLog(response);
     }
@@ -70,12 +71,13 @@ public class APIClient {
         return JSONConverter.toUser(response);
     }
 
-    public static com.example.andy.api_model.Log logPutRequest(int logno, String log) {
+    public static com.example.andy.api_model.Log logPutRequest(int logno, String log)
+            throws IOException {
         String response = putRequest("localhost/saints-xctf/api/api.php/logs/" + logno, log);
         return JSONConverter.toLog(response);
     }
 
-    public static Group groupPutRequest(String groupname, String group) {
+    public static Group groupPutRequest(String groupname, String group) throws IOException {
         String response = putRequest("localhost/saints-xctf/api/api.php/groups/" + groupname, group);
         return JSONConverter.toGroup(response);
     }
