@@ -2,6 +2,7 @@ package com.example.andy.api_model;
 
 import android.util.Log;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public class APIClient {
         return JSONConverter.toUserList(response);
     }
 
-    public static User userGetRequest(String username) {
+    public static User userGetRequest(String username) throws IOException {
         String response = getRequest("localhost/saints-xctf/api/api.php/users/" + username);
         return JSONConverter.toUser(response);
     }
@@ -54,7 +55,7 @@ public class APIClient {
         return JSONConverter.toLogList(response);
     }
 
-    public static User userPostRequest(String user) {
+    public static User userPostRequest(String user) throws IOException {
         String response = postRequest("localhost/saints-xctf/api/api.php/user", user);
         return JSONConverter.toUser(response);
     }
@@ -64,7 +65,7 @@ public class APIClient {
         return JSONConverter.toLog(response);
     }
 
-    public static User userPutRequest(String username, String user) {
+    public static User userPutRequest(String username, String user) throws IOException {
         String response = putRequest("localhost/saints-xctf/api/api.php/users/" + username, user);
         return JSONConverter.toUser(response);
     }

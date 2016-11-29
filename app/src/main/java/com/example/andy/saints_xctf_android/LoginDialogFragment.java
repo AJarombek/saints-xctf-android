@@ -10,10 +10,12 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.andy.api_model.APIClient;
+import com.example.andy.api_model.Log;
 import com.example.andy.api_model.User;
+import org.mindrot.jbcrypt.BCrypt;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
 
 /**
  * Class for the Login DialogFragment which is used as a form to login users
@@ -22,9 +24,12 @@ import java.util.List;
  */
 public class LoginDialogFragment extends DialogFragment {
 
+    private static final String LOG_TAG = LoginDialogFragment.class.getName();
+
     // Views in the fragment
     private EditText login_username;
     private EditText login_password;
+    private User user;
 
     /**
      * Create and Run an AlertDialog for Log Submitting
@@ -67,12 +72,25 @@ public class LoginDialogFragment extends DialogFragment {
 
         @Override
         protected User doInBackground(String... params) {
-
+            User user = null;
+            try {
+                user = APIClient.userGetRequest(params[0]);
+            } catch (IOException e) {
+                android.util.Log.e(LOG_TAG, "User object JSON conversion failed.");
+                return null;
+            }
+            String hashedPassword = user.getPassword();
+            if (BCrypt.checkpw(params[1], hashedPassword)) {
+                return user;
+            } else {
+                return null;
+            }
         }
 
         @Override
         protected void onPostExecute(User user) {
             super.onPostExecute(user);
+            LoginDialogFragment.this.user = user;
         }
     }
 }
