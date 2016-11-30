@@ -23,6 +23,15 @@ public class Log {
     private Integer feel;
     private String description;
 
+    @Override
+    public String toString() {
+        return "Log: [ username: " + username + ", name: " + name + ", location: " + location +
+                ", date: " + date.toString() + ", type: " + type + ", distance: "
+                + distance.toString() + ", metric: " + metric + ", miles: " + miles.toString() +
+                ", time: " + time.toString() + ", feel: " + feel.toString() + ", description: " +
+                description + "]";
+    }
+
     public String getUsername() {
         return username;
     }

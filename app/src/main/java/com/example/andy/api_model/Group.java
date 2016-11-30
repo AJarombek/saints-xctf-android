@@ -19,6 +19,14 @@ public class Group {
     private List<String> groupmembers;
     private Map<String, Double> statistics;
 
+    @Override
+    public String toString() {
+        return "Group: [ group_name: " + group_name + ", group_title: " + group_title +
+                ", grouppic: " + grouppic + ", grouppic_name: " + grouppic_name +
+                ", description: " + description + ", groupmembers: [" + groupmembers.toString() +
+                "], statistics: " + statistics + "]]";
+    }
+
     public String getGroup_name() {
         return group_name;
     }

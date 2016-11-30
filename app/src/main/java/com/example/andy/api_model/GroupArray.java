@@ -12,6 +12,16 @@ public class GroupArray {
 
     private ArrayList<Group> groups;
 
+    @Override
+    public String toString() {
+        String groupsString = "Groups: [";
+        for (Group group: groups) {
+            groupsString += group.toString();
+        }
+        groupsString += "]";
+        return groupsString;
+    }
+
     public ArrayList<Group> getGroups() {
         return groups;
     }

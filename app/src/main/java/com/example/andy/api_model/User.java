@@ -27,6 +27,16 @@ public class User {
     private Map<String, String> groups;
     private Map<String, Double> statistics;
 
+    @Override
+    public String toString() {
+        return "User: [ username: " + username + ", first: " + first + ", last: " + last +
+                ", salt: " + salt + ", password: " + password + ", profilepic: " + profilepic +
+                ", profilepic_name: " + profilepic_name + ", description: " + description +
+                ", member_since: " + member_since.toString() + ", class_year: " + class_year +
+                ", location: " + location + ", favorite_event: " + favorite_event + ", groups: [" +
+                groups.toString() + "], statistics: [" + statistics.toString() + "]]";
+    }
+
     public String getUsername() {
         return username;
     }

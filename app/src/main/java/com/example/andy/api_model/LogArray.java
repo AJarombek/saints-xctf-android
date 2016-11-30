@@ -12,6 +12,16 @@ public class LogArray {
 
     private ArrayList<Log> logs;
 
+    @Override
+    public String toString() {
+        String logsString = "Logs: [";
+        for (Log log: logs) {
+            logsString += log.toString();
+        }
+        logsString += "]";
+        return logsString;
+    }
+
     public ArrayList<Log> getLogs() {
         return logs;
     }

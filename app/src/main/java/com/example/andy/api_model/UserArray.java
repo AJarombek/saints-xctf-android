@@ -12,6 +12,16 @@ public class UserArray {
 
     private ArrayList<User> users;
 
+    @Override
+    public String toString() {
+        String usersString = "Users: [";
+        for (User user: users) {
+            usersString += user.toString();
+        }
+        usersString += "]";
+        return usersString;
+    }
+
     public ArrayList<User> getUsers() {
         return users;
     }
