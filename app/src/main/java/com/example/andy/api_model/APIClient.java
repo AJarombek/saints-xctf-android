@@ -34,6 +34,16 @@ public class APIClient {
         return JSONConverter.toLog(response);
     }
 
+    public static List<Comment> commentsGetRequest() throws IOException {
+        String response = getRequest("localhost/saints-xctf/api/api.php/comments");
+        return JSONConverter.toCommentList(response);
+    }
+
+    public static Comment commentsGetRequest(int commentno) throws IOException {
+        String response = getRequest("localhost/saints-xctf/api/api.php/comments/" + commentno);
+        return JSONConverter.toComment(response);
+    }
+
     public static List<Group> groupsGetRequest() throws IOException {
         String response = getRequest("localhost/saints-xctf/api/api.php/groups");
         return JSONConverter.toGroupList(response);
@@ -57,13 +67,18 @@ public class APIClient {
     }
 
     public static User userPostRequest(String user) throws IOException {
-        String response = postRequest("localhost/saints-xctf/api/api.php/user", user);
+        String response = postRequest("localhost/saints-xctf/api/api.php/user/", user);
         return JSONConverter.toUser(response);
     }
 
     public static com.example.andy.api_model.Log logPostRequest(String log) throws IOException {
-        String response = postRequest("localhost/saints-xctf/api/api.php/log", log);
+        String response = postRequest("localhost/saints-xctf/api/api.php/log/", log);
         return JSONConverter.toLog(response);
+    }
+
+    public static Comment commentPostRequest(String comment) throws IOException {
+        String response = postRequest("localhost/saints-xctf/api/api.php/comment/", comment);
+        return JSONConverter.toComment(response);
     }
 
     public static User userPutRequest(String username, String user) throws IOException {
@@ -77,6 +92,12 @@ public class APIClient {
         return JSONConverter.toLog(response);
     }
 
+    public static Comment commentPutRequest(int commentno, String comment) throws IOException {
+        String response = putRequest("localhost/saints-xctf/api/api.php/logs/" +
+                commentno, comment);
+        return JSONConverter.toComment(response);
+    }
+
     public static Group groupPutRequest(String groupname, String group) throws IOException {
         String response = putRequest("localhost/saints-xctf/api/api.php/groups/" + groupname, group);
         return JSONConverter.toGroup(response);
@@ -88,6 +109,10 @@ public class APIClient {
 
     public static boolean logDeleteRequest(int logno) {
         return deleteRequest("localhost/saints-xctf/api/api.php/logs/" + logno);
+    }
+
+    public static boolean commentDeleteRequest(int commentno) {
+        return deleteRequest("localhost/saints-xctf/api/api.php/comments/" + commentno);
     }
 
     private static String getRequest(String url) {

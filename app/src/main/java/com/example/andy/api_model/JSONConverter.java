@@ -31,6 +31,12 @@ public class JSONConverter {
         return group;
     }
 
+    public static Comment toComment(String JSON) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Comment comment = mapper.readValue(JSON, Comment.class);
+        return comment;
+    }
+
     public static List<User> toUserList(String JSON) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         UserArray userArray = mapper.readValue(JSON, UserArray.class);
@@ -47,6 +53,12 @@ public class JSONConverter {
         ObjectMapper mapper = new ObjectMapper();
         GroupArray groupArray = mapper.readValue(JSON, GroupArray.class);
         return groupArray.getGroups();
+    }
+
+    public static List<Comment> toCommentList(String JSON) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        CommentArray commentArray = mapper.readValue(JSON, CommentArray.class);
+        return commentArray.getComments();
     }
 
     public static String fromUser(User user) throws Throwable {
@@ -70,6 +82,13 @@ public class JSONConverter {
         return groupJsonString;
     }
 
+    public static String fromComment(Comment comment) throws Throwable {
+        ObjectMapper mapper = new ObjectMapper();
+        String commentJsonString = mapper.writeValueAsString(comment);
+        android.util.Log.d(LOG_TAG, "The Comment JSON String\n" + commentJsonString);
+        return commentJsonString;
+    }
+
     public static String fromUserList(List<User> users) throws Throwable {
         ObjectMapper mapper = new ObjectMapper();
         String usersJsonString = mapper.writeValueAsString(users);
@@ -89,5 +108,12 @@ public class JSONConverter {
         String groupsJsonString = mapper.writeValueAsString(groups);
         android.util.Log.d(LOG_TAG, "The Groups JSON String\n" + groupsJsonString);
         return groupsJsonString;
+    }
+
+    public static String fromCommentList(List<Comment> logs) throws Throwable {
+        ObjectMapper mapper = new ObjectMapper();
+        String commentsJsonString = mapper.writeValueAsString(logs);
+        android.util.Log.d(LOG_TAG, "The Comments JSON String\n" + commentsJsonString);
+        return commentsJsonString;
     }
 }

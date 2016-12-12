@@ -12,6 +12,8 @@ import java.util.Date;
 public class Log {
 
     private String username;
+    private String first;
+    private String last;
     private String name;
     private String location;
     private Date date;
@@ -20,15 +22,17 @@ public class Log {
     private String metric;
     private Double miles;
     private Time time;
+    private Time pace;
     private Integer feel;
     private String description;
 
     @Override
     public String toString() {
-        return "Log: [ username: " + username + ", name: " + name + ", location: " + location +
-                ", date: " + date.toString() + ", type: " + type + ", distance: "
-                + distance.toString() + ", metric: " + metric + ", miles: " + miles.toString() +
-                ", time: " + time.toString() + ", feel: " + feel.toString() + ", description: " +
+        return "Log: [ username: " + username + ", first: " + first + ", last: " + last +
+                ", name: " + name + ", location: " + location + ", date: " + date.toString() +
+                ", type: " + type + ", distance: " + distance.toString() + ", metric: " + metric +
+                ", miles: " + miles.toString() + ", time: " + time.toString() + ", pace:" + pace +
+                ", feel: " + feel.toString() + ", description: " +
                 description + "]";
     }
 
@@ -118,5 +122,29 @@ public class Log {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getFirst() {
+        return first;
+    }
+
+    public void setFirst(String first) {
+        this.first = first;
+    }
+
+    public String getLast() {
+        return last;
+    }
+
+    public void setLast(String last) {
+        this.last = last;
+    }
+
+    public Time getPace() {
+        return pace;
+    }
+
+    public void setPace(Time pace) {
+        this.pace = pace;
     }
 }
