@@ -14,9 +14,21 @@ public class JSONConverter {
     private final static String LOG_TAG = JSONConverter.class.getName();
 
     public static User toUser(String JSON) throws IOException {
+        JSON = getUserJSON(JSON);
+        android.util.Log.d(LOG_TAG, JSON);
         ObjectMapper mapper = new ObjectMapper();
         User user = mapper.readValue(JSON, User.class);
         return user;
+    }
+
+    private static String getUserJSON(String JSON) {
+        for (int i=0; i < JSON.length(); i++) {
+            char c = JSON.charAt(i);
+            if (JSON.charAt(i) == ':' && JSON.substring(i+1,i+12).equals("{\"username\"")) {
+                return JSON.substring(i+1,JSON.length() - 1);
+            }
+        }
+        return JSON;
     }
 
     public static Log toLog(String JSON) throws IOException {

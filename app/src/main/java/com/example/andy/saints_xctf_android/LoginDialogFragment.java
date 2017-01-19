@@ -34,6 +34,8 @@ public class LoginDialogFragment extends DialogFragment {
     private EditText login_password;
     private TextView error_message;
     private User user;
+    private String username;
+    private AlertDialog d;
 
     /**
      * Create and Run an AlertDialog for Log Submitting
@@ -76,15 +78,14 @@ public class LoginDialogFragment extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        final AlertDialog d = (AlertDialog) getDialog();
+        d = (AlertDialog) getDialog();
         if (d != null) {
             Button positiveButton = d.getButton(Dialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Boolean closeDialog = false;
 
-                    String username = login_username.getText().toString();
+                    username = login_username.getText().toString();
                     String password = login_password.getText().toString();
 
                     boolean formError = false;
@@ -106,16 +107,7 @@ public class LoginDialogFragment extends DialogFragment {
                     if (!formError) {
                         LoginTask loginTask = new LoginTask();
                         loginTask.execute(username, password);
-
-                        String serverUsername = user.getUsername();
-                        if (username.equals(serverUsername)) {
-                            // TODO Login the user, redirect to main page
-                        }
                     }
-
-                    // check to see if we should close the dialog
-                    if (closeDialog)
-                        d.dismiss();
                 }
             });
         }
@@ -130,6 +122,7 @@ public class LoginDialogFragment extends DialogFragment {
                 user = APIClient.userGetRequest(params[0]);
             } catch (IOException e) {
                 android.util.Log.e(LOG_TAG, "User object JSON conversion failed.");
+                android.util.Log.e(LOG_TAG, e.getMessage());
                 return null;
             }
             String hashedPassword = user.getPassword();
@@ -145,6 +138,10 @@ public class LoginDialogFragment extends DialogFragment {
             super.onPostExecute(user);
             LoginDialogFragment.this.user = user;
             android.util.Log.d(LOG_TAG, "The User Object Received: " + user.toString());
+
+            if (username.equals(user.getUsername())) {
+                d.dismiss();
+            }
         }
     }
 }

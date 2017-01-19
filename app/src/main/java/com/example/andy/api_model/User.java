@@ -1,5 +1,6 @@
 package com.example.andy.api_model;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,26 +16,31 @@ public class User {
     private String username;
     private String first;
     private String last;
+    private String email;
     private String salt;
     private String password;
     private String profilepic;
     private String profilepic_name;
     private String description;
+    private String activation_code;
     private Date member_since;
     private int class_year;
     private String location;
     private String favorite_event;
+    private String[] forgotpassword;
     private Map<String, String> groups;
     private Map<String, Double> statistics;
 
     @Override
     public String toString() {
         return "User: [ username: " + username + ", first: " + first + ", last: " + last +
-                ", salt: " + salt + ", password: " + password + ", profilepic: " + profilepic +
-                ", profilepic_name: " + profilepic_name + ", description: " + description +
-                ", member_since: " + member_since.toString() + ", class_year: " + class_year +
-                ", location: " + location + ", favorite_event: " + favorite_event + ", groups: [" +
-                groups.toString() + "], statistics: [" + statistics.toString() + "]]";
+                ", email: " + email + ", salt: " + salt + ", password: " + password +
+                ", profilepic: " + profilepic + ", profilepic_name: " + profilepic_name +
+                ", description: " + description + ", member_since: " + member_since.toString() +
+                ", class_year: " + class_year + ", location: " + location + ", favorite_event: " +
+                favorite_event + ", activation_code: " + activation_code + ", groups: [" +
+                groups.toString() + "], forgotpassword: [" + Arrays.toString(forgotpassword) +
+                "], statistics: [" + statistics.toString() + "]]";
     }
 
     public String getUsername() {
@@ -147,5 +153,29 @@ public class User {
 
     public void setStatistics(Map<String, Double> statistics) {
         this.statistics = statistics;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setActivation_code(String activation_code) {
+        this.activation_code = activation_code;
+    }
+
+    public void setForgotpassword(String[] forgotpassword) {
+        this.forgotpassword = forgotpassword;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getActivation_code() {
+        return activation_code;
+    }
+
+    public String[] getForgotpassword() {
+        return forgotpassword;
     }
 }

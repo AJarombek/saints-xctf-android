@@ -27,18 +27,20 @@ public class APIRequest {
                     + connection.getResponseCode());
         }
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
 
-        String responseBody = "";
+        StringBuilder responseBody = new StringBuilder();
         String r;
+        int loop = 0;
         while ((r = br.readLine()) != null) {
-            responseBody = responseBody + r;
+            responseBody.append(r);
+            Log.d(TAG, "" + loop++);
         }
 
         connection.disconnect();
 
         Log.d(TAG, "API GET Response Body: " + responseBody);
-        return responseBody;
+        return responseBody.toString();
     }
 
     public static String post(String url, String input) throws Throwable {
