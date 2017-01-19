@@ -22,7 +22,7 @@ public class APIRequest {
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Accept", "application/json");
 
-        if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+        if (connection.getResponseCode() != HttpURLConnection.HTTP_INTERNAL_ERROR) {
             throw new RuntimeException("API Response Failed: Error Code = "
                     + connection.getResponseCode());
         }

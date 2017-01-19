@@ -35,11 +35,11 @@ public class SignupDialogFragment extends DialogFragment {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(getActivity());
         View loginDialogView = getActivity().getLayoutInflater().inflate(
-                R.layout.fragment_login, null);
+                R.layout.fragment_signup, null);
         builder.setView(loginDialogView);
 
         // set the AlertDialog's message
-        builder.setTitle(R.string.title_log_dialog);
+        builder.setTitle("Sign Up");
 
         // Initialize View variables
         signup_username = (EditText) loginDialogView.findViewById(R.id.signup_username);
