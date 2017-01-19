@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -52,4 +53,30 @@ public class MainFragment extends Fragment {
         setRetainInstance(true);
     }
 
+    /**
+     * Android Activity method for taking an action when an item is clicked in the
+     * app bar
+     * @param item menu item selected
+     * @return --
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_log:
+                LogDialogFragment logDialog = new LogDialogFragment();
+                logDialog.show(getFragmentManager(), "log dialog");
+                return true;
+            case R.id.action_home:
+                return true;
+            case R.id.action_profile:
+                return true;
+            case R.id.action_group:
+                return true;
+            case R.id.action_settings:
+                return true;
+            default:
+                // The user's action was not recognized, invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }

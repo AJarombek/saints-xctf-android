@@ -6,9 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,7 +18,9 @@ import android.view.ViewGroup;
 public class HomeFragment extends Fragment {
 
     private View v;
+    private Button login_button, signup_button;
     private static final String TAG = "HomeFragment: ";
+    private boolean dialogOnScreen;
 
     /**
      * Android onCreateView method
@@ -37,6 +39,27 @@ public class HomeFragment extends Fragment {
         setHasOptionsMenu(true);
         this.v = view;
 
+        login_button = (Button) v.findViewById(R.id.login_button);
+        signup_button = (Button) v.findViewById(R.id.signup_button);
+
+        // Click listener for the login button
+        login_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginDialogFragment loginDialog = new LoginDialogFragment();
+                loginDialog.show(getFragmentManager(), "login dialog");
+            }
+        });
+
+        // Click listener for the signup button
+        signup_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SignupDialogFragment signupDialog = new SignupDialogFragment();
+                signupDialog.show(getFragmentManager(), "signup dialog");
+            }
+        });
+
         return v;
     }
 
@@ -52,30 +75,8 @@ public class HomeFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    /**
-     * Android Activity method for taking an action when an item is clicked in the
-     * app bar
-     * @param item menu item selected
-     * @return --
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_log:
-                LogDialogFragment logDialog = new LogDialogFragment();
-                logDialog.show(getFragmentManager(), "log dialog");
-                return true;
-            case R.id.action_home:
-                return true;
-            case R.id.action_profile:
-                return true;
-            case R.id.action_group:
-                return true;
-            case R.id.action_settings:
-                return true;
-            default:
-                // The user's action was not recognized, invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-        }
+    // indicates whether a dialog is displayed
+    public void setDialogOnScreen(boolean visible) {
+        dialogOnScreen = visible;
     }
 }

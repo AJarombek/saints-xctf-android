@@ -1,5 +1,6 @@
 package com.example.andy.saints_xctf_android;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -39,6 +40,7 @@ public class LoginDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle bundle) {
+        android.util.Log.d(LOG_TAG, "Inside onCreateDialog.");
         // create dialog
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(getActivity());
@@ -66,6 +68,32 @@ public class LoginDialogFragment extends DialogFragment {
         });
 
         return builder.create();
+    }
+
+    // gets a reference to the HomeFragment
+    private HomeFragment getHomeFragment() {
+        return (HomeFragment) getFragmentManager().findFragmentById(
+                R.id.home_fragment);
+    }
+
+    // tell HomeFragment that dialog is now displayed
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        HomeFragment fragment = getHomeFragment();
+
+        if (fragment != null)
+            fragment.setDialogOnScreen(true);
+    }
+
+    // tell HomeFragment that dialog is no longer displayed
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        HomeFragment fragment = getHomeFragment();
+
+        if (fragment != null)
+            fragment.setDialogOnScreen(false);
     }
 
     class LoginTask extends AsyncTask<String, Void, User> {

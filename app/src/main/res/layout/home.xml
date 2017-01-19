@@ -2,6 +2,7 @@
 
 <!-- Layout for the home fragment -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/home_fragment"
     android:orientation="vertical"
     android:gravity="center"
     android:layout_width="match_parent"
@@ -53,6 +54,7 @@
                 android:orientation="vertical">
 
                 <Button
+                    android:id="@+id/login_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:width="300dp"
@@ -62,6 +64,7 @@
                     android:text="@string/log_in"/>
 
                 <Button
+                    android:id="@+id/signup_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:width="300dp"
