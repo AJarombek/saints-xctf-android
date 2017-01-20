@@ -3,10 +3,12 @@ package com.example.andy.saints_xctf_android;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +18,9 @@ import android.widget.TextView;
 import com.example.andy.api_model.APIClient;
 import com.example.andy.api_model.Log;
 import com.example.andy.api_model.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
@@ -28,6 +33,7 @@ import java.io.IOException;
 public class LoginDialogFragment extends DialogFragment {
 
     private static final String LOG_TAG = LoginDialogFragment.class.getName();
+    public static final String PREFS_NAME = "SaintsxctfUserPrefs";
 
     // Views in the fragment
     private EditText login_username;
@@ -126,6 +132,10 @@ public class LoginDialogFragment extends DialogFragment {
                 return null;
             }
             String hashedPassword = user.getPassword();
+
+            // The hashed password must be altered from the PHP implementation in order to match
+            hashedPassword = "$2a$" + hashedPassword.substring(4,hashedPassword.length());
+
             if (BCrypt.checkpw(params[1], hashedPassword)) {
                 return user;
             } else {
@@ -140,7 +150,28 @@ public class LoginDialogFragment extends DialogFragment {
             android.util.Log.d(LOG_TAG, "The User Object Received: " + user.toString());
 
             if (username.equals(user.getUsername())) {
+
+                ObjectMapper mapper = new ObjectMapper();
+                String userJsonString = "";
+                try {
+                    userJsonString = mapper.writeValueAsString(user);
+                } catch (JsonProcessingException e) {
+                    android.util.Log.e(LOG_TAG, "Unable to store user data in preferences.");
+                    android.util.Log.e(LOG_TAG, e.getMessage());
+                }
+
+                SharedPreferences sp = getActivity().getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString("user", userJsonString);
+                editor.putString("username", username);
+                editor.putString("first", user.getFirst());
+                editor.putString("last", user.getLast());
+                editor.apply();
+
                 d.dismiss();
+
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+
             }
         }
     }
