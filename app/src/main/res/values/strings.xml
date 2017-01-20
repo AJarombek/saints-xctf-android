@@ -41,8 +41,19 @@
         <item>Meters</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_username">No Username Entered</string>
     <string name="no_password">No Password Entered</string>
+    <string name="password_length">Password Must Be 6 Characters Long</string>
+    <string name="no_cpassword">No Confirm Password Entered</string>
+    <string name="no_password_match">Confirm Password and Password Must Match</string>
+    <string name="activation_code">Activation Code</string>
+    <string name="email">Email:</string>
+    <string name="no_activation_code">No Activation Code Entered</string>
+    <string name="no_email">No Email Entered</string>
+    <string name="invalid_email">Invalid Email Address Entered</string>
+    <string name="no_last_name">No Last Name Entered</string>
+    <string name="invalid_last_name">Invalid Last Name Entered</string>
+    <string name="no_first_name">No First Name Entered</string>
+    <string name="invalid_first_name">Invalid First Name Entered</string>
+    <string name="invalid_username">Invalid Username Entered</string>
 </resources>
