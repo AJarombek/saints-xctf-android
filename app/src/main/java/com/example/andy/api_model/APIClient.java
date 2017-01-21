@@ -21,6 +21,7 @@ public class APIClient {
 
     public static User userGetRequest(String username) throws IOException {
         String response = getRequest("http://www.saintsxctf.com/api/api.php/users/" + username);
+        if (response.equals("false")) return null;
         return JSONConverter.toUser(response);
     }
 
@@ -122,6 +123,7 @@ public class APIClient {
         } catch (Throwable throwable) {
             Log.e(TAG, "Error Connecting to API with GET Request.");
             throwable.printStackTrace();
+            return "false";
         }
         return response;
     }
@@ -133,6 +135,7 @@ public class APIClient {
         } catch (Throwable throwable) {
             Log.e(TAG, "Error Connecting to API with GET Request.");
             throwable.printStackTrace();
+            return "false";
         }
         return response;
     }
@@ -144,6 +147,7 @@ public class APIClient {
         } catch (Throwable throwable) {
             Log.e(TAG, "Error Connecting to API with GET Request.");
             throwable.printStackTrace();
+            return "false";
         }
         return response;
     }
@@ -155,6 +159,7 @@ public class APIClient {
         } catch (Throwable throwable) {
             Log.e(TAG, "Error Connecting to API with GET Request.");
             throwable.printStackTrace();
+            return false;
         }
         return response;
     }

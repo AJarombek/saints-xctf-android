@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 
 /**
  * Class for the Login DialogFragment which is used as a form to login users
@@ -121,17 +122,22 @@ public class LoginDialogFragment extends DialogFragment {
         }
     }
 
-    class LoginTask extends AsyncTask<String, Void, User> {
+    class LoginTask extends AsyncTask<String, Void, Object> {
 
         @Override
-        protected User doInBackground(String... params) {
+        protected Object doInBackground(String... params) {
             User user = null;
             try {
                 user = APIClient.userGetRequest(params[0]);
+
+                // If null is returned, there is no internet connection
+                if (user == null) {
+                    return "no_internet";
+                }
             } catch (IOException e) {
                 android.util.Log.e(LOG_TAG, "User object JSON conversion failed.");
                 android.util.Log.e(LOG_TAG, e.getMessage());
-                return null;
+                return "invalid_user";
             }
             String hashedPassword = user.getPassword();
 
@@ -146,35 +152,45 @@ public class LoginDialogFragment extends DialogFragment {
         }
 
         @Override
-        protected void onPostExecute(User user) {
-            super.onPostExecute(user);
-            LoginDialogFragment.this.user = user;
-            android.util.Log.d(LOG_TAG, "The User Object Received: " + user.toString());
+        protected void onPostExecute(Object response) {
+            super.onPostExecute(response);
 
-            if (username.equals(user.getUsername())) {
-
-                ObjectMapper mapper = new ObjectMapper();
-                String userJsonString = "";
-                try {
-                    userJsonString = mapper.writeValueAsString(user);
-                } catch (JsonProcessingException e) {
-                    android.util.Log.e(LOG_TAG, "Unable to store user data in preferences.");
-                    android.util.Log.e(LOG_TAG, e.getMessage());
-                }
-
-                SharedPreferences sp = getActivity().getSharedPreferences(PREFS_NAME, 0);
-                SharedPreferences.Editor editor = sp.edit();
-                editor.putString("user", userJsonString);
-                editor.putString("username", username);
-                editor.putString("first", user.getFirst());
-                editor.putString("last", user.getLast());
-                editor.apply();
-
-                // Exit the dialog fragment
+            if (response.equals("no_internet")) {
+                ((MainActivity) getActivity()).noInternet();
                 d.dismiss();
+            } else if (response.equals("invalid_user")) {
+                error_message.setText(R.string.invalid_user);
+                login_username.requestFocus();
+            } else if (response instanceof User) {
 
-                // Sign In the User and Display the new Fragment
-                ((MainActivity)getActivity()).signIn();
+                LoginDialogFragment.this.user = (User) response;
+                android.util.Log.d(LOG_TAG, "The User Object Received: " + response.toString());
+
+                if (username.equals(user.getUsername())) {
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    String userJsonString = "";
+                    try {
+                        userJsonString = mapper.writeValueAsString(user);
+                    } catch (JsonProcessingException e) {
+                        android.util.Log.e(LOG_TAG, "Unable to store user data in preferences.");
+                        android.util.Log.e(LOG_TAG, e.getMessage());
+                    }
+
+                    SharedPreferences sp = getActivity().getSharedPreferences(PREFS_NAME, 0);
+                    SharedPreferences.Editor editor = sp.edit();
+                    editor.putString("user", userJsonString);
+                    editor.putString("username", username);
+                    editor.putString("first", user.getFirst());
+                    editor.putString("last", user.getLast());
+                    editor.apply();
+
+                    // Exit the dialog fragment
+                    d.dismiss();
+
+                    // Sign In the User and Display the new Fragment
+                    ((MainActivity) getActivity()).signIn();
+                }
             }
         }
     }

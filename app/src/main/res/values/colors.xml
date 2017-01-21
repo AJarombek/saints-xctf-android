@@ -8,4 +8,5 @@
     <color name="darkGrey">#222</color>
     <color name="stlawuRed">#900</color>
     <color name="transparentGrey">#AABBBBBB</color>
+    <color name="transparent">#00BBBBBB</color>
 </resources>

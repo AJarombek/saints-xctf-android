@@ -67,4 +67,13 @@ public class MainActivity extends AppCompatActivity {
                 replace(R.id.activity_main, fragment).
                 commit();
     }
+
+    protected void noInternet() {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = new NoInternetFragment();
+        fm.beginTransaction().
+                replace(R.id.activity_main, fragment).
+                addToBackStack(null).
+                commit();
+    }
 }
