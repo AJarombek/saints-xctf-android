@@ -1,6 +1,7 @@
 package com.example.andy.saints_xctf_android;
 
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.annotation.Nullable;
@@ -8,12 +9,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
+import com.example.andy.api_model.APIClient;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +29,7 @@ public class MainFragment extends Fragment {
     private static final String TAG = "MainFragment: ";
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
+    private RecyclerAdapter adapter;
 
     /**
      * Android onCreateView method
@@ -44,9 +48,16 @@ public class MainFragment extends Fragment {
         setHasOptionsMenu(true);
         this.v = view;
 
+        // Set up the recycler view and layout manager
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        LoadLogTask loadLogTask = new LoadLogTask();
+        loadLogTask.execute();
+
+        adapter = new RecyclerAdapter(logList);
+        recyclerView.setAdapter(adapter);
 
         return v;
     }
@@ -87,6 +98,33 @@ public class MainFragment extends Fragment {
             default:
                 // The user's action was not recognized, invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    class LoadLogTask extends AsyncTask<Void, Void, Object> {
+
+        @Override
+        protected Object doInBackground(Void... voids) {
+            List logArray = null;
+            try {
+                logArray = APIClient.logsGetRequest();
+
+                // If null is returned, there is no internet connection
+                if (user == null) {
+                    return "no_internet";
+                }
+            } catch (IOException e) {
+                android.util.Log.e(LOG_TAG, "User object JSON conversion failed.");
+                android.util.Log.e(LOG_TAG, e.getMessage());
+                return "invalid_user";
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Object response) {
+            super.onPostExecute(response);
+
+
         }
     }
 }
