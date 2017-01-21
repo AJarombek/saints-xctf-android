@@ -8,6 +8,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -168,10 +170,11 @@ public class LoginDialogFragment extends DialogFragment {
                 editor.putString("last", user.getLast());
                 editor.apply();
 
+                // Exit the dialog fragment
                 d.dismiss();
 
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-
+                // Sign In the User and Display the new Fragment
+                ((MainActivity)getActivity()).signIn();
             }
         }
     }

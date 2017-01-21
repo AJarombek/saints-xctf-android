@@ -36,7 +36,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.home, container, false);
         Log.d(TAG, "Inside onCreateView.");
 
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
         this.v = view;
 
         login_button = (Button) v.findViewById(R.id.login_button);
