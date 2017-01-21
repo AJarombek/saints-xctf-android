@@ -2,18 +2,23 @@ package com.example.andy.saints_xctf_android;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.andy.api_model.APIClient;
+import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -43,6 +48,7 @@ public class SignupDialogFragment extends DialogFragment {
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
     private static final String NAME_REGEX = "^[a-zA-Z\\-']+$";
     private static final String USERNAME_REGEX = "^[a-zA-Z0-9]+$";
+    public static final String PREFS_NAME = "SaintsxctfUserPrefs";
 
     /**
      * Create and Run an AlertDialog for Log Submitting
@@ -74,6 +80,11 @@ public class SignupDialogFragment extends DialogFragment {
 
         // Attempt to Sign Up a user
         builder.setPositiveButton("Sign Up", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {}
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {}
         });
@@ -188,32 +199,100 @@ public class SignupDialogFragment extends DialogFragment {
             });
         }
     }
-    class SignUpTask extends AsyncTask<String, Void, Integer> {
+    class SignUpTask extends AsyncTask<String, Void, Object> {
 
         @Override
-        protected Integer doInBackground(String... params) {
+        protected Object doInBackground(String... params) {
             User user;
             try {
+                // First see if there is already a user with this username
                 user = APIClient.userGetRequest(params[0]);
+
+                if (user == null) return "no_internet";
+
             } catch (IOException e) {
-                android.util.Log.e(LOG_TAG, "User object JSON conversion failed.");
-                android.util.Log.e(LOG_TAG, e.getMessage());
-                return null;
+                // The username is not already used
+                Log.d(LOG_TAG, "There is no user with this username.");
+
+                String hash = BCrypt.hashpw(params[4], BCrypt.gensalt());
+
+                // Create the new user object
+                User newUser = new User();
+                newUser.setUsername(params[0]);
+                newUser.setFirst(params[1]);
+                newUser.setLast(params[2]);
+                newUser.setEmail(params[3]);
+                newUser.setPassword(hash);
+                newUser.setActivation_code(params[5]);
+
+                // Convert the new user to JSON
+                String userJSON;
+                try {
+                    userJSON = JSONConverter.fromUser(newUser);
+                } catch (Throwable t) {
+                    android.util.Log.d(LOG_TAG, "Failed to Convert from User to JSON.");
+                    Log.d(LOG_TAG, t.getMessage());
+                    return "failed";
+                }
+
+                try {
+                    // Second try to add this user to the database
+                    user = APIClient.userPostRequest(userJSON);
+
+                    if (user == null) return "no_internet";
+
+                } catch (IOException e1) {
+                    android.util.Log.d(LOG_TAG, "The activation code is invalid.");
+                    Log.d(LOG_TAG, e1.getMessage());
+                    return "bad_activation_code";
+                }
+
             }
-            String hashedPassword = user.getPassword();
-            if (BCrypt.checkpw(params[1], hashedPassword)) {
-                return 0;
-            } else {
-                return null;
-            }
+            return user;
         }
 
         @Override
-        protected void onPostExecute(Integer response) {
+        protected void onPostExecute(Object response) {
             super.onPostExecute(response);
 
-            if (response == 2) {
+            if (response.equals("no_internet")) {
+                ((MainActivity) getActivity()).noInternet();
                 d.dismiss();
+            } else if (response.equals("invalid_username")) {
+                signup_error_message.setText(R.string.invalid_username);
+                signup_username.requestFocus();
+            } else if (response.equals("bad_activation_code")) {
+                signup_error_message.setText(R.string.invalid_activation_code);
+                signup_username.requestFocus();
+            } else if (response.equals("failed")) {
+                signup_error_message.setText(R.string.server_error);
+            } else if (response instanceof User) {
+
+                User user = (User) response;
+                android.util.Log.d(LOG_TAG, "The User Object Received: " + user.toString());
+
+                ObjectMapper mapper = new ObjectMapper();
+                String userJsonString = "";
+                try {
+                    userJsonString = mapper.writeValueAsString(user);
+                } catch (JsonProcessingException e) {
+                    android.util.Log.e(LOG_TAG, "Unable to store user data in preferences.");
+                    android.util.Log.e(LOG_TAG, e.getMessage());
+                }
+
+                SharedPreferences sp = getActivity().getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.putString("user", userJsonString);
+                editor.putString("username", user.getUsername());
+                editor.putString("first", user.getFirst());
+                editor.putString("last", user.getLast());
+                editor.apply();
+
+                // Exit the dialog fragment
+                d.dismiss();
+
+                // Sign In the User and Display the new Fragment
+                ((MainActivity) getActivity()).signIn();
             }
         }
     }

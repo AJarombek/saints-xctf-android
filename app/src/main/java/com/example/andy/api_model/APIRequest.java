@@ -54,23 +54,25 @@ public class APIRequest {
         outputStream.write(input.getBytes());
         outputStream.flush();
 
-        if (connection.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
+        if (connection.getResponseCode() != HttpURLConnection.HTTP_INTERNAL_ERROR) {
             throw new RuntimeException("API Response Failed: Error Code = "
                     + connection.getResponseCode());
         }
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
 
-        String responseBody = "";
+        StringBuilder responseBody = new StringBuilder();
         String r;
+        int loop = 0;
         while ((r = br.readLine()) != null) {
-            responseBody = responseBody + r;
+            responseBody.append(r);
+            Log.d(TAG, "" + loop++);
         }
 
         connection.disconnect();
 
         Log.d(TAG, "API POST Response Body: " + responseBody);
-        return responseBody;
+        return responseBody.toString();
     }
 
     public static String put(String url, String input) throws Throwable {
@@ -84,23 +86,25 @@ public class APIRequest {
         outputStream.write(input.getBytes());
         outputStream.flush();
 
-        if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+        if (connection.getResponseCode() != HttpURLConnection.HTTP_INTERNAL_ERROR) {
             throw new RuntimeException("API Response Failed: Error Code = "
                     + connection.getResponseCode());
         }
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
 
-        String responseBody = "";
+        StringBuilder responseBody = new StringBuilder();
         String r;
+        int loop = 0;
         while ((r = br.readLine()) != null) {
-            responseBody = responseBody + r;
+            responseBody.append(r);
+            Log.d(TAG, "" + loop++);
         }
 
         connection.disconnect();
 
         Log.d(TAG, "API PUT Response Body: " + responseBody);
-        return responseBody;
+        return responseBody.toString();
     }
 
     public static boolean delete(String url) throws Throwable {
