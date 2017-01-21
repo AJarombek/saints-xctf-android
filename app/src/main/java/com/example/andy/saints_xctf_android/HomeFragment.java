@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -24,8 +25,9 @@ public class HomeFragment extends Fragment {
 
     /**
      * Android onCreateView method
-     * @param inflater --
-     * @param container --
+     *
+     * @param inflater           --
+     * @param container          --
      * @param savedInstanceState --
      * @return fragment view
      */
@@ -36,7 +38,6 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.home, container, false);
         Log.d(TAG, "Inside onCreateView.");
 
-        setHasOptionsMenu(false);
         this.v = view;
 
         login_button = (Button) v.findViewById(R.id.login_button);
@@ -65,6 +66,7 @@ public class HomeFragment extends Fragment {
 
     /**
      * Android onCreate method
+     *
      * @param savedInstanceState --
      */
     @Override
@@ -73,10 +75,16 @@ public class HomeFragment extends Fragment {
         Log.d(TAG, "Inside onCreate.");
         // Save on rotation
         setRetainInstance(true);
+        setHasOptionsMenu(true);
     }
 
-    // indicates whether a dialog is displayed
-    public void setDialogOnScreen(boolean visible) {
-        dialogOnScreen = visible;
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.action_settings).setVisible(false);
+        menu.findItem(R.id.action_profile).setVisible(false);
+        menu.findItem(R.id.action_home).setVisible(false);
+        menu.findItem(R.id.action_group).setVisible(false);
+        menu.findItem(R.id.action_log).setVisible(false);
     }
 }
