@@ -4,6 +4,8 @@ package com.example.andy.saints_xctf_android;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +24,8 @@ public class MainFragment extends Fragment {
 
     private View v;
     private static final String TAG = "MainFragment: ";
+    private RecyclerView recyclerView;
+    private LinearLayoutManager linearLayoutManager;
 
     /**
      * Android onCreateView method
@@ -39,6 +43,10 @@ public class MainFragment extends Fragment {
 
         setHasOptionsMenu(true);
         this.v = view;
+
+        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         return v;
     }
@@ -74,7 +82,7 @@ public class MainFragment extends Fragment {
                 return true;
             case R.id.action_group:
                 return true;
-            case R.id.action_settings:
+            case R.id.action_exit:
                 return true;
             default:
                 // The user's action was not recognized, invoke the superclass to handle it.

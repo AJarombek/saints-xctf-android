@@ -28,9 +28,9 @@
         android:title="@string/group"
         app:showAsAction="ifRoom"/>
 
-    <item android:id="@+id/action_settings"
-        android:icon="@drawable/settings"
-        android:title="@string/settings"
+    <item android:id="@+id/action_exit"
+        android:icon="@drawable/exit"
+        android:title="@string/log_out"
         app:showAsAction="ifRoom"/>
 
 </menu>

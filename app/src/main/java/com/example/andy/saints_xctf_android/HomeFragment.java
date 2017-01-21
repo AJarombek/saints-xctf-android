@@ -81,7 +81,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        menu.findItem(R.id.action_settings).setVisible(false);
+        menu.findItem(R.id.action_exit).setVisible(false);
         menu.findItem(R.id.action_profile).setVisible(false);
         menu.findItem(R.id.action_home).setVisible(false);
         menu.findItem(R.id.action_group).setVisible(false);
