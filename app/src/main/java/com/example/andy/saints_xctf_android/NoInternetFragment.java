@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,11 +15,27 @@ import android.view.ViewGroup;
  */
 public class NoInternetFragment extends Fragment {
 
+    private View v;
+    private ImageButton refresh_button;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_no_internet, container, false);
+        super.onCreateView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_no_internet, container, false);
+        this.v = view;
+
+        refresh_button = (ImageButton) v.findViewById(R.id.refresh_button);
+
+        // When the refresh button is clicked, just go back to previous fragment
+        refresh_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().popBackStackImmediate();
+            }
+        });
+
+        return v;
     }
 
 }

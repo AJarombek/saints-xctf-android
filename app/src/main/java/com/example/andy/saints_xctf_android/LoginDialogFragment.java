@@ -147,7 +147,7 @@ public class LoginDialogFragment extends DialogFragment {
             if (BCrypt.checkpw(params[1], hashedPassword)) {
                 return user;
             } else {
-                return null;
+                return "invalid password";
             }
         }
 
@@ -160,6 +160,9 @@ public class LoginDialogFragment extends DialogFragment {
                 d.dismiss();
             } else if (response.equals("invalid_user")) {
                 error_message.setText(R.string.invalid_user);
+                login_username.requestFocus();
+            } else if (response.equals("invalid_password")) {
+                error_message.setText(R.string.invalid_password);
                 login_username.requestFocus();
             } else if (response instanceof User) {
 
