@@ -3,6 +3,7 @@ package com.example.andy.api_model;
 import android.util.Log;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class APIClient {
         return JSONConverter.toUser(response);
     }
 
-    public static List<com.example.andy.api_model.Log> logsGetRequest() throws IOException {
+    public static List<com.example.andy.api_model.Log> logsGetRequest() throws IOException, ParseException {
         String response = getRequest("http://www.saintsxctf.com/api/api.php/logs");
         if (response.equals("false")) return null;
         return JSONConverter.toLogList(response);
@@ -63,7 +64,7 @@ public class APIClient {
     }
 
     public static List<com.example.andy.api_model.Log> logfeedGetRequest(String[] params)
-            throws IOException {
+            throws IOException, ParseException {
         String paramtype = params[0];
         String sortparam = params[1];
         String limit = params[2];

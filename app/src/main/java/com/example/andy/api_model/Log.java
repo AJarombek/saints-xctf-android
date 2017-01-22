@@ -1,6 +1,7 @@
 package com.example.andy.api_model;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -11,6 +12,7 @@ import java.util.Date;
 
 public class Log {
 
+    private Integer log_id;
     private String username;
     private String first;
     private String last;
@@ -25,10 +27,11 @@ public class Log {
     private Time pace;
     private Integer feel;
     private String description;
+    private ArrayList<Comment> comments;
 
     @Override
     public String toString() {
-        return "Log: [ username: " + username + ", first: " + first + ", last: " + last +
+        return "Log: [ log_id: " + log_id + "username: " + username + ", first: " + first + ", last: " + last +
                 ", name: " + name + ", location: " + location + ", date: " + date.toString() +
                 ", type: " + type + ", distance: " + distance.toString() + ", metric: " + metric +
                 ", miles: " + miles.toString() + ", time: " + time.toString() + ", pace:" + pace +

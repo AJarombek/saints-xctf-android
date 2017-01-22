@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.example.andy.api_model.APIClient;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,9 +56,6 @@ public class MainFragment extends Fragment {
 
         LoadLogTask loadLogTask = new LoadLogTask();
         loadLogTask.execute();
-
-        adapter = new RecyclerAdapter(logList);
-        recyclerView.setAdapter(adapter);
 
         return v;
     }
@@ -105,26 +103,35 @@ public class MainFragment extends Fragment {
 
         @Override
         protected Object doInBackground(Void... voids) {
-            List logArray = null;
+            List<com.example.andy.api_model.Log> logArray = null;
             try {
                 logArray = APIClient.logsGetRequest();
 
                 // If null is returned, there is no internet connection
-                if (user == null) {
+                if (logArray == null) {
                     return "no_internet";
                 }
-            } catch (IOException e) {
-                android.util.Log.e(LOG_TAG, "User object JSON conversion failed.");
-                android.util.Log.e(LOG_TAG, e.getMessage());
-                return "invalid_user";
+            } catch (Exception e) {
+                android.util.Log.e(TAG, "Log object JSON conversion failed.");
+                android.util.Log.e(TAG, e.getMessage());
+                return "no_internet";
             }
+
+            return logArray;
         }
 
         @Override
         protected void onPostExecute(Object response) {
             super.onPostExecute(response);
 
-
+            if (response.equals("no_internet")) {
+                ((MainActivity) getActivity()).noInternet();
+            } else if (response instanceof List) {
+                ArrayList<com.example.andy.api_model.Log> logs =
+                        (ArrayList<com.example.andy.api_model.Log>) response;
+                adapter = new RecyclerAdapter(logs);
+                recyclerView.setAdapter(adapter);
+            }
         }
     }
 }

@@ -3,7 +3,17 @@ package com.example.andy.api_model;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.sql.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author Andrew Jarombek
@@ -32,21 +42,54 @@ public class JSONConverter {
     }
 
     public static Log toLog(String JSON) throws IOException {
+        JSON = getLogJSON(JSON);
         ObjectMapper mapper = new ObjectMapper();
         Log log = mapper.readValue(JSON, Log.class);
         return log;
     }
 
+    private static String getLogJSON(String JSON) {
+        for (int i=0; i < JSON.length(); i++) {
+            char c = JSON.charAt(i);
+            if (JSON.charAt(i) == ':' && JSON.substring(i+1,i+10).equals("{\"log_id\"")) {
+                return JSON.substring(i+1,JSON.length() - 1);
+            }
+        }
+        return JSON;
+    }
+
     public static Group toGroup(String JSON) throws IOException {
+        JSON = getGroupJSON(JSON);
         ObjectMapper mapper = new ObjectMapper();
         Group group = mapper.readValue(JSON, Group.class);
         return group;
     }
 
+    private static String getGroupJSON(String JSON) {
+        for (int i=0; i < JSON.length(); i++) {
+            char c = JSON.charAt(i);
+            if (JSON.charAt(i) == ':' && JSON.substring(i+1,i+14).equals("{\"group_name\"")) {
+                return JSON.substring(i+1,JSON.length() - 1);
+            }
+        }
+        return JSON;
+    }
+
     public static Comment toComment(String JSON) throws IOException {
+        JSON = getCommentJSON(JSON);
         ObjectMapper mapper = new ObjectMapper();
         Comment comment = mapper.readValue(JSON, Comment.class);
         return comment;
+    }
+
+    private static String getCommentJSON(String JSON) {
+        for (int i=0; i < JSON.length(); i++) {
+            char c = JSON.charAt(i);
+            if (JSON.charAt(i) == ':' && JSON.substring(i+1,i+14).equals("{\"comment_id\"")) {
+                return JSON.substring(i+1,JSON.length() - 1);
+            }
+        }
+        return JSON;
     }
 
     public static List<User> toUserList(String JSON) throws IOException {
@@ -55,10 +98,35 @@ public class JSONConverter {
         return userArray.getUsers();
     }
 
-    public static List<Log> toLogList(String JSON) throws IOException {
+    public static List<Log> toLogList(String JSON) throws IOException, ParseException {
+        JSON = JSON.substring(10, JSON.length()-1);
         ObjectMapper mapper = new ObjectMapper();
-        LogArray logArray = mapper.readValue(JSON, LogArray.class);
-        return logArray.getLogs();
+        TreeMap<String,Map<String,String>> logsMap = mapper.readValue(JSON, TreeMap.class);
+
+        List<Log> logList = new ArrayList<Log>();
+        for (TreeMap.Entry<String, Map<String,String>> entry : logsMap.entrySet()) {
+            Map<String,String> logMap = entry.getValue();
+            Log tempLog = new Log();
+            tempLog.setUsername(logMap.get("username"));
+            tempLog.setFirst(logMap.get("first"));
+            tempLog.setLast(logMap.get("last"));
+            tempLog.setName(logMap.get("name"));
+            tempLog.setLocation(logMap.get("location"));
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            tempLog.setDate(formatter.parse(logMap.get("date")));
+            tempLog.setType(logMap.get("type"));
+            tempLog.setDistance(Double.parseDouble(logMap.get("distance")));
+            tempLog.setMetric(logMap.get("metric"));
+            tempLog.setMiles(Double.parseDouble(logMap.get("miles")));
+            tempLog.setTime(Time.valueOf(logMap.get("time")));
+            tempLog.setPace(Time.valueOf(logMap.get("pace")));
+            tempLog.setFeel(Integer.parseInt(logMap.get("feel")));
+            tempLog.setDescription(logMap.get("description"));
+            //tempLog.setComments(logMap.get("comments"));
+            logList.add(tempLog);
+        }
+        return logList;
     }
 
     public static List<Group> toGroupList(String JSON) throws IOException {
