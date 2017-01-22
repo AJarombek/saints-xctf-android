@@ -5,6 +5,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * Class used to hit endpoints on the REST API
@@ -27,7 +28,7 @@ public class APIClient {
         return JSONConverter.toUser(response);
     }
 
-    public static List<com.example.andy.api_model.Log> logsGetRequest() throws IOException, ParseException {
+    public static TreeMap<Integer,com.example.andy.api_model.Log> logsGetRequest() throws IOException, ParseException {
         String response = getRequest("http://www.saintsxctf.com/api/api.php/logs");
         if (response.equals("false")) return null;
         return JSONConverter.toLogList(response);
@@ -63,7 +64,7 @@ public class APIClient {
         return JSONConverter.toGroup(response);
     }
 
-    public static List<com.example.andy.api_model.Log> logfeedGetRequest(String[] params)
+    public static TreeMap<Integer,com.example.andy.api_model.Log> logfeedGetRequest(String[] params)
             throws IOException, ParseException {
         String paramtype = params[0];
         String sortparam = params[1];

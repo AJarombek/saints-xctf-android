@@ -18,6 +18,7 @@ import com.example.andy.api_model.APIClient;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -103,21 +104,18 @@ public class MainFragment extends Fragment {
 
         @Override
         protected Object doInBackground(Void... voids) {
-            List<com.example.andy.api_model.Log> logArray = null;
+            TreeMap<Integer,com.example.andy.api_model.Log> logArray = null;
+            ArrayList<com.example.andy.api_model.Log> logs = null;
             try {
                 logArray = APIClient.logsGetRequest();
-
-                // If null is returned, there is no internet connection
-                if (logArray == null) {
-                    return "no_internet";
-                }
+                logs = new ArrayList<>(logArray.values());
             } catch (Exception e) {
                 android.util.Log.e(TAG, "Log object JSON conversion failed.");
                 android.util.Log.e(TAG, e.getMessage());
                 return "no_internet";
             }
 
-            return logArray;
+            return logs;
         }
 
         @Override
@@ -126,7 +124,7 @@ public class MainFragment extends Fragment {
 
             if (response.equals("no_internet")) {
                 ((MainActivity) getActivity()).noInternet();
-            } else if (response instanceof List) {
+            } else if (response instanceof TreeMap) {
                 ArrayList<com.example.andy.api_model.Log> logs =
                         (ArrayList<com.example.andy.api_model.Log>) response;
                 adapter = new RecyclerAdapter(logs);

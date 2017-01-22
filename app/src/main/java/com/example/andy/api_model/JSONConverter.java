@@ -98,12 +98,12 @@ public class JSONConverter {
         return userArray.getUsers();
     }
 
-    public static List<Log> toLogList(String JSON) throws IOException, ParseException {
+    public static TreeMap<Integer,Log> toLogList(String JSON) throws IOException, ParseException {
         JSON = JSON.substring(10, JSON.length()-1);
         ObjectMapper mapper = new ObjectMapper();
         TreeMap<String,Map<String,String>> logsMap = mapper.readValue(JSON, TreeMap.class);
 
-        List<Log> logList = new ArrayList<Log>();
+        TreeMap<Integer, Log> logList = new TreeMap<>();
         for (TreeMap.Entry<String, Map<String,String>> entry : logsMap.entrySet()) {
             Map<String,String> logMap = entry.getValue();
             Log tempLog = new Log();
@@ -124,7 +124,7 @@ public class JSONConverter {
             tempLog.setFeel(Integer.parseInt(logMap.get("feel")));
             tempLog.setDescription(logMap.get("description"));
             //tempLog.setComments(logMap.get("comments"));
-            logList.add(tempLog);
+            logList.put(Integer.parseInt(logMap.get("log_id")), tempLog);
         }
         return logList;
     }
