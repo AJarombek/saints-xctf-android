@@ -104,11 +104,9 @@ public class MainFragment extends Fragment {
 
         @Override
         protected Object doInBackground(Void... voids) {
-            TreeMap<Integer,com.example.andy.api_model.Log> logArray = null;
-            ArrayList<com.example.andy.api_model.Log> logs = null;
+            List<com.example.andy.api_model.Log> logs = null;
             try {
-                logArray = APIClient.logsGetRequest();
-                logs = new ArrayList<>(logArray.values());
+                logs = APIClient.logsGetRequest();
             } catch (Exception e) {
                 android.util.Log.e(TAG, "Log object JSON conversion failed.");
                 android.util.Log.e(TAG, e.getMessage());
@@ -124,7 +122,7 @@ public class MainFragment extends Fragment {
 
             if (response.equals("no_internet")) {
                 ((MainActivity) getActivity()).noInternet();
-            } else if (response instanceof TreeMap) {
+            } else if (response instanceof List) {
                 ArrayList<com.example.andy.api_model.Log> logs =
                         (ArrayList<com.example.andy.api_model.Log>) response;
                 adapter = new RecyclerAdapter(logs);

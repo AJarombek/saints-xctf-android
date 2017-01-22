@@ -35,7 +35,7 @@ public class Log {
                 ", name: " + name + ", location: " + location + ", date: " + date.toString() +
                 ", type: " + type + ", distance: " + distance.toString() + ", metric: " + metric +
                 ", miles: " + miles.toString() + ", time: " + time.toString() + ", pace:" + pace +
-                ", feel: " + feel.toString() + ", description: " +
+                ", feel: " + feel.toString() + ", comments:" + comments.toString() + ", description: " +
                 description + "]";
     }
 
@@ -157,5 +157,13 @@ public class Log {
 
     public void setPace(Time pace) {
         this.pace = pace;
+    }
+
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
     }
 }

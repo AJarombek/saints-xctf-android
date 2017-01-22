@@ -1,6 +1,7 @@
 package com.example.andy.api_model;
 
-import java.sql.Time;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -16,6 +17,8 @@ public class Comment {
     private String username;
     private String first;
     private String last;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time;
     private String content;
 

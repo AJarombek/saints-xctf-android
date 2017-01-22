@@ -84,8 +84,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
 
         public void bindLog(Log log) {
             this.log = log;
-            logview_username.setText(log.getUsername());
-            logview_name.setText(log.getFirst() + " " + log.getLast());
+            logview_username.setText(log.getFirst() + " " + log.getLast());
+            logview_name.setText(log.getName());
             logview_date.setText(log.getDate().toString());
             logview_type.setText(log.getType());
             logview_location.setText(log.getLocation());

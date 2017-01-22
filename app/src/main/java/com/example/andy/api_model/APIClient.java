@@ -28,7 +28,7 @@ public class APIClient {
         return JSONConverter.toUser(response);
     }
 
-    public static TreeMap<Integer,com.example.andy.api_model.Log> logsGetRequest() throws IOException, ParseException {
+    public static List<com.example.andy.api_model.Log> logsGetRequest() throws IOException {
         String response = getRequest("http://www.saintsxctf.com/api/api.php/logs");
         if (response.equals("false")) return null;
         return JSONConverter.toLogList(response);
@@ -64,15 +64,15 @@ public class APIClient {
         return JSONConverter.toGroup(response);
     }
 
-    public static TreeMap<Integer,com.example.andy.api_model.Log> logfeedGetRequest(String[] params)
-            throws IOException, ParseException {
+    public static List<com.example.andy.api_model.Log> logfeedGetRequest(String[] params)
+            throws IOException {
         String paramtype = params[0];
         String sortparam = params[1];
         String limit = params[2];
         String offset = params[3];
 
         String response = getRequest("http://www.saintsxctf.com/api/api.php/logfeed/" + paramtype + "/"
-                            + sortparam + "/" + limit + "/" + offset);
+                + sortparam + "/" + limit + "/" + offset);
         if (response.equals("false")) return null;
         return JSONConverter.toLogList(response);
     }
