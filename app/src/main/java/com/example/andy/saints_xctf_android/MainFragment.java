@@ -17,6 +17,7 @@ import com.example.andy.api_model.APIClient;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -125,6 +126,7 @@ public class MainFragment extends Fragment {
             } else if (response instanceof List) {
                 ArrayList<com.example.andy.api_model.Log> logs =
                         (ArrayList<com.example.andy.api_model.Log>) response;
+                Collections.reverse(logs);
                 adapter = new RecyclerAdapter(logs);
                 recyclerView.setAdapter(adapter);
             }

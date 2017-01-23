@@ -14,6 +14,17 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity: ";
 
+    public static final String COLOR_TERRIBLE = "#64ea9999";
+    public static final String COLOR_VERYBAD = "#64ffad99";
+    public static final String COLOR_BAD = "#64eac199";
+    public static final String COLOR_PRETTYBAD = "#64ffd699";
+    public static final String COLOR_MEDIOCRE = "#64ffffad";
+    public static final String COLOR_AVERAGE = "#64e3e3e3";
+    public static final String COLOR_FAIRLYGOOD = "#64c7f599";
+    public static final String COLOR_GOOD = "#6499d699";
+    public static final String COLOR_GREAT = "#6499c199";
+    public static final String COLOR_FANTASTIC = "#64a3a3ff";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
