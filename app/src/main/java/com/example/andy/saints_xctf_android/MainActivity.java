@@ -14,16 +14,16 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity: ";
 
-    public static final String COLOR_TERRIBLE = "#64ea9999";
-    public static final String COLOR_VERYBAD = "#64ffad99";
-    public static final String COLOR_BAD = "#64eac199";
-    public static final String COLOR_PRETTYBAD = "#64ffd699";
-    public static final String COLOR_MEDIOCRE = "#64ffffad";
-    public static final String COLOR_AVERAGE = "#64e3e3e3";
-    public static final String COLOR_FAIRLYGOOD = "#64c7f599";
-    public static final String COLOR_GOOD = "#6499d699";
-    public static final String COLOR_GREAT = "#6499c199";
-    public static final String COLOR_FANTASTIC = "#64a3a3ff";
+    public static final String COLOR_TERRIBLE = "#ea9999";
+    public static final String COLOR_VERYBAD = "#ffad99";
+    public static final String COLOR_BAD = "#eac199";
+    public static final String COLOR_PRETTYBAD = "#ffd699";
+    public static final String COLOR_MEDIOCRE = "#ffffad";
+    public static final String COLOR_AVERAGE = "#e3e3e3";
+    public static final String COLOR_FAIRLYGOOD = "#c7f599";
+    public static final String COLOR_GOOD = "#99d699";
+    public static final String COLOR_GREAT = "#99c199";
+    public static final String COLOR_FANTASTIC = "#a3a3ff";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

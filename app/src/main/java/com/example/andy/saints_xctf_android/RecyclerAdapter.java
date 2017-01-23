@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,6 +92,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
 
                 }
             });
+
+            // Add the comment to the view and call API when user hits enter
+            logview_add_comment.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    return false;
+                }
+            });
         }
 
         public void bindLog(Log log) {
@@ -107,7 +116,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             logview_date.setText(date);
             logview_type.setText(log.getType().toUpperCase());
             logview_location.setText(log.getLocation());
-            logview_distance.setText(String.valueOf(log.getDistance()));
+
+            String distance = String.valueOf(log.getDistance());
+            if (distance.equals("0.0")) {
+                logview_distance.setVisibility(View.GONE);
+            }
+            logview_distance.setText(distance + " " + log.getMetric());
+
+            String time = log.getTime().toString();
+            if (time.equals("00:00:00")) {
+                logview_time.setVisibility(View.GONE);
+            }
             logview_time.setText(log.getTime().toString());
             logview_description.setText(log.getDescription());
         }

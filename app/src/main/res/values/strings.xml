@@ -74,4 +74,6 @@
     <string name="log_date">Log Date</string>
     <string name="log_name">Log Name</string>
     <string name="first_last">First Last</string>
+    <string name="comment_date">Comment Date</string>
+    <string name="comment_content">Comment Content</string>
 </resources>
