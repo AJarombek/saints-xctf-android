@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.example.andy.api_model.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Adapter for the RecycleView (which shows workout logs)
@@ -52,6 +54,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
 
     public static class LogHolder extends RecyclerView.ViewHolder {
 
+        private View v;
+        private RecyclerView recyclerCommentView;
+        private LinearLayoutManager linearLayoutManager;
+        private RecyclerCommentAdapter adapter;
+
         private LinearLayout logview;
         private TextView logview_username;
         private TextView logview_name;
@@ -74,6 +81,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
         public LogHolder(View v) {
             super(v);
 
+            this.v = v;
             logview = (LinearLayout) v.findViewById(R.id.logview);
             logview_username = (TextView) v.findViewById(R.id.logview_username);
             logview_name = (TextView) v.findViewById(R.id.logview_name);
@@ -104,10 +112,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
 
         public void bindLog(Log log) {
             this.log = log;
+
+            // Set the background color according to the log feel
             GradientDrawable bgShape = (GradientDrawable)logview.getBackground();
             int color = Color.parseColor(COLOR_VALUE[log.getFeel()-1]);
             bgShape.setColor(color);
 
+            // Set all of the log values
             logview_username.setText(log.getFirst() + " " + log.getLast());
             logview_name.setText(log.getName());
 
@@ -129,6 +140,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             }
             logview_time.setText(log.getTime().toString());
             logview_description.setText(log.getDescription());
+
+            // Add the comment recycler view
+            // Set up the recycler view and layout manager
+            recyclerCommentView = (RecyclerView) v.findViewById(R.id.recyclerViewComments);
+            linearLayoutManager = new LinearLayoutManager(v.getContext());
+            recyclerCommentView.setLayoutManager(linearLayoutManager);
+
+            Collections.reverse(log.getComments());
+            adapter = new RecyclerCommentAdapter(log.getComments());
+            recyclerCommentView.setAdapter(adapter);
         }
     }
 }
