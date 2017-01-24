@@ -1,5 +1,7 @@
 package com.example.andy.saints_xctf_android;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +15,7 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity: ";
+    public static final String PREFS_NAME = "SaintsxctfUserPrefs";
 
     public static final String COLOR_TERRIBLE = "#ea9999";
     public static final String COLOR_VERYBAD = "#ffad99";
@@ -37,8 +40,11 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.activity_main);
 
+        SharedPreferences prefs = this.getSharedPreferences(
+                PREFS_NAME, Context.MODE_PRIVATE);
+
         // If the user is signed in, forward them to the main page
-        if (savedInstanceState != null) {
+        if (prefs.contains("username")) {
             if (fragment == null) {
                 fragment = new MainFragment();
                 fm.beginTransaction().
@@ -74,6 +80,14 @@ public class MainActivity extends AppCompatActivity {
     protected void signIn() {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = new MainFragment();
+        fm.beginTransaction().
+                replace(R.id.activity_main, fragment).
+                commit();
+    }
+
+    protected void signOut() {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = new HomeFragment();
         fm.beginTransaction().
                 replace(R.id.activity_main, fragment).
                 commit();

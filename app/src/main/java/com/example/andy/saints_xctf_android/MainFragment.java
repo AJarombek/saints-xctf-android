@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -30,6 +31,7 @@ public class MainFragment extends Fragment {
 
     private View v;
     private static final String TAG = "MainFragment: ";
+    public static final String PREFS_NAME = "SaintsxctfUserPrefs";
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private RecyclerAdapter adapter;
@@ -94,6 +96,8 @@ public class MainFragment extends Fragment {
             case R.id.action_group:
                 return true;
             case R.id.action_exit:
+                getContext().getSharedPreferences(PREFS_NAME, 0).edit().clear().apply();
+                ((MainActivity) getActivity()).signOut();
                 return true;
             default:
                 // The user's action was not recognized, invoke the superclass to handle it.
