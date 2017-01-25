@@ -1,8 +1,11 @@
 package com.example.andy.saints_xctf_android;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,8 +17,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.andy.api_model.APIClient;
+import com.example.andy.api_model.Comment;
 import com.example.andy.api_model.Log;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +35,8 @@ import java.util.Collections;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHolder> {
 
+    private static final String LOG_TAG = RecyclerAdapter.class.getName();
+    public static final String PREFS_NAME = "SaintsxctfUserPrefs";
     private ArrayList<Log> logs;
 
     public RecyclerAdapter(ArrayList<Log> logs) {
@@ -105,6 +114,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             logview_add_comment.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    // If the event is a key down on the enter button
+                    if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                            (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        SharedPreferences prefs = v.getContext().getSharedPreferences(
+                                PREFS_NAME, Context.MODE_PRIVATE);
+                        String username = prefs.getString("username", "");
+                        String first = prefs.getString("first", "");
+                        String last = prefs.getString("last", "");
+
+                        CommentTask commentTask = new CommentTask();
+                        commentTask.execute(logview_add_comment.getText().toString(),
+                                String.valueOf(log.getLog_id()), username, first, last);
+                        return true;
+                    }
                     return false;
                 }
             });
@@ -150,6 +173,50 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             Collections.reverse(log.getComments());
             adapter = new RecyclerCommentAdapter(log.getComments());
             recyclerCommentView.setAdapter(adapter);
+        }
+
+        class CommentTask extends AsyncTask<String, Void, Object> {
+
+            @Override
+            protected Object doInBackground(String... params) {
+                Comment comment;
+                String commentJSON;
+                try {
+                    comment = new Comment();
+                    comment.setContent(params[0]);
+                    comment.setLog_id(Integer.parseInt(params[1]));
+                    comment.setUsername(params[2]);
+                    comment.setFirst(params[3]);
+                    comment.setLast(params[4]);
+
+                    ObjectMapper mapper = new ObjectMapper();
+                    commentJSON = mapper.writeValueAsString(comment);
+
+                    comment = APIClient.commentPostRequest(commentJSON);
+
+                    // If null is returned, there is no internet connection
+                    if (comment == null) {
+                        return "no_internet";
+                    }
+                } catch (IOException e) {
+                    android.util.Log.e(LOG_TAG, "Comment object JSON conversion failed.");
+                    android.util.Log.e(LOG_TAG, e.getMessage());
+                    return "no_internet";
+                }
+                return comment;
+            }
+
+            @Override
+            protected void onPostExecute(Object response) {
+                super.onPostExecute(response);
+
+                if (response.equals("no_internet")) {
+
+                } else if (response instanceof Comment) {
+                    android.util.Log.d(LOG_TAG, "The Comment Object Received: " + response.toString());
+
+                }
+            }
         }
     }
 }
