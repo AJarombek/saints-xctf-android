@@ -76,4 +76,5 @@
     <string name="first_last">First Last</string>
     <string name="comment_date">Comment Date</string>
     <string name="comment_content">Comment Content</string>
+    <string name="ms">:</string>
 </resources>

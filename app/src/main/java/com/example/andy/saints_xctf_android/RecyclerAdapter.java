@@ -79,6 +79,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
         private TextView logview_description;
         private EditText logview_add_comment;
         private Log log;
+        private ArrayList<Comment> comments;
 
         private static final String LOG_KEY = "LOGVIEW";
         private static final String[] COLOR_VALUE = {MainActivity.COLOR_TERRIBLE,
@@ -170,15 +171,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             linearLayoutManager = new LinearLayoutManager(v.getContext());
             recyclerCommentView.setLayoutManager(linearLayoutManager);
 
-            Collections.reverse(log.getComments());
-            adapter = new RecyclerCommentAdapter(log.getComments());
+            comments = log.getComments();
+            Collections.reverse(comments);
+            adapter = new RecyclerCommentAdapter(comments);
             recyclerCommentView.setAdapter(adapter);
         }
 
-        class CommentTask extends AsyncTask<String, Void, Object> {
+        class CommentTask extends AsyncTask<String, Void, Comment> {
 
             @Override
-            protected Object doInBackground(String... params) {
+            protected Comment doInBackground(String... params) {
                 Comment comment;
                 String commentJSON;
                 try {
@@ -196,25 +198,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
 
                     // If null is returned, there is no internet connection
                     if (comment == null) {
-                        return "no_internet";
+                        return null;
                     }
                 } catch (IOException e) {
                     android.util.Log.e(LOG_TAG, "Comment object JSON conversion failed.");
                     android.util.Log.e(LOG_TAG, e.getMessage());
-                    return "no_internet";
+                    return null;
                 }
                 return comment;
             }
 
             @Override
-            protected void onPostExecute(Object response) {
+            protected void onPostExecute(Comment response) {
                 super.onPostExecute(response);
 
-                if (response.equals("no_internet")) {
-
-                } else if (response instanceof Comment) {
+                if (response != null) {
                     android.util.Log.d(LOG_TAG, "The Comment Object Received: " + response.toString());
-
+                    logview_add_comment.setText("");
+                    comments.add(response);
+                    adapter.notifyItemInserted(comments.size() - 1);
                 }
             }
         }

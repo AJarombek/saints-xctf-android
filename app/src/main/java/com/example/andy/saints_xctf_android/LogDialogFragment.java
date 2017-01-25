@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -65,7 +66,6 @@ public class LogDialogFragment extends DialogFragment {
         log_metric = (Spinner) logDialogView.findViewById(R.id.log_metric);
         log_feel = (SeekBar) logDialogView.findViewById(R.id.log_feel);
 
-        log_time_hours = (EditText) logDialogView.findViewById(R.id.log_time_hours);
         log_time_minutes = (EditText) logDialogView.findViewById(R.id.log_time_minutes);
         log_time_seconds = (EditText) logDialogView.findViewById(R.id.log_time_seconds);
         log_description = (EditText) logDialogView.findViewById(R.id.log_description);
@@ -85,6 +85,22 @@ public class LogDialogFragment extends DialogFragment {
 
             }
         });
+
+        // Populate the spinner for the workout type
+        ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter
+                .createFromResource(getContext(), R.array.log_type_array,
+                        android.R.layout.simple_spinner_item);
+
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        log_type.setAdapter(typeAdapter);
+
+        // Populate the spinner for the distance metric
+        ArrayAdapter<CharSequence> metricAdapter = ArrayAdapter
+                .createFromResource(getContext(), R.array.log_metric_array,
+                        android.R.layout.simple_spinner_item);
+
+        metricAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        log_metric.setAdapter(metricAdapter);
 
         return builder.create(); // return dialog
     }
