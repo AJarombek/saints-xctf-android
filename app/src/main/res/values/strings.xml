@@ -77,4 +77,6 @@
     <string name="comment_date">Comment Date</string>
     <string name="comment_content">Comment Content</string>
     <string name="ms">:</string>
+    <string name="average">AVERAGE</string>
+    <string name="new_log">New Log</string>
 </resources>

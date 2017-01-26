@@ -14,6 +14,30 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/new_log"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/log_feel_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/average"
+            android:textSize="16sp"
+            android:textAlignment="viewEnd"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <TextView
@@ -36,7 +60,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
 
         <TextView
             android:id="@+id/log_location_tag"
@@ -59,7 +84,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
 
         <TextView
             android:id="@+id/log_date_tag"
@@ -89,7 +115,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
 
         <TextView
             android:id="@+id/log_type_tag"
@@ -194,7 +221,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/feel"
-        android:textSize="18sp"/>
+        android:textSize="18sp"
+        android:layout_gravity="center_vertical"/>
 
     <SeekBar
         android:id="@+id/log_feel"
@@ -203,7 +231,8 @@
         android:minWidth="400dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
-        android:max="10"/>
+        android:max="9"
+        android:progress="5"/>
 
     </LinearLayout>
 
@@ -230,7 +259,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/error_message"
+        android:id="@+id/log_error_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"

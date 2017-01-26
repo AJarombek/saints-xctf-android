@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -27,7 +28,14 @@ import java.util.TimeZone;
  */
 public class LogDialogFragment extends DialogFragment {
 
+    private static final String[] COLOR_DESCRIPTION = {MainActivity.DESCRIPT_TERRIBLE,
+            MainActivity.DESCRIPT_VERYBAD, MainActivity.DESCRIPT_BAD, MainActivity.DESCRIPT_PRETTYBAD,
+            MainActivity.DESCRIPT_MEDIOCRE, MainActivity.DESCRIPT_AVERAGE,
+            MainActivity.DESCRIPT_FAIRLYGOOD, MainActivity.DESCRIPT_GOOD,
+            MainActivity.DESCRIPT_GREAT, MainActivity.DESCRIPT_FANTASTIC};
+
     // Views in the fragment
+    private TextView log_feel_view;
     private EditText log_run_name;
     private EditText log_location;
     private TextView log_date;
@@ -40,7 +48,9 @@ public class LogDialogFragment extends DialogFragment {
     private EditText log_time_seconds;
     private SeekBar log_feel;
     private EditText log_description;
+    private TextView log_error_message;
     private Calendar calendar;
+    private AlertDialog d;
 
     /**
      * Create and Run an AlertDialog for Log Submitting
@@ -50,6 +60,7 @@ public class LogDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle bundle) {
+        Dialog dialog = super.onCreateDialog(bundle);
         // create dialog
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(getActivity());
@@ -57,10 +68,11 @@ public class LogDialogFragment extends DialogFragment {
                 R.layout.fragment_log, null);
         builder.setView(logDialogView); // add GUI to dialog
 
-        // set the AlertDialog's message
-        builder.setTitle(R.string.title_log_dialog);
+        // Make this dialog fragment have no title
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         // Initialize View variables
+        log_feel_view = (TextView) logDialogView.findViewById(R.id.log_feel_view);
         log_run_name = (EditText) logDialogView.findViewById(R.id.log_run_name);
         log_location = (EditText) logDialogView.findViewById(R.id.log_location);
 
@@ -76,6 +88,7 @@ public class LogDialogFragment extends DialogFragment {
         log_time_minutes = (EditText) logDialogView.findViewById(R.id.log_time_minutes);
         log_time_seconds = (EditText) logDialogView.findViewById(R.id.log_time_seconds);
         log_description = (EditText) logDialogView.findViewById(R.id.log_description);
+        log_error_message = (TextView) logDialogView.findViewById(R.id.log_error_message);
 
         // Populate the spinner for the workout type
         ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter
@@ -108,23 +121,70 @@ public class LogDialogFragment extends DialogFragment {
             }
         });
 
+        log_feel.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                log_feel_view.setText(COLOR_DESCRIPTION[progress].toUpperCase());
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
         // Cancel the Log
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
+            public void onClick(DialogInterface dialog, int which) {}
         });
 
         // Post the Log
         builder.setPositiveButton("Post Log", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
+            public void onClick(DialogInterface dialog, int which) {}
         });
 
         return builder.create(); // return dialog
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        d = (AlertDialog) getDialog();
+        if (d != null) {
+            Button positiveButton = d.getButton(Dialog.BUTTON_POSITIVE);
+            positiveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    String name = log_run_name.getText().toString();
+                    String location = log_location.getText().toString();
+                    String type = log_type.getSelectedItem().toString();
+                    double distance = Double.parseDouble(log_distance.getText().toString());
+                    String metric = log_metric.getSelectedItem().toString();
+                    int minutes = Integer.parseInt(log_time_minutes.getText().toString());
+                    int seconds = Integer.parseInt(log_time_seconds.getText().toString());
+                    int feel = log_feel.getProgress() + 1;
+                    String description = log_location.getText().toString();
+
+                    boolean formError = false;
+
+                    // First Do Validation for the form inputs
+                    if (name.length() == 0) {
+                        log_error_message.setText(R.string.no_password);
+                        log_run_name.requestFocus();
+                        formError = true;
+                    }
+
+                    // Second try to submit the log
+                    if (!formError) {
+
+                    }
+                }
+            });
+        }
     }
 
     // Listener for when the user picks a date
