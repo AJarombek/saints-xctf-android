@@ -23,8 +23,8 @@ public class Log {
     private Double distance;
     private String metric;
     private Double miles;
-    private Time time;
-    private Time pace;
+    private String time;
+    private String pace;
     private Integer feel;
     private String description;
     private ArrayList<Comment> comments;
@@ -34,7 +34,7 @@ public class Log {
         return "Log: [ log_id: " + log_id + "username: " + username + ", first: " + first + ", last: " + last +
                 ", name: " + name + ", location: " + location + ", date: " + date.toString() +
                 ", type: " + type + ", distance: " + distance.toString() + ", metric: " + metric +
-                ", miles: " + miles.toString() + ", time: " + time.toString() + ", pace:" + pace +
+                ", miles: " + miles.toString() + ", time: " + time + ", pace:" + pace +
                 ", feel: " + feel.toString() + ", comments:" + comments.toString() + ", description: " +
                 description + "]";
     }
@@ -111,11 +111,11 @@ public class Log {
         this.miles = miles;
     }
 
-    public Time getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Time time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
@@ -151,11 +151,11 @@ public class Log {
         this.last = last;
     }
 
-    public Time getPace() {
+    public String getPace() {
         return pace;
     }
 
-    public void setPace(Time pace) {
+    public void setPace(String pace) {
         this.pace = pace;
     }
 

@@ -2,7 +2,10 @@ package com.example.andy.saints_xctf_android;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -17,6 +20,11 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.andy.api_model.APIClient;
+import com.example.andy.api_model.JSONConverter;
+import com.example.andy.api_model.Log;
+
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -30,6 +38,9 @@ import java.util.regex.Pattern;
  * @since 11/7/2016 -
  */
 public class LogDialogFragment extends DialogFragment {
+
+    public static final String PREFS_NAME = "SaintsxctfUserPrefs";
+    private static final String LOG_TAG = LogDialogFragment.class.getName();
 
     private static final String[] COLOR_DESCRIPTION = {MainActivity.DESCRIPT_TERRIBLE,
             MainActivity.DESCRIPT_VERYBAD, MainActivity.DESCRIPT_BAD, MainActivity.DESCRIPT_PRETTYBAD,
@@ -181,7 +192,14 @@ public class LogDialogFragment extends DialogFragment {
 
                     // Second try to submit the log
                     if (!validateForms()) {
-                        log_error_message.setText("no error");
+                        SharedPreferences prefs = getContext().getSharedPreferences(
+                                PREFS_NAME, Context.MODE_PRIVATE);
+                        String username = prefs.getString("username", "");
+
+                        LogTask logTask = new LogTask();
+                        logTask.execute(username,name,location,type,distance,
+                                metric,(minutes + ":" + seconds),minutes,seconds,
+                                String.valueOf(feel),description);
                     }
                 }
             });
@@ -266,5 +284,61 @@ public class LogDialogFragment extends DialogFragment {
         }
 
         return false;
+    }
+
+    class LogTask extends AsyncTask<String, Void, Object> {
+
+        @Override
+        protected Object doInBackground(String... params) {
+            Log log;
+
+            // Create the new log object
+            log = new Log();
+            log.setUsername(params[0]);
+            log.setName(params[1]);
+            log.setLocation(params[2]);
+            log.setType(params[3]);
+
+            double distance = Double.parseDouble(params[4]);
+            log.setDistance(distance);
+            log.setMiles(ControllerUtils.convertToMiles(distance, params[5]));
+            log.setMetric(params[5]);
+            log.setTime(params[6]);
+            log.setPace(ControllerUtils.milePace(distance, params[7], params[8]));
+            log.setFeel(Integer.parseInt(params[9]));
+            log.setDescription(params[10]);
+
+            // Convert the new log to JSON
+            String logJSON;
+            try {
+                logJSON = JSONConverter.fromLog(log);
+            } catch (Throwable t) {
+                android.util.Log.d(LOG_TAG, "Failed to Convert from Log to JSON.");
+                android.util.Log.d(LOG_TAG, t.getMessage());
+                return "internal_error";
+            }
+
+            try {
+                // Second try to add this user to the database
+                log = APIClient.logPostRequest(logJSON);
+
+                if (log == null) return "no_internet";
+
+            } catch (IOException e) {
+                android.util.Log.d(LOG_TAG, "The log failed to be uploaded.");
+                android.util.Log.d(LOG_TAG, e.getMessage());
+                return "internal_error";
+            }
+
+            return log;
+        }
+
+        @Override
+        protected void onPostExecute(Object response) {
+            super.onPostExecute(response);
+
+            // Exit the dialog fragment
+            d.dismiss();
+        }
     }
 }
