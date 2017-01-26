@@ -1,5 +1,6 @@
 package com.example.andy.saints_xctf_android;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -9,10 +10,15 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Class for the Log DialogFragment which is used for creating new exercise logs
@@ -34,6 +40,7 @@ public class LogDialogFragment extends DialogFragment {
     private EditText log_time_seconds;
     private SeekBar log_feel;
     private EditText log_description;
+    private Calendar calendar;
 
     /**
      * Create and Run an AlertDialog for Log Submitting
@@ -70,22 +77,6 @@ public class LogDialogFragment extends DialogFragment {
         log_time_seconds = (EditText) logDialogView.findViewById(R.id.log_time_seconds);
         log_description = (EditText) logDialogView.findViewById(R.id.log_description);
 
-        // Cancel the Log
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
-        // Post the Log
-        builder.setPositiveButton("Post Log", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-
         // Populate the spinner for the workout type
         ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter
                 .createFromResource(getContext(), R.array.log_type_array,
@@ -102,6 +93,49 @@ public class LogDialogFragment extends DialogFragment {
         metricAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         log_metric.setAdapter(metricAdapter);
 
+        calendar = Calendar.getInstance(TimeZone.getTimeZone("EST"));
+        log_date.setText((calendar.get(Calendar.MONTH) + 1) + "-" +
+                calendar.get(Calendar.DAY_OF_MONTH) + "-" + calendar.get(Calendar.YEAR));
+
+        // Create a click listener for the log date button.  It will start the DatePickerDialog
+        log_date_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        getContext(), dateOnDateSetListener, calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
+            }
+        });
+
+        // Cancel the Log
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        // Post the Log
+        builder.setPositiveButton("Post Log", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
         return builder.create(); // return dialog
     }
+
+    // Listener for when the user picks a date
+    private DatePickerDialog.OnDateSetListener dateOnDateSetListener =
+            new DatePickerDialog.OnDateSetListener() {
+
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            log_date.setText((monthOfYear + 1) + "-" + dayOfMonth + "-" + year);
+            calendar.set(year + 1900, monthOfYear, dayOfMonth);
+        }
+
+    };
 }
