@@ -79,4 +79,11 @@
     <string name="ms">:</string>
     <string name="average">AVERAGE</string>
     <string name="new_log">New Log</string>
+    <string name="no_log_name">No Log Name Entered</string>
+    <string name="invalid_date_future">Invalid Date. The Date Selected Is In The Future</string>
+    <string name="invalid_date_past">Invalid Date. The Date Must Be After Jan 1, 2016</string>
+    <string name="no_distance_or_time">Either Distance or Time Must Be Entered</string>
+    <string name="invalid_distance">Invalid Distance Entered</string>
+    <string name="invalid_minutes">Invalid Minutes Entered</string>
+    <string name="invalid_seconds">Invalid Seconds Entered</string>
 </resources>
