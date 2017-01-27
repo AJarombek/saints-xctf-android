@@ -18,7 +18,7 @@ public class Log {
     private String last;
     private String name;
     private String location;
-    private Date date;
+    private String date;
     private String type;
     private Double distance;
     private String metric;
@@ -32,7 +32,7 @@ public class Log {
     @Override
     public String toString() {
         return "Log: [ log_id: " + log_id + "username: " + username + ", first: " + first + ", last: " + last +
-                ", name: " + name + ", location: " + location + ", date: " + date.toString() +
+                ", name: " + name + ", location: " + location + ", date: " + date +
                 ", type: " + type + ", distance: " + distance.toString() + ", metric: " + metric +
                 ", miles: " + miles.toString() + ", time: " + time + ", pace:" + pace +
                 ", feel: " + feel.toString() + ", comments:" + comments.toString() + ", description: " +
@@ -71,11 +71,11 @@ public class Log {
         this.location = location;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

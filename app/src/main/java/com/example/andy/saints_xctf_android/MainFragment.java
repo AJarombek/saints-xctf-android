@@ -1,6 +1,7 @@
 package com.example.andy.saints_xctf_android;
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.andy.api_model.APIClient;
+import com.example.andy.api_model.JSONConverter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,9 +34,12 @@ public class MainFragment extends Fragment {
     private View v;
     private static final String TAG = "MainFragment: ";
     public static final String PREFS_NAME = "SaintsxctfUserPrefs";
+    public static final int REQUEST_CODE = 0;
+
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private RecyclerAdapter adapter;
+    private ArrayList<com.example.andy.api_model.Log> logs;
 
     /**
      * Android onCreateView method
@@ -87,6 +92,7 @@ public class MainFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_log:
                 LogDialogFragment logDialog = new LogDialogFragment();
+                logDialog.setTargetFragment(this, REQUEST_CODE);
                 logDialog.show(getFragmentManager(), "log dialog");
                 return true;
             case R.id.action_home:
@@ -105,6 +111,25 @@ public class MainFragment extends Fragment {
         }
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Make sure fragment codes match up
+        if (requestCode == LogDialogFragment.REQUEST_CODE) {
+            String newlog = data.getStringExtra(
+                    LogDialogFragment.NEW_LOG_KEY);
+
+            com.example.andy.api_model.Log log = null;
+            try {
+                log = JSONConverter.toLog(newlog);
+            } catch (IOException e) {
+                Log.e(TAG, "Log object JSON conversion failed.");
+                Log.e(TAG, e.getMessage());
+            }
+
+            logs.add(0,log);
+            adapter.notifyItemInserted(logs.size() - 1);
+        }
+    }
+
     class LoadLogTask extends AsyncTask<Void, Void, Object> {
 
         @Override
@@ -113,8 +138,8 @@ public class MainFragment extends Fragment {
             try {
                 logs = APIClient.logsGetRequest();
             } catch (Exception e) {
-                android.util.Log.e(TAG, "Log object JSON conversion failed.");
-                android.util.Log.e(TAG, e.getMessage());
+                Log.e(TAG, "Log object JSON conversion failed.");
+                Log.e(TAG, e.getMessage());
                 return "no_internet";
             }
 
@@ -125,14 +150,15 @@ public class MainFragment extends Fragment {
         protected void onPostExecute(Object response) {
             super.onPostExecute(response);
 
-            if (response.equals("no_internet")) {
-                ((MainActivity) getActivity()).noInternet();
-            } else if (response instanceof List) {
-                ArrayList<com.example.andy.api_model.Log> logs =
-                        (ArrayList<com.example.andy.api_model.Log>) response;
-                Collections.reverse(logs);
-                adapter = new RecyclerAdapter(logs);
-                recyclerView.setAdapter(adapter);
+            if (response != null) {
+                if (response.equals("no_internet")) {
+                    ((MainActivity) getActivity()).noInternet();
+                } else if (response instanceof List) {
+                    logs = (ArrayList<com.example.andy.api_model.Log>) response;
+                    Collections.reverse(logs);
+                    adapter = new RecyclerAdapter(logs);
+                    recyclerView.setAdapter(adapter);
+                }
             }
         }
     }

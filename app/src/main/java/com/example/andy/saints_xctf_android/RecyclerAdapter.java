@@ -148,7 +148,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
 
             SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
             String date = df.format(log.getDate());
-            logview_date.setText(date);
+            logview_date.setText(log.getDate());
             logview_type.setText(log.getType().toUpperCase());
             logview_location.setText(log.getLocation());
 

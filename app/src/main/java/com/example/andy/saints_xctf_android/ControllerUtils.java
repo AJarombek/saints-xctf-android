@@ -22,6 +22,14 @@ public class ControllerUtils {
     }
 
     public static String milePace(Double distance, String minutes, String seconds) {
+        if (minutes.equals(""))
+            if (seconds.equals(""))
+                return "0:00";
+            minutes = "0";
+
+        if (seconds.equals(""))
+            seconds = "0";
+
         int s = (Integer.valueOf(minutes) * 60) + Integer.valueOf(seconds);
         long secondPace = Math.round(s / distance);
         return String.valueOf(secondPace/60) + ":" + String.valueOf(secondPace%60);

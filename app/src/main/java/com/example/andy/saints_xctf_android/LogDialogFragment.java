@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,6 +33,8 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.example.andy.saints_xctf_android.R.id.signup_error_message;
+
 /**
  * Class for the Log DialogFragment which is used for creating new exercise logs
  * @author Andrew Jarombek
@@ -41,6 +44,8 @@ public class LogDialogFragment extends DialogFragment {
 
     public static final String PREFS_NAME = "SaintsxctfUserPrefs";
     private static final String LOG_TAG = LogDialogFragment.class.getName();
+    public static final int REQUEST_CODE = 0;
+    public static final String NEW_LOG_KEY = "new_log";
 
     private static final String[] COLOR_DESCRIPTION = {MainActivity.DESCRIPT_TERRIBLE,
             MainActivity.DESCRIPT_VERYBAD, MainActivity.DESCRIPT_BAD, MainActivity.DESCRIPT_PRETTYBAD,
@@ -68,7 +73,7 @@ public class LogDialogFragment extends DialogFragment {
     private Calendar calendar;
     private AlertDialog d;
     private int feel;
-    private String name,location,type,distance,metric,minutes,seconds,description;
+    private String name,location,type,distance,metric,minutes,seconds,description,date;
 
     /**
      * Create and Run an AlertDialog for Log Submitting
@@ -188,18 +193,30 @@ public class LogDialogFragment extends DialogFragment {
                     minutes = log_time_minutes.getText().toString();
                     seconds = log_time_seconds.getText().toString();
                     feel = log_feel.getProgress() + 1;
-                    description = log_location.getText().toString();
+                    description = log_description.getText().toString();
+                    date = log_date.getText().toString();
+
+                    String month = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+                    String year = String.valueOf(calendar.get(Calendar.YEAR));
+                    String day = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+
+                    if (month.length() == 1)
+                        month = "0" + month;
+
+                    date = year + "-" + month + "-" + day;
 
                     // Second try to submit the log
                     if (!validateForms()) {
                         SharedPreferences prefs = getContext().getSharedPreferences(
                                 PREFS_NAME, Context.MODE_PRIVATE);
                         String username = prefs.getString("username", "");
+                        String first = prefs.getString("first", "");
+                        String last = prefs.getString("last", "");
 
                         LogTask logTask = new LogTask();
-                        logTask.execute(username,name,location,type,distance,
+                        logTask.execute(username,first,last,name,location,type,distance,
                                 metric,(minutes + ":" + seconds),minutes,seconds,
-                                String.valueOf(feel),description);
+                                String.valueOf(feel),description,date);
                     }
                 }
             });
@@ -295,18 +312,26 @@ public class LogDialogFragment extends DialogFragment {
             // Create the new log object
             log = new Log();
             log.setUsername(params[0]);
-            log.setName(params[1]);
-            log.setLocation(params[2]);
-            log.setType(params[3]);
+            log.setFirst(params[1]);
+            log.setLast(params[2]);
+            log.setName(params[3]);
+            log.setLocation(params[4]);
+            log.setType(params[5]);
 
-            double distance = Double.parseDouble(params[4]);
+            double distance = Double.parseDouble(params[6]);
             log.setDistance(distance);
-            log.setMiles(ControllerUtils.convertToMiles(distance, params[5]));
-            log.setMetric(params[5]);
-            log.setTime(params[6]);
-            log.setPace(ControllerUtils.milePace(distance, params[7], params[8]));
-            log.setFeel(Integer.parseInt(params[9]));
-            log.setDescription(params[10]);
+            log.setMiles(ControllerUtils.convertToMiles(distance, params[7]));
+            log.setMetric(params[7]);
+
+            String time = params[8];
+            if (time.equals(":"))
+                time = null;
+
+            log.setTime(time);
+            log.setPace(ControllerUtils.milePace(distance, params[9], params[10]));
+            log.setFeel(Integer.parseInt(params[11]));
+            log.setDescription(params[12]);
+            log.setDate(params[13]);
 
             // Convert the new log to JSON
             String logJSON;
@@ -319,7 +344,8 @@ public class LogDialogFragment extends DialogFragment {
             }
 
             try {
-                // Second try to add this user to the database
+                // add log to the database
+                android.util.Log.d(LOG_TAG, logJSON);
                 log = APIClient.logPostRequest(logJSON);
 
                 if (log == null) return "no_internet";
@@ -337,8 +363,34 @@ public class LogDialogFragment extends DialogFragment {
         protected void onPostExecute(Object response) {
             super.onPostExecute(response);
 
-            // Exit the dialog fragment
-            d.dismiss();
+            if (response.equals("no_internet")) {
+                ((MainActivity) getActivity()).noInternet();
+                d.dismiss();
+            } else if (response.equals("internal_error")) {
+                log_error_message.setText(R.string.internal_error);
+            }  else if (response instanceof Log) {
+
+                Log log = (Log) response;
+                android.util.Log.d(LOG_TAG, "The Log Object Received: " + log.toString());
+
+                String logJSON = "";
+                try {
+                    logJSON = JSONConverter.fromLog(log);
+                } catch (Throwable t) {
+                    android.util.Log.d(LOG_TAG, "Failed to Convert from Log to JSON.");
+                    android.util.Log.d(LOG_TAG, t.getMessage());
+                }
+
+                sendResult(logJSON, REQUEST_CODE);
+                d.dismiss();
+            }
         }
+    }
+
+    private void sendResult(String logJSON, int REQUEST_CODE) {
+        Intent intent = new Intent();
+        intent.putExtra(NEW_LOG_KEY, logJSON);
+        getTargetFragment().onActivityResult(
+                getTargetRequestCode(), REQUEST_CODE, intent);
     }
 }

@@ -86,4 +86,5 @@
     <string name="invalid_distance">Invalid Distance Entered</string>
     <string name="invalid_minutes">Invalid Minutes Entered</string>
     <string name="invalid_seconds">Invalid Seconds Entered</string>
+    <string name="internal_error">Internal Error.  Try Again.</string>
 </resources>
