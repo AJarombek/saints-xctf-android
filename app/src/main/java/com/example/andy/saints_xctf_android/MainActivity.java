@@ -115,8 +115,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void viewProfile(String username) {
+        Bundle data = new Bundle();
+        data.putString("username", username);
+
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = new ProfileFragment();
+        fragment.setArguments(data);
         fm.beginTransaction().
                 replace(R.id.activity_main, fragment).
                 addToBackStack(null).

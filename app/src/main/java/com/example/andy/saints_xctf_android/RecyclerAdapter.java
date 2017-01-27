@@ -71,6 +71,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
         private RecyclerCommentAdapter adapter;
 
         private LinearLayout logview;
+        private TextView logview_un;
         private TextView logview_username;
         private TextView logview_name;
         private TextView logview_date;
@@ -81,6 +82,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
         private TextView logview_description;
         private EditText logview_add_comment;
         private Log log;
+        private String username;
         private ArrayList<Comment> comments;
 
         private static final String LOG_KEY = "LOGVIEW";
@@ -95,6 +97,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
 
             this.v = v;
             logview = (LinearLayout) v.findViewById(R.id.logview);
+            logview_un = (TextView) v.findViewById(R.id.logview_un);
             logview_username = (TextView) v.findViewById(R.id.logview_username);
             logview_name = (TextView) v.findViewById(R.id.logview_name);
             logview_date = (TextView) v.findViewById(R.id.logview_date);
@@ -104,6 +107,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             logview_time = (TextView) v.findViewById(R.id.logview_time);
             logview_description = (TextView) v.findViewById(R.id.logview_description);
             logview_add_comment = (EditText) v.findViewById(R.id.logview_add_comment);
+
+            username = logview_un.getText().toString();
 
             // Go to the users profile when you click on their name
             logview_username.setOnClickListener(new View.OnClickListener() {

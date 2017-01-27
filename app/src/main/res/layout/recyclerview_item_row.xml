@@ -20,6 +20,13 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/logview_un"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="Username"/>
+
+            <TextView
                 android:id="@+id/logview_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
