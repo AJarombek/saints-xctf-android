@@ -108,4 +108,6 @@
     <string name="workout_mileage">Workout Mileage</string>
     <string name="running_mileage">Running Mileage</string>
     <string name="body_feel">Body Feel</string>
+    <string name="logs_tab">Logs</string>
+    <string name="statistics_tab">Statistics</string>
 </resources>

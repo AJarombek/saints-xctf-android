@@ -49,8 +49,8 @@ public class JSONConverter {
 
     public static List<User> toUserList(String JSON) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        UserArray userArray = mapper.readValue(JSON, UserArray.class);
-        return userArray.getUsers();
+        List<User> userArray = mapper.readValue(JSON, new TypeReference<List<User>>(){});
+        return userArray;
     }
 
     public static List<Log> toLogList(String JSON) throws IOException {
@@ -63,14 +63,14 @@ public class JSONConverter {
 
     public static List<Group> toGroupList(String JSON) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        GroupArray groupArray = mapper.readValue(JSON, GroupArray.class);
-        return groupArray.getGroups();
+        List<Group> groupArray = mapper.readValue(JSON, new TypeReference<List<Group>>(){});
+        return groupArray;
     }
 
     public static List<Comment> toCommentList(String JSON) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        CommentArray commentArray = mapper.readValue(JSON, CommentArray.class);
-        return commentArray.getComments();
+        List<Comment> commentArray = mapper.readValue(JSON, new TypeReference<List<Comment>>(){});
+        return commentArray;
     }
 
     public static String fromUser(User user) throws Throwable {
