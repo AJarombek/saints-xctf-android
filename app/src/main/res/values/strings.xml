@@ -100,4 +100,12 @@
     <string name="location_debug">Riverside, CT[D]</string>
     <string name="year_debug">2017[D]</string>
     <string name="class_year">Class Year:</string>
+    <string name="_0">0</string>
+    <string name="career">Career:</string>
+    <string name="past_year">Past Year:</string>
+    <string name="past_month">Past Month:</string>
+    <string name="past_week">Past Week:</string>
+    <string name="workout_mileage">Workout Mileage</string>
+    <string name="running_mileage">Running Mileage</string>
+    <string name="body_feel">Body Feel</string>
 </resources>
