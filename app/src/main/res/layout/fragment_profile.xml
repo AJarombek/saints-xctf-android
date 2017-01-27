@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="50dp"
+    android:orientation="vertical"
     tools:context="com.example.andy.saints_xctf_android.ProfileFragment">
 
     <LinearLayout
@@ -101,14 +102,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Class Year: "
+                    android:text="@string/class_year"
                     android:textSize="18sp"/>
 
                 <TextView
                     android:id="@+id/profile_class_year"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2017[D]"
+                    android:text="@string/year_debug"
                     android:textSize="18sp"/>
 
             </LinearLayout>
@@ -121,14 +122,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Location: "
+                    android:text="@string/location_profile"
                     android:textSize="18sp"/>
 
                 <TextView
                     android:id="@+id/profile_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Riverside, CT[D]"
+                    android:text="@string/location_debug"
                     android:textSize="18sp"/>
 
             </LinearLayout>
@@ -141,14 +142,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Favorite Event: "
+                    android:text="@string/favorite_event"
                     android:textSize="18sp"/>
 
                 <TextView
                     android:id="@+id/profile_favorite_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8K XC[D]"
+                    android:text="@string/fav_event_debug"
                     android:textSize="18sp"/>
 
             </LinearLayout>
@@ -161,19 +162,43 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Description: "
+                    android:text="@string/description_profile"
                     android:textSize="18sp"/>
 
                 <TextView
                     android:id="@+id/profile_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="I like to run.[D]"
+                    android:text="@string/description_debug"
                     android:textSize="18sp"/>
 
             </LinearLayout>
 
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp">
+
+        <android.support.design.widget.TabLayout
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <android.support.design.widget.TabItem
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="              Logs                "/>
+
+            <android.support.design.widget.TabItem
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="              Statistics            "/>
+
+        </android.support.design.widget.TabLayout>
 
     </LinearLayout>
 

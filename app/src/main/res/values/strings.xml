@@ -92,4 +92,12 @@
     <string name="member_since">Member Since: </string>
     <string name="_2016_12_23">2016-12-23[D]</string>
     <string name="groups_debug"><![CDATA[Men\'s Cross Country[D]\nMens\'s Track & Field[D]]]></string>
+    <string name="description_debug">I like to run.[D]</string>
+    <string name="description_profile">Description:</string>
+    <string name="fav_event_debug">8K XC[D]</string>
+    <string name="favorite_event">Favorite Event:</string>
+    <string name="location_profile">Location:</string>
+    <string name="location_debug">Riverside, CT[D]</string>
+    <string name="year_debug">2017[D]</string>
+    <string name="class_year">Class Year:</string>
 </resources>
