@@ -25,7 +25,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 
 /**
  * Adapter for the RecycleView (which shows workout logs)
@@ -146,9 +148,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             logview_username.setText(log.getFirst() + " " + log.getLast());
             logview_name.setText(log.getName());
 
+            String dateString = log.getDate();
+            int year = Integer.parseInt(dateString.substring(0,4));
+            int month = Integer.parseInt(dateString.substring(5,7));
+            int day = Integer.parseInt(dateString.substring(8,10));
+
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.set(year,month,day);
+
             SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
-            String date = df.format(log.getDate());
-            logview_date.setText(log.getDate());
+            df.setCalendar(calendar);
+            String date = df.format(calendar.getTime());
+            logview_date.setText(date);
             logview_type.setText(log.getType().toUpperCase());
             logview_location.setText(log.getLocation());
 
@@ -158,11 +169,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             }
             logview_distance.setText(distance + " " + log.getMetric());
 
-            String time = log.getTime().toString();
-            if (time.equals("00:00:00")) {
+            String time = log.getTime();
+            if (time == null || time.equals("00:00:00")) {
                 logview_time.setVisibility(View.GONE);
             }
-            logview_time.setText(log.getTime().toString());
+            logview_time.setText(log.getTime());
             logview_description.setText(log.getDescription());
 
             // Add the comment recycler view

@@ -29,16 +29,16 @@
     <string name="last_name">Last Name:</string>
 
     <string-array name="log_type_array">
-        <item>Run</item>
-        <item>Bike</item>
-        <item>Swim</item>
-        <item>Other</item>
+        <item>run</item>
+        <item>bike</item>
+        <item>swim</item>
+        <item>other</item>
     </string-array>
 
     <string-array name="log_metric_array">
-        <item>Miles</item>
-        <item>Kilometers</item>
-        <item>Meters</item>
+        <item>miles</item>
+        <item>kilometers</item>
+        <item>meters</item>
     </string-array>
 
     <string name="no_username">No Username Entered</string>
