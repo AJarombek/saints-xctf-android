@@ -87,4 +87,9 @@
     <string name="invalid_minutes">Invalid Minutes Entered</string>
     <string name="invalid_seconds">Invalid Seconds Entered</string>
     <string name="internal_error">Internal Error.  Try Again.</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="amp_username"><![CDATA[&username]]></string>
+    <string name="member_since">Member Since: </string>
+    <string name="_2016_12_23">2016-12-23[D]</string>
+    <string name="groups_debug"><![CDATA[Men\'s Cross Country[D]\nMens\'s Track & Field[D]]]></string>
 </resources>

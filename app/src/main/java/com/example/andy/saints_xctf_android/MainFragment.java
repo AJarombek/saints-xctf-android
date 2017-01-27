@@ -1,7 +1,9 @@
 package com.example.andy.saints_xctf_android;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -40,6 +42,7 @@ public class MainFragment extends Fragment {
     private LinearLayoutManager linearLayoutManager;
     private RecyclerAdapter adapter;
     private ArrayList<com.example.andy.api_model.Log> logs;
+    private String username,first,last;
 
     /**
      * Android onCreateView method
@@ -57,6 +60,12 @@ public class MainFragment extends Fragment {
 
         setHasOptionsMenu(true);
         this.v = view;
+
+        SharedPreferences prefs = getContext().getSharedPreferences(
+                PREFS_NAME, Context.MODE_PRIVATE);
+        username = prefs.getString("username", "");
+        first = prefs.getString("first", "");
+        last = prefs.getString("last", "");
 
         // Set up the recycler view and layout manager
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
@@ -98,7 +107,7 @@ public class MainFragment extends Fragment {
             case R.id.action_home:
                 return true;
             case R.id.action_profile:
-                return true;
+                ((MainActivity) getActivity()).viewProfile(username);
             case R.id.action_group:
                 return true;
             case R.id.action_exit:
@@ -126,7 +135,7 @@ public class MainFragment extends Fragment {
             }
 
             logs.add(0,log);
-            adapter.notifyItemInserted(logs.size() - 1);
+            adapter.notifyItemInserted(0);
         }
     }
 
