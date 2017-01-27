@@ -25,6 +25,7 @@
                 android:background="@drawable/logo"/>
 
             <Button
+                android:id="@+id/edit_profile_button"
                 android:layout_width="200sp"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
@@ -72,6 +73,7 @@
                     android:id="@+id/profile_member_since"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:text="@string/_2016_12_23"
                     android:textSize="18sp"/>
 
@@ -100,6 +102,7 @@
                 android:layout_marginTop="10dp">
 
                 <TextView
+                    android:id="@+id/profile_class_year_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/class_year"
@@ -109,6 +112,7 @@
                     android:id="@+id/profile_class_year"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:text="@string/year_debug"
                     android:textSize="18sp"/>
 
@@ -120,6 +124,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/profile_location_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/location_profile"
@@ -129,6 +134,7 @@
                     android:id="@+id/profile_location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:text="@string/location_debug"
                     android:textSize="18sp"/>
 
@@ -140,6 +146,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/profile_favorite_event_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/favorite_event"
@@ -149,6 +156,7 @@
                     android:id="@+id/profile_favorite_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:text="@string/fav_event_debug"
                     android:textSize="18sp"/>
 
@@ -160,6 +168,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/profile_description_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/description_profile"
@@ -169,6 +178,7 @@
                     android:id="@+id/profile_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
                     android:text="@string/description_debug"
                     android:textSize="18sp"/>
 
