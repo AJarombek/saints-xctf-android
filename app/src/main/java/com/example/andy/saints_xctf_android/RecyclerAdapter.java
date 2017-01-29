@@ -3,10 +3,8 @@ package com.example.andy.saints_xctf_android;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -15,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.andy.api_model.APIClient;
@@ -39,23 +38,80 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
 
     private static final String LOG_TAG = RecyclerAdapter.class.getName();
     public static final String PREFS_NAME = "SaintsxctfUserPrefs";
+
     private ArrayList<Log> logs;
+    private Context context;
+    private int visibleThreshold = 5;
+    private int lastVisibleItem, totalItemCount;
+    private boolean loading;
+    private OnLoadMoreListener onLoadMoreListener;
 
-    public RecyclerAdapter(ArrayList<Log> logs) {
+    public RecyclerAdapter(Context context, ArrayList<Log> logs,
+                           RecyclerView recyclerView) {
         this.logs = logs;
+        this.context = context;
+        if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+            final LinearLayoutManager linearLayoutManager =
+                    (LinearLayoutManager) recyclerView.getLayoutManager();
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                    if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                        if (onLoadMoreListener != null) {
+                            onLoadMoreListener.onLoadMore();
+                        }
+                        loading = true;
+                    }
+                }
+            });
+        }
     }
 
     @Override
-    public RecyclerAdapter.LogHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View inflatedView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recyclerview_item_row, parent, false);
-        return new LogHolder(inflatedView);
+    public int getItemViewType(int position) {
+        return logs.get(position) != null ? 1 : 0;
     }
 
     @Override
-    public void onBindViewHolder(RecyclerAdapter.LogHolder holder, int position) {
-        Log itemlog = logs.get(position);
-        holder.bindLog(itemlog);
+    public LogHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LogHolder logHolder;
+        View layoutView = LayoutInflater.from(parent.getContext()).
+                inflate(R.layout.recyclerview_item_row, parent, false);
+        if (viewType == 1) {
+            logHolder = new LogHolder(layoutView);
+        } else {
+            logHolder = new ProgressHolder(layoutView);
+        }
+        return logHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(LogHolder holder, int position) {
+        if (holder instanceof ProgressHolder) {
+            ((ProgressHolder)holder).progressBar.setIndeterminate(true);
+        } else {
+            Log itemlog = logs.get(position);
+            holder.bindLog(itemlog);
+        }
+    }
+
+    public void setLoad() {
+        loading = false;
+    }
+
+    public void setLoaded() {
+        loading = false;
+    }
+
+    public interface OnLoadMoreListener {
+        void onLoadMore();
+    }
+
+    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
+        this.onLoadMoreListener = onLoadMoreListener;
     }
 
     @Override
@@ -235,6 +291,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
                     adapter.notifyItemInserted(comments.size() - 1);
                 }
             }
+        }
+    }
+
+    public static class ProgressHolder extends LogHolder {
+
+        private ProgressBar progressBar;
+
+        public ProgressHolder(View v) {
+            super(v);
+            progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         }
     }
 }

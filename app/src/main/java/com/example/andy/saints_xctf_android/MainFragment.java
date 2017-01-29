@@ -65,10 +65,20 @@ public class MainFragment extends Fragment {
         first = prefs.getString("first", "");
         last = prefs.getString("last", "");
 
+        logs = new ArrayList<>();
+
         // Set up the recycler view and layout manager
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
+        adapter = new RecyclerAdapter(getContext(), logs, recyclerView);
+        recyclerView.setAdapter(adapter);
+        adapter.setOnLoadMoreListener(new RecyclerAdapter.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+
+            }
+        });
 
         LoadLogTask loadLogTask = new LoadLogTask();
         loadLogTask.execute();
