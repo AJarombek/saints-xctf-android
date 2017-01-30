@@ -64,7 +64,7 @@ public class APIClient {
         return JSONConverter.toGroup(response);
     }
 
-    public static List<com.example.andy.api_model.Log> logfeedGetRequest(String[] params)
+    public static List<com.example.andy.api_model.Log> logfeedGetRequest(String... params)
             throws IOException {
         String paramtype = params[0];
         String sortparam = params[1];

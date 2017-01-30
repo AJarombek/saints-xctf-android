@@ -41,6 +41,7 @@ public class MainFragment extends Fragment {
     private RecyclerAdapter adapter;
     private ArrayList<com.example.andy.api_model.Log> logs;
     private String username,first,last;
+    private LoadLogTask loadLogTask;
 
     /**
      * Android onCreateView method
@@ -66,6 +67,7 @@ public class MainFragment extends Fragment {
         last = prefs.getString("last", "");
 
         logs = new ArrayList<>();
+        loadLogTask = new LoadLogTask();
 
         // Set up the recycler view and layout manager
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
@@ -73,15 +75,25 @@ public class MainFragment extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new RecyclerAdapter(getContext(), logs, recyclerView);
         recyclerView.setAdapter(adapter);
+
+        // Initiate the progress bar
+        logs.add(null);
+        adapter.notifyItemInserted(logs.size() - 1);
+
         adapter.setOnLoadMoreListener(new RecyclerAdapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-
+                logs.add(null);
+                adapter.notifyItemInserted(logs.size() - 1);
+                int itemsLoaded = adapter.getItemCount();
+                if ((itemsLoaded % 10) == 0) {
+                    loadLogTask.execute("all", "all", String.valueOf(itemsLoaded));
+                }
             }
         });
 
-        LoadLogTask loadLogTask = new LoadLogTask();
-        loadLogTask.execute();
+        // Load the first ten logs
+        loadLogTask.execute("all","all","0");
 
         return v;
     }
@@ -147,13 +159,13 @@ public class MainFragment extends Fragment {
         }
     }
 
-    class LoadLogTask extends AsyncTask<Void, Void, Object> {
+    class LoadLogTask extends AsyncTask<String, Void, Object> {
 
         @Override
-        protected Object doInBackground(Void... voids) {
+        protected Object doInBackground(String... strings) {
             List<com.example.andy.api_model.Log> logs = null;
             try {
-                logs = APIClient.logsGetRequest();
+                logs = APIClient.logfeedGetRequest(strings[0], strings[1], "10", strings[2]);
             } catch (Exception e) {
                 Log.e(TAG, "Log object JSON conversion failed.");
                 Log.e(TAG, e.getMessage());
@@ -171,10 +183,14 @@ public class MainFragment extends Fragment {
                 if (response.equals("no_internet")) {
                     ((MainActivity) getActivity()).noInternet();
                 } else if (response instanceof List) {
-                    logs = (ArrayList<com.example.andy.api_model.Log>) response;
-                    Collections.reverse(logs);
-                    adapter = new RecyclerAdapter(logs);
-                    recyclerView.setAdapter(adapter);
+                    ArrayList<com.example.andy.api_model.Log> addedlogs
+                            = (ArrayList<com.example.andy.api_model.Log>) response;
+
+                    // Remove the progress bar and add the new items to the recycler view
+                    logs.remove(logs.size() - 1);
+                    adapter.notifyItemRemoved(logs.size());
+                    logs.addAll(addedlogs);
+                    adapter.notifyItemInserted(logs.size() - 1);
                 }
             }
         }

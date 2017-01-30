@@ -78,11 +78,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
     @Override
     public LogHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LogHolder logHolder;
-        View layoutView = LayoutInflater.from(parent.getContext()).
-                inflate(R.layout.recyclerview_item_row, parent, false);
+        View layoutView;
         if (viewType == 1) {
+            layoutView = LayoutInflater.from(parent.getContext()).
+                    inflate(R.layout.recyclerview_item_row, parent, false);
             logHolder = new LogHolder(layoutView);
         } else {
+            layoutView = LayoutInflater.from(parent.getContext()).
+                    inflate(R.layout.progress_item, parent, false);
             logHolder = new ProgressHolder(layoutView);
         }
         return logHolder;
@@ -163,7 +166,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             logview_time = (TextView) v.findViewById(R.id.logview_time);
             logview_description = (TextView) v.findViewById(R.id.logview_description);
             logview_add_comment = (EditText) v.findViewById(R.id.logview_add_comment);
+        }
 
+        public void bindLog(Log logObject) {
+            this.log = logObject;
             username = logview_un.getText().toString();
 
             // Go to the users profile when you click on their name
@@ -195,10 +201,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
                     return false;
                 }
             });
-        }
-
-        public void bindLog(Log log) {
-            this.log = log;
 
             // Set the background color according to the log feel
             GradientDrawable bgShape = (GradientDrawable)logview.getBackground();
