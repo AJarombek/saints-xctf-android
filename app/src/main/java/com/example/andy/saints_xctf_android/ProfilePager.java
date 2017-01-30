@@ -29,11 +29,14 @@ public class ProfilePager extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         //Returning the current tabs
+        Bundle data = new Bundle();
         switch (position) {
             case 0:
-                return new LogsTab();
+                data.putString("username", String.valueOf(user.getUsername()));
+                LogsTab logsTab = new LogsTab();
+                logsTab.setArguments(data);
+                return logsTab;
             case 1:
-                Bundle data = new Bundle();
                 Map<String,Double> statistics = user.getStatistics();
                 data.putString("workout_career", String.valueOf(statistics.get("miles")));
                 data.putString("workout_year", String.valueOf(statistics.get("milespastyear")));

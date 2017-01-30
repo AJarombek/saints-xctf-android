@@ -168,6 +168,10 @@ public class MainFragment extends Fragment {
             List<com.example.andy.api_model.Log> logs = null;
             try {
                 logs = APIClient.logfeedGetRequest(strings[0], strings[1], "10", strings[2]);
+
+                if (logs == null)
+                    return "no_internet";
+
             } catch (Exception e) {
                 Log.e(TAG, "Log object JSON conversion failed.");
                 Log.e(TAG, e.getMessage());
