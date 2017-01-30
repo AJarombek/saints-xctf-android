@@ -123,4 +123,13 @@ public class MainActivity extends AppCompatActivity {
                 addToBackStack(null).
                 commit();
     }
+
+    protected void editProfile() {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = new EditProfileFragment();
+        fm.beginTransaction().
+                replace(R.id.activity_main, fragment).
+                addToBackStack(null).
+                commit();
+    }
 }

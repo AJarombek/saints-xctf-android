@@ -95,6 +95,13 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
             }
             populateProfileInfo(user);
 
+            edit_profile_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity) getActivity()).editProfile();
+                }
+            });
+
         } else {
             // This is someone else's profile page
             edit_profile_button.setVisibility(View.GONE);

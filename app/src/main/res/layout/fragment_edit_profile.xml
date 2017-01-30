@@ -1,0 +1,253 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.andy.saints_xctf_android.EditProfileFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="100dp"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profile Details"
+            android:textStyle="bold"
+            android:textSize="24sp"/>
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:columnCount="2"
+            android:rowCount="7">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="First Name: "
+                android:layout_row="0"
+                android:layout_column="0"
+                android:textSize="18sp"/>
+
+            <EditText
+                android:id="@+id/edit_profile_first"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_row="0"
+                android:layout_column="1"
+                android:minWidth="200dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last Name: "
+                android:layout_row="1"
+                android:layout_column="0"
+                android:textSize="18sp"/>
+
+            <EditText
+                android:id="@+id/edit_profile_last"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_row="1"
+                android:layout_column="1"
+                android:minWidth="200dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email: "
+                android:layout_row="2"
+                android:layout_column="0"
+                android:textSize="18sp"/>
+
+            <EditText
+                android:id="@+id/edit_profile_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_row="2"
+                android:layout_column="1"
+                android:minWidth="200dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Class Year: "
+                android:layout_row="3"
+                android:layout_column="0"
+                android:textSize="18sp"/>
+
+            <EditText
+                android:id="@+id/edit_profile_class_year"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_row="3"
+                android:layout_column="1"
+                android:minWidth="200dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location: "
+                android:layout_row="4"
+                android:layout_column="0"
+                android:textSize="18sp"/>
+
+            <EditText
+                android:id="@+id/edit_profile_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_row="4"
+                android:layout_column="1"
+                android:minWidth="200dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Favorite Event: "
+                android:layout_row="5"
+                android:layout_column="0"
+                android:textSize="18sp"/>
+
+            <EditText
+                android:id="@+id/edit_profile_favorite_event"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_row="5"
+                android:layout_column="1"
+                android:minWidth="200dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description: "
+                android:layout_row="6"
+                android:layout_column="0"
+                android:textSize="18sp"/>
+
+            <EditText
+                android:id="@+id/edit_profile_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_row="6"
+                android:layout_column="1"
+                android:minWidth="200dp"/>
+
+        </GridLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profile Picture"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:textSize="24sp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/profile_picture"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:background="@drawable/logo"/>
+
+            <Button
+                android:id="@+id/edit_profile_button"
+                android:layout_width="200sp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_gravity="center_vertical"
+                android:text="Upload Picture"/>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pick Groups"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:textSize="24sp"/>
+
+        <Button
+            android:id="@+id/edit_profile_mensxc"
+            android:layout_width="250sp"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:text="Men's Cross Country"/>
+
+        <Button
+            android:id="@+id/edit_profile_wmensxc"
+            android:layout_width="250sp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:text="Women's Cross Country"/>
+
+        <Button
+            android:id="@+id/edit_profile_menstf"
+            android:layout_width="250sp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:text="Men's Track &amp; Field"/>
+
+        <Button
+            android:id="@+id/edit_profile_wmenstf"
+            android:layout_width="250sp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:text="Women's Track &amp; Field"/>
+
+        <Button
+            android:id="@+id/edit_profile_alumni"
+            android:layout_width="250sp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:text="Alumni"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="150dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/edit_profile_cancel"
+                android:layout_width="200sp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical"
+                android:text="Cancel"/>
+
+            <Button
+                android:id="@+id/edit_profile_sumbit"
+                android:layout_width="200sp"
+                android:layout_height="50dp"
+                android:layout_marginStart="30dp"
+                android:layout_gravity="center_vertical"
+                android:text="Submit"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
