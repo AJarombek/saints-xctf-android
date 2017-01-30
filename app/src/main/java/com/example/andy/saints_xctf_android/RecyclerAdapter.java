@@ -60,10 +60,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
                     totalItemCount = linearLayoutManager.getItemCount();
                     lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
                     if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                        loading = true;
                         if (onLoadMoreListener != null) {
                             onLoadMoreListener.onLoadMore();
                         }
-                        loading = true;
                     }
                 }
             });
@@ -102,11 +102,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
     }
 
     public void setLoad() {
-        loading = false;
+        loading = true;
     }
 
     public void setLoaded() {
         loading = false;
+    }
+
+    public boolean getLoading() {
+        return loading;
     }
 
     public interface OnLoadMoreListener {
@@ -217,7 +221,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             int day = Integer.parseInt(dateString.substring(8,10));
 
             Calendar calendar = GregorianCalendar.getInstance();
-            calendar.set(year,month,day);
+            calendar.set(year,month-1,day);
 
             SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
             df.setCalendar(calendar);

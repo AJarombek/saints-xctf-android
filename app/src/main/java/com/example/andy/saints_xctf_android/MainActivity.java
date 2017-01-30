@@ -1,6 +1,5 @@
 package com.example.andy.saints_xctf_android;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
@@ -11,8 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
 
 public class MainActivity extends AppCompatActivity {
 

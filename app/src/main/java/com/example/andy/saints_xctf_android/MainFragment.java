@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -83,10 +84,11 @@ public class MainFragment extends Fragment {
         adapter.setOnLoadMoreListener(new RecyclerAdapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                logs.add(null);
-                adapter.notifyItemInserted(logs.size() - 1);
                 int itemsLoaded = adapter.getItemCount();
                 if ((itemsLoaded % 10) == 0) {
+                    logs.add(null);
+                    adapter.notifyItemInserted(logs.size() - 1);
+                    LoadLogTask loadLogTask = new LoadLogTask();
                     loadLogTask.execute("all", "all", String.valueOf(itemsLoaded));
                 }
             }
@@ -191,6 +193,7 @@ public class MainFragment extends Fragment {
                     adapter.notifyItemRemoved(logs.size());
                     logs.addAll(addedlogs);
                     adapter.notifyItemInserted(logs.size() - 1);
+                    adapter.setLoaded();
                 }
             }
         }
