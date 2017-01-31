@@ -206,37 +206,46 @@
             android:id="@+id/edit_profile_mensxc"
             android:layout_width="250sp"
             android:layout_height="50dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_gravity="center"
-            android:text="Men's Cross Country"/>
+            android:text="Men's Cross Country"
+            android:background="@color/lightGrey"/>
 
         <Button
             android:id="@+id/edit_profile_wmensxc"
             android:layout_width="250sp"
             android:layout_height="50dp"
+            android:layout_marginTop="10dp"
             android:layout_gravity="center"
-            android:text="Women's Cross Country"/>
+            android:text="Women's Cross Country"
+            android:background="@color/lightGrey"/>
 
         <Button
             android:id="@+id/edit_profile_menstf"
             android:layout_width="250sp"
             android:layout_height="50dp"
+            android:layout_marginTop="10dp"
             android:layout_gravity="center"
-            android:text="Men's Track &amp; Field"/>
+            android:text="Men's Track &amp; Field"
+            android:background="@color/lightGrey"/>
 
         <Button
             android:id="@+id/edit_profile_wmenstf"
             android:layout_width="250sp"
             android:layout_height="50dp"
+            android:layout_marginTop="10dp"
             android:layout_gravity="center"
-            android:text="Women's Track &amp; Field"/>
+            android:text="Women's Track &amp; Field"
+            android:background="@color/lightGrey"/>
 
         <Button
             android:id="@+id/edit_profile_alumni"
             android:layout_width="250sp"
             android:layout_height="50dp"
+            android:layout_marginTop="10dp"
             android:layout_gravity="center"
-            android:text="Alumni"/>
+            android:text="Alumni"
+            android:background="@color/lightGrey"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -253,7 +262,7 @@
                 android:text="Cancel"/>
 
             <Button
-                android:id="@+id/edit_profile_sumbit"
+                android:id="@+id/edit_profile_submit"
                 android:layout_width="200sp"
                 android:layout_height="50dp"
                 android:layout_marginStart="30dp"

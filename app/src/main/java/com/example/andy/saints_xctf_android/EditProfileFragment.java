@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,6 +42,16 @@ public class EditProfileFragment extends Fragment {
     private ImageView edit_profile_picture;
     private Button edit_profile_picture_button;
 
+    private Button edit_profile_mensxc;
+    private Button edit_profile_wmensxc;
+    private Button edit_profile_menstf;
+    private Button edit_profile_wmenstf;
+    private Button edit_profile_alumni;
+    private boolean mensxc, wmensxc, menstf, wmenstf, alumni;
+
+    private Button edit_profile_cancel;
+    private Button edit_profile_submit;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -68,6 +79,16 @@ public class EditProfileFragment extends Fragment {
         edit_profile_description = (EditText) v.findViewById(R.id.edit_profile_description);
 
         edit_profile_picture = (ImageView) v.findViewById(R.id.edit_profile_picture);
+        edit_profile_picture_button = (Button) v.findViewById(R.id.edit_profile_picture_button);
+
+        edit_profile_mensxc = (Button) v.findViewById(R.id.edit_profile_mensxc);
+        edit_profile_wmensxc = (Button) v.findViewById(R.id.edit_profile_wmensxc);
+        edit_profile_menstf = (Button) v.findViewById(R.id.edit_profile_menstf);
+        edit_profile_wmenstf = (Button) v.findViewById(R.id.edit_profile_wmenstf);
+        edit_profile_alumni = (Button) v.findViewById(R.id.edit_profile_alumni);
+
+        edit_profile_cancel = (Button) v.findViewById(R.id.edit_profile_cancel);
+        edit_profile_submit = (Button) v.findViewById(R.id.edit_profile_submit);
 
         edit_profile_first.setText(user.getFirst());
         edit_profile_last.setText(user.getLast());
@@ -101,6 +122,333 @@ public class EditProfileFragment extends Fragment {
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             edit_profile_picture.setImageBitmap(decodedByte);
         }
+
+        edit_profile_mensxc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mensxc) {
+                    mensxc = false;
+                    edit_profile_mensxc.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.lightGrey));
+                    edit_profile_mensxc.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.black));
+
+                    if (!menstf) {
+                        // Enable Women's XC
+                        edit_profile_wmensxc.setClickable(true);
+                        edit_profile_wmensxc.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.lightGrey));
+                        edit_profile_wmensxc.setTextColor(ContextCompat.getColor(
+                                getContext(), R.color.black));
+
+                        // Enable Women's TF
+                        edit_profile_wmenstf.setClickable(true);
+                        edit_profile_wmenstf.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.lightGrey));
+                        edit_profile_wmenstf.setTextColor(ContextCompat.getColor(
+                                getContext(), R.color.black));
+
+                        // Enable Alumni
+                        edit_profile_alumni.setClickable(true);
+                        edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.lightGrey));
+                        edit_profile_alumni.setTextColor(ContextCompat.getColor(
+                                getContext(), R.color.black));
+                    }
+                } else {
+                    mensxc = true;
+                    edit_profile_mensxc.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.stlawuRed));
+                    edit_profile_mensxc.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+
+                    // Disable Women's XC
+                    edit_profile_wmensxc.setClickable(false);
+                    edit_profile_wmensxc.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+                    edit_profile_wmensxc.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.lighterGrey));
+
+                    // Disable Women's TF
+                    edit_profile_wmenstf.setClickable(false);
+                    edit_profile_wmenstf.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+                    edit_profile_wmenstf.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.lighterGrey));
+
+                    // Disable Alumni
+                    edit_profile_alumni.setClickable(false);
+                    edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+                    edit_profile_alumni.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.lighterGrey));
+                }
+            }
+        });
+
+        edit_profile_menstf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (menstf) {
+                    menstf = false;
+                    edit_profile_menstf.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.lightGrey));
+                    edit_profile_menstf.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.black));
+
+                    if (!mensxc) {
+                        // Enable Women's XC
+                        edit_profile_wmensxc.setClickable(true);
+                        edit_profile_wmensxc.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.lightGrey));
+                        edit_profile_wmensxc.setTextColor(ContextCompat.getColor(
+                                getContext(), R.color.black));
+
+                        // Enable Women's TF
+                        edit_profile_wmenstf.setClickable(true);
+                        edit_profile_wmenstf.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.lightGrey));
+                        edit_profile_wmenstf.setTextColor(ContextCompat.getColor(
+                                getContext(), R.color.black));
+
+                        // Enable Alumni
+                        edit_profile_alumni.setClickable(true);
+                        edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.lightGrey));
+                        edit_profile_alumni.setTextColor(ContextCompat.getColor(
+                                getContext(), R.color.black));
+                    }
+                } else {
+                    menstf = true;
+                    edit_profile_menstf.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.stlawuRed));
+                    edit_profile_menstf.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+
+                    // Disable Women's XC
+                    edit_profile_wmensxc.setClickable(false);
+                    edit_profile_wmensxc.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+                    edit_profile_wmensxc.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.lighterGrey));
+
+                    // Disable Women's TF
+                    edit_profile_wmenstf.setClickable(false);
+                    edit_profile_wmenstf.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+                    edit_profile_wmenstf.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.lighterGrey));
+
+                    // Disable Alumni
+                    edit_profile_alumni.setClickable(false);
+                    edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+                    edit_profile_alumni.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.lighterGrey));
+                }
+            }
+        });
+
+        edit_profile_wmensxc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (wmensxc) {
+                    wmensxc = false;
+                    edit_profile_wmensxc.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.lightGrey));
+                    edit_profile_wmensxc.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.black));
+
+                    if (!wmenstf) {
+                        // Enable Men's XC
+                        edit_profile_mensxc.setClickable(true);
+                        edit_profile_mensxc.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.lightGrey));
+                        edit_profile_mensxc.setTextColor(ContextCompat.getColor(
+                                getContext(), R.color.black));
+
+                        // Enable Men's TF
+                        edit_profile_menstf.setClickable(true);
+                        edit_profile_menstf.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.lightGrey));
+                        edit_profile_menstf.setTextColor(ContextCompat.getColor(
+                                getContext(), R.color.black));
+
+                        // Enable Alumni
+                        edit_profile_alumni.setClickable(true);
+                        edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.lightGrey));
+                        edit_profile_alumni.setTextColor(ContextCompat.getColor(
+                                getContext(), R.color.black));
+                    }
+                } else {
+                    wmensxc = true;
+                    edit_profile_wmensxc.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.stlawuRed));
+                    edit_profile_wmensxc.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+
+                    // Disable Men's XC
+                    edit_profile_mensxc.setClickable(false);
+                    edit_profile_mensxc.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+                    edit_profile_mensxc.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.lighterGrey));
+
+                    // Disable Men's TF
+                    edit_profile_menstf.setClickable(false);
+                    edit_profile_menstf.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+                    edit_profile_menstf.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.lighterGrey));
+
+                    // Disable Alumni
+                    edit_profile_alumni.setClickable(false);
+                    edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+                    edit_profile_alumni.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.lighterGrey));
+                }
+            }
+        });
+
+        edit_profile_wmenstf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (wmenstf) {
+                    wmenstf = false;
+                    edit_profile_wmenstf.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.lightGrey));
+                    edit_profile_wmenstf.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.black));
+
+                    if (!wmensxc) {
+                        // Enable Men's XC
+                        edit_profile_mensxc.setClickable(true);
+                        edit_profile_mensxc.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.lightGrey));
+                        edit_profile_mensxc.setTextColor(ContextCompat.getColor(
+                                getContext(), R.color.black));
+
+                        // Enable Men's TF
+                        edit_profile_menstf.setClickable(true);
+                        edit_profile_menstf.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.lightGrey));
+                        edit_profile_menstf.setTextColor(ContextCompat.getColor(
+                                getContext(), R.color.black));
+
+                        // Enable Alumni
+                        edit_profile_alumni.setClickable(true);
+                        edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.lightGrey));
+                        edit_profile_alumni.setTextColor(ContextCompat.getColor(
+                                getContext(), R.color.black));
+                    }
+                } else {
+                    wmenstf = true;
+                    edit_profile_wmenstf.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.stlawuRed));
+                    edit_profile_wmenstf.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+
+                    // Disable Men's XC
+                    edit_profile_mensxc.setClickable(false);
+                    edit_profile_mensxc.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+                    edit_profile_mensxc.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.lighterGrey));
+
+                    // Disable Men's TF
+                    edit_profile_menstf.setClickable(false);
+                    edit_profile_menstf.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+                    edit_profile_menstf.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.lighterGrey));
+
+                    // Disable Alumni
+                    edit_profile_alumni.setClickable(false);
+                    edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+                    edit_profile_alumni.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.lighterGrey));
+                }
+            }
+        });
+
+        edit_profile_alumni.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (alumni) {
+                    alumni = false;
+                    edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.lightGrey));
+                    edit_profile_alumni.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.black));
+
+                    // Enable Men's XC
+                    edit_profile_mensxc.setClickable(true);
+                    edit_profile_mensxc.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.lightGrey));
+                    edit_profile_mensxc.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.black));
+
+                    // Enable Men's TF
+                    edit_profile_menstf.setClickable(true);
+                    edit_profile_menstf.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.lightGrey));
+                    edit_profile_menstf.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.black));
+
+                    // Enable Women's XC
+                    edit_profile_wmensxc.setClickable(true);
+                    edit_profile_wmensxc.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.lightGrey));
+                    edit_profile_wmensxc.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.black));
+
+                    // Enable Women's TF
+                    edit_profile_wmenstf.setClickable(true);
+                    edit_profile_wmenstf.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.lightGrey));
+                    edit_profile_wmenstf.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.black));
+                } else {
+                    alumni = true;
+                    edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.stlawuRed));
+                    edit_profile_alumni.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+
+                    // Disable Men's XC
+                    edit_profile_mensxc.setClickable(false);
+                    edit_profile_mensxc.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+                    edit_profile_mensxc.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.lighterGrey));
+
+                    // Disable Men's TF
+                    edit_profile_menstf.setClickable(false);
+                    edit_profile_menstf.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+                    edit_profile_menstf.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.lighterGrey));
+
+                    // Disable Women's XC
+                    edit_profile_wmensxc.setClickable(false);
+                    edit_profile_wmensxc.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+                    edit_profile_wmensxc.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.lighterGrey));
+
+                    // Disable Women's TF
+                    edit_profile_wmenstf.setClickable(false);
+                    edit_profile_wmenstf.setBackgroundColor(ContextCompat.getColor(
+                            getContext(), R.color.white));
+                    edit_profile_wmenstf.setTextColor(ContextCompat.getColor(
+                            getContext(), R.color.lighterGrey));
+                }
+            }
+        });
 
         return v;
     }
