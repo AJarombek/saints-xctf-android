@@ -1,11 +1,17 @@
 package com.example.andy.saints_xctf_android;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
@@ -20,7 +26,10 @@ import android.widget.ImageView;
 import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.User;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
 
 
 /**
@@ -30,6 +39,7 @@ public class EditProfileFragment extends Fragment {
 
     private static final String TAG = EditProfileFragment.class.getName();
     public static final String PREFS_NAME = "SaintsxctfUserPrefs";
+    private static final int RESULT_LOAD_IMG = 0;
 
     private View v;
     private EditText edit_profile_first;
@@ -121,6 +131,7 @@ public class EditProfileFragment extends Fragment {
             byte[] decodedString = Base64.decode(base64encoding, Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             edit_profile_picture.setImageBitmap(decodedByte);
+            edit_profile_picture.setBackground(null);
         }
 
         edit_profile_mensxc.setOnClickListener(new View.OnClickListener() {
@@ -450,7 +461,83 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
+        Map<String,String> groups = user.getGroups();
+        for (Map.Entry<String,String> entry : groups.entrySet()) {
+            String group = entry.getKey();
+            clickGroup(group);
+        }
+
+        // Load a picture from google pictures
+        edit_profile_picture_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
+            }
+        });
+
         return v;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_LOAD_IMG && resultCode == Activity.RESULT_OK
+                && null != data) {
+
+            Uri selectedImageUri = data.getData();
+            String url = data.getData().toString();
+            if (url.startsWith("content://com.google.android.apps.photos.content")){
+                try {
+                    InputStream is = getActivity().getContentResolver().openInputStream(selectedImageUri);
+                    if (is != null) {
+                        Bitmap pictureBitmap = BitmapFactory.decodeStream(is);
+                        edit_profile_picture.setImageBitmap(pictureBitmap);
+                        edit_profile_picture.setBackground(null);
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public String getPath(Uri uri, Activity activity) {
+        Cursor cursor = null;
+        try {
+            String[] projection = {MediaStore.MediaColumns.DATA};
+            cursor = activity.getContentResolver().query(uri, projection, null, null, null);
+            if (cursor.moveToFirst()) {
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
+                return cursor.getString(column_index);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+        }
+        return "";
+    }
+
+    private void clickGroup(String group) {
+        switch (group) {
+            case "mensxc":
+                edit_profile_mensxc.performClick();
+                break;
+            case "wmensxc":
+                edit_profile_wmensxc.performClick();
+                break;
+            case "menstf":
+                edit_profile_menstf.performClick();
+                break;
+            case "wmenstf":
+                edit_profile_wmenstf.performClick();
+                break;
+            case "alumni":
+                edit_profile_alumni.performClick();
+                break;
+        }
     }
 
 }
