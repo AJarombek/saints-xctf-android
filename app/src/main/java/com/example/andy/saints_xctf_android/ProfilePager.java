@@ -28,7 +28,7 @@ public class ProfilePager extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        //Returning the current tabs
+        // Returning the current tabs
         Bundle data = new Bundle();
         switch (position) {
             case 0:

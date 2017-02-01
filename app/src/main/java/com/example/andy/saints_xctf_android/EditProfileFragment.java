@@ -5,19 +5,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -47,6 +45,7 @@ public class EditProfileFragment extends Fragment {
     private static final String TAG = EditProfileFragment.class.getName();
     public static final String PREFS_NAME = "SaintsxctfUserPrefs";
     private static final int RESULT_LOAD_IMG = 0;
+    public static final int REQUEST_CODE = 0;
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
     private static final String NAME_REGEX = "^[a-zA-Z\\-']+$";
     private static final String YEAR_REGEX = "^[0-9]+$";
@@ -69,7 +68,7 @@ public class EditProfileFragment extends Fragment {
     private Button edit_profile_menstf;
     private Button edit_profile_wmenstf;
     private Button edit_profile_alumni;
-    private boolean mensxc, wmensxc, menstf, wmenstf, alumni;
+    private boolean mensxc, wmensxc, menstf, wmenstf, alumni, editpicture;
 
     private TextView edit_profile_error_message;
     private Button edit_profile_cancel;
@@ -81,6 +80,7 @@ public class EditProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_edit_profile, container, false);
+        setHasOptionsMenu(true);
 
         SharedPreferences prefs = getContext().getSharedPreferences(
                 PREFS_NAME, Context.MODE_PRIVATE);
@@ -598,13 +598,13 @@ public class EditProfileFragment extends Fragment {
             user.setDescription(description);
 
         // convert from bitmap to base 64 encoded string
-        if (profile_picture_bitmap != null) {
+        if (profile_picture_bitmap != null && editpicture) {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             profile_picture_bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
 
             String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-            user.setProfilepic(encoded);
+            user.setProfilepic("data:image/jpeg;base64," + encoded);
         }
 
         Map<String,String> groups = new HashMap<>();
@@ -636,11 +636,36 @@ public class EditProfileFragment extends Fragment {
                         profile_picture_bitmap = BitmapFactory.decodeStream(is);
                         edit_profile_picture.setImageBitmap(profile_picture_bitmap);
                         edit_profile_picture.setBackground(null);
+                        editpicture = true;
                     }
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_log:
+                LogDialogFragment logDialog = new LogDialogFragment();
+                logDialog.setTargetFragment(this, REQUEST_CODE);
+                logDialog.show(getFragmentManager(), "log dialog");
+                return true;
+            case R.id.action_home:
+                ((MainActivity) getActivity()).viewMainPage();
+            case R.id.action_profile:
+                ((MainActivity) getActivity()).viewProfile(username);
+            case R.id.action_group:
+                return true;
+            case R.id.action_exit:
+                getContext().getSharedPreferences(PREFS_NAME, 0).edit().clear().apply();
+                ((MainActivity) getActivity()).signOut();
+                return true;
+            default:
+                // The user's action was not recognized, invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
         }
     }
 

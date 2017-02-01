@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -34,6 +35,7 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
 
     private static final String TAG = ProfileFragment.class.getName();
     public static final String PREFS_NAME = "SaintsxctfUserPrefs";
+    public static final int REQUEST_CODE = 0;
 
     private View v;
     private TabLayout tabLayout;
@@ -59,6 +61,7 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         v = view;
+        setHasOptionsMenu(true);
 
         profile_picture = (ImageView) v.findViewById(R.id.profile_picture);
         profile_name = (TextView) v.findViewById(R.id.profile_name);
@@ -111,7 +114,7 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager) v.findViewById(R.id.pager);
-        ProfilePager adapter = new ProfilePager(getActivity().getSupportFragmentManager(),
+        ProfilePager adapter = new ProfilePager(getChildFragmentManager(),
                 tabLayout.getTabCount(), user);
         viewPager.setAdapter(adapter);
         tabLayout.setOnTabSelectedListener(this);
@@ -186,6 +189,30 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
 
         // Populate the statistics
         Map<String,Double> statistics = user.getStatistics();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_log:
+                LogDialogFragment logDialog = new LogDialogFragment();
+                logDialog.setTargetFragment(this, REQUEST_CODE);
+                logDialog.show(getFragmentManager(), "log dialog");
+                return true;
+            case R.id.action_home:
+                ((MainActivity) getActivity()).viewMainPage();
+            case R.id.action_profile:
+                return true;
+            case R.id.action_group:
+                return true;
+            case R.id.action_exit:
+                getContext().getSharedPreferences(PREFS_NAME, 0).edit().clear().apply();
+                ((MainActivity) getActivity()).signOut();
+                return true;
+            default:
+                // The user's action was not recognized, invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

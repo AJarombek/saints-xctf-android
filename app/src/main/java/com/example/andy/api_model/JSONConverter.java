@@ -25,6 +25,8 @@ public class JSONConverter {
     public static User toUser(String JSON) throws IOException {
         android.util.Log.d(LOG_TAG, JSON);
         ObjectMapper mapper = new ObjectMapper();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        mapper.setDateFormat(df);
         User user = mapper.readValue(JSON, User.class);
         return user;
     }
@@ -75,6 +77,8 @@ public class JSONConverter {
 
     public static String fromUser(User user) throws Throwable {
         ObjectMapper mapper = new ObjectMapper();
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        mapper.setDateFormat(df);
         String userJsonString = mapper.writeValueAsString(user);
         android.util.Log.d(LOG_TAG, "The User JSON String\n" + userJsonString);
         return userJsonString;

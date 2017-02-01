@@ -1,7 +1,9 @@
 package com.example.andy.api_model;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -112,7 +114,12 @@ public class User {
     }
 
     public void setMember_since(Date member_since) {
-        this.member_since = member_since;
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(member_since);
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH));
+
+        this.member_since = calendar.getTime();
     }
 
     public Integer getClass_year() {
