@@ -655,8 +655,10 @@ public class EditProfileFragment extends Fragment {
                 return true;
             case R.id.action_home:
                 ((MainActivity) getActivity()).viewMainPage();
+                return true;
             case R.id.action_profile:
                 ((MainActivity) getActivity()).viewProfile(username);
+                return true;
             case R.id.action_group:
                 return true;
             case R.id.action_exit:

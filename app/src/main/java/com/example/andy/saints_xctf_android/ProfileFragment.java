@@ -214,6 +214,7 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
                 return true;
             case R.id.action_home:
                 ((MainActivity) getActivity()).viewMainPage();
+                return true;
             case R.id.action_profile:
                 return true;
             case R.id.action_group:

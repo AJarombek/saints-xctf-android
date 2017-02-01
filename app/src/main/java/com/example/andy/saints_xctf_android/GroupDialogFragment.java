@@ -31,6 +31,7 @@ public class GroupDialogFragment extends DialogFragment {
     private Button view_group_menstf;
     private Button view_group_wmenstf;
     private Button view_group_alumni;
+    private AlertDialog d;
 
     /**
      * Create and Run an AlertDialog for Log Submitting
@@ -57,75 +58,87 @@ public class GroupDialogFragment extends DialogFragment {
         view_group_wmenstf = (Button) groupDialogView.findViewById(R.id.view_group_wmenstf);
         view_group_alumni = (Button) groupDialogView.findViewById(R.id.view_group_alumni);
 
-        SharedPreferences prefs = getContext().getSharedPreferences(
-                PREFS_NAME, Context.MODE_PRIVATE);
-        String userJSON = prefs.getString("user", "");
-
-        User user = new User();
-        try {
-            user = JSONConverter.toUser(userJSON);
-        } catch (IOException e) {
-            android.util.Log.e(LOG_TAG, "User object JSON conversion failed.");
-            android.util.Log.e(LOG_TAG, e.getMessage());
-        }
-
-        Map<String,String> groups = user.getGroups();
-        if (!groups.containsKey("mensxc")) {
-            view_group_mensxc.setVisibility(View.GONE);
-        } else {
-            view_group_mensxc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((MainActivity) getActivity()).viewGroup("mensxc");
-                }
-            });
-        }
-
-        if (!groups.containsKey("wmensxc")) {
-            view_group_menstf.setVisibility(View.GONE);
-        } else {
-            view_group_menstf.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((MainActivity) getActivity()).viewGroup("wmensxc");
-                }
-            });
-        }
-
-        if (!groups.containsKey("menstf")) {
-            view_group_wmensxc.setVisibility(View.GONE);
-        } else {
-            view_group_wmensxc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((MainActivity) getActivity()).viewGroup("menstf");
-                }
-            });
-        }
-
-        if (!groups.containsKey("wmenstf")) {
-            view_group_wmenstf.setVisibility(View.GONE);
-        } else {
-            view_group_wmenstf.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((MainActivity) getActivity()).viewGroup("wmenstf");
-                }
-            });
-        }
-
-        if (!groups.containsKey("alumni")) {
-            view_group_alumni.setVisibility(View.GONE);
-        } else {
-            view_group_alumni.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((MainActivity) getActivity()).viewGroup("alumni");
-                }
-            });
-        }
-
         return builder.create(); // return dialog
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        d = (AlertDialog) getDialog();
+        if (d != null) {
+            SharedPreferences prefs = getContext().getSharedPreferences(
+                    PREFS_NAME, Context.MODE_PRIVATE);
+            String userJSON = prefs.getString("user", "");
+
+            User user = new User();
+            try {
+                user = JSONConverter.toUser(userJSON);
+            } catch (IOException e) {
+                android.util.Log.e(LOG_TAG, "User object JSON conversion failed.");
+                android.util.Log.e(LOG_TAG, e.getMessage());
+            }
+
+            Map<String,String> groups = user.getGroups();
+            if (!groups.containsKey("mensxc")) {
+                view_group_mensxc.setVisibility(View.GONE);
+            } else {
+                view_group_mensxc.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((MainActivity) getActivity()).viewGroup("mensxc");
+                        d.dismiss();
+                    }
+                });
+            }
+
+            if (!groups.containsKey("wmensxc")) {
+                view_group_wmensxc.setVisibility(View.GONE);
+            } else {
+                view_group_wmensxc.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((MainActivity) getActivity()).viewGroup("wmensxc");
+                        d.dismiss();
+                    }
+                });
+            }
+
+            if (!groups.containsKey("menstf")) {
+                view_group_menstf.setVisibility(View.GONE);
+            } else {
+                view_group_menstf.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((MainActivity) getActivity()).viewGroup("menstf");
+                        d.dismiss();
+                    }
+                });
+            }
+
+            if (!groups.containsKey("wmenstf")) {
+                view_group_wmenstf.setVisibility(View.GONE);
+            } else {
+                view_group_wmenstf.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((MainActivity) getActivity()).viewGroup("wmenstf");
+                        d.dismiss();
+                    }
+                });
+            }
+
+            if (!groups.containsKey("alumni")) {
+                view_group_alumni.setVisibility(View.GONE);
+            } else {
+                view_group_alumni.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ((MainActivity) getActivity()).viewGroup("alumni");
+                        d.dismiss();
+                    }
+                });
+            }
+        }
     }
 }
 
