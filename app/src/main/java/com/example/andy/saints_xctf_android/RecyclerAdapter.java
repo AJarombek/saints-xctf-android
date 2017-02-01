@@ -40,7 +40,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
     public static final String PREFS_NAME = "SaintsxctfUserPrefs";
 
     private ArrayList<Log> logs;
-    private Context context;
+    private static Context context;
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
     private boolean loading;
@@ -49,7 +49,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
     public RecyclerAdapter(Context context, ArrayList<Log> logs,
                            RecyclerView recyclerView) {
         this.logs = logs;
-        this.context = context;
+        RecyclerAdapter.context = context;
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
             final LinearLayoutManager linearLayoutManager =
                     (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -174,13 +174,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
 
         public void bindLog(Log logObject) {
             this.log = logObject;
+            logview_un.setText(log.getUsername());
             username = logview_un.getText().toString();
 
             // Go to the users profile when you click on their name
             logview_username.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    android.util.Log.d(LOG_TAG, username);
+                    ((MainActivity) context).viewProfile(username);
                 }
             });
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,8 +18,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.andy.api_model.APIClient;
 import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.User;
 
@@ -54,6 +57,8 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
     private TextView profile_favorite_event_view;
     private TextView profile_description_view;
     private Button edit_profile_button;
+    private LinearLayout profile_picture_view;
+    private LinearLayout profile_info_view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,6 +67,9 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         v = view;
         setHasOptionsMenu(true);
+
+        profile_picture_view = (LinearLayout) v.findViewById(R.id.profile_picture_view);
+        profile_info_view = (LinearLayout) v.findViewById(R.id.profile_info_view);
 
         profile_picture = (ImageView) v.findViewById(R.id.profile_picture);
         profile_name = (TextView) v.findViewById(R.id.profile_name);
@@ -105,19 +113,24 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
                 }
             });
 
+            tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
+            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+            viewPager = (ViewPager) v.findViewById(R.id.pager);
+            ProfilePager adapter = new ProfilePager(getChildFragmentManager(),
+                    tabLayout.getTabCount(), user);
+            viewPager.setAdapter(adapter);
+            tabLayout.setOnTabSelectedListener(this);
+
         } else {
             // This is someone else's profile page
             edit_profile_button.setVisibility(View.GONE);
+            profile_picture_view.setVisibility(View.INVISIBLE);
+            profile_info_view.setVisibility(View.INVISIBLE);
+
+            LoadUserTask loadUserTask = new LoadUserTask();
+            loadUserTask.execute(username);
         }
-
-        tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        viewPager = (ViewPager) v.findViewById(R.id.pager);
-        ProfilePager adapter = new ProfilePager(getChildFragmentManager(),
-                tabLayout.getTabCount(), user);
-        viewPager.setAdapter(adapter);
-        tabLayout.setOnTabSelectedListener(this);
 
         return view;
     }
@@ -228,5 +241,54 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
 
+    }
+
+    class LoadUserTask extends AsyncTask<String, Void, Object> {
+
+        @Override
+        protected Object doInBackground(String... strings) {
+            User user = null;
+            try {
+                user = APIClient.userGetRequest(strings[0]);
+
+                if (user == null)
+                    return "no_internet";
+
+            } catch (Exception e) {
+                Log.e(TAG, "User object server JSON conversion failed.");
+                Log.e(TAG, e.getMessage());
+                e.printStackTrace();
+                return "no_internet";
+            }
+
+            return user;
+        }
+
+        @Override
+        protected void onPostExecute(Object response) {
+            super.onPostExecute(response);
+
+            User user;
+            if (response != null) {
+                if (response.equals("no_internet")) {
+                    ((MainActivity) getActivity()).noInternet();
+                } else if (response instanceof User) {
+                    user = (User) response;
+
+                    populateProfileInfo(user);
+                    profile_info_view.setVisibility(View.VISIBLE);
+                    profile_picture_view.setVisibility(View.VISIBLE);
+
+                    tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
+                    tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+                    viewPager = (ViewPager) v.findViewById(R.id.pager);
+                    ProfilePager adapter = new ProfilePager(getChildFragmentManager(),
+                            tabLayout.getTabCount(), user);
+                    viewPager.setAdapter(adapter);
+                    tabLayout.setOnTabSelectedListener(ProfileFragment.this);
+                }
+            }
+        }
     }
 }
