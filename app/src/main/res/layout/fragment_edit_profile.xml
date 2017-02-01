@@ -247,6 +247,18 @@
             android:text="Alumni"
             android:background="@color/lightGrey"/>
 
+        <TextView
+            android:id="@+id/edit_profile_error_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/colorAccent"
+            android:text=""
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_gravity="center">
+        </TextView>
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -111,4 +111,5 @@
     <string name="logs_tab">Logs</string>
     <string name="statistics_tab">Statistics</string>
     <string name="at">\@</string>
+    <string name="invalid_class_year">Invalid Class Year</string>
 </resources>
