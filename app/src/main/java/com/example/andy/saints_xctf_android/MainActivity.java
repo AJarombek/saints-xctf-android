@@ -94,6 +94,14 @@ public class MainActivity extends AppCompatActivity {
                 commit();
     }
 
+    protected void signUp() {
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = new PickGroupFragment();
+        fm.beginTransaction().
+                replace(R.id.activity_main, fragment).
+                commit();
+    }
+
     protected void viewMainPage() {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = new MainFragment();

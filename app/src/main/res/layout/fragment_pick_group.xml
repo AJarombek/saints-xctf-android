@@ -1,0 +1,64 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context="com.example.andy.saints_xctf_android.PickGroupFragment">
+
+
+    <Button
+        android:id="@+id/pick_group_mensxc"
+        android:layout_width="250sp"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:text="Men's Cross Country"
+        android:background="@color/lightGrey"/>
+
+    <Button
+        android:id="@+id/pick_group_wmensxc"
+        android:layout_width="250sp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:text="Women's Cross Country"
+        android:background="@color/lightGrey"/>
+
+    <Button
+        android:id="@+id/pick_group_menstf"
+        android:layout_width="250sp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:text="Men's Track &amp; Field"
+        android:background="@color/lightGrey"/>
+
+    <Button
+        android:id="@+id/pick_group_wmenstf"
+        android:layout_width="250sp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:text="Women's Track &amp; Field"
+        android:background="@color/lightGrey"/>
+
+    <Button
+        android:id="@+id/pick_group_alumni"
+        android:layout_width="250sp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:text="Alumni"
+        android:background="@color/lightGrey"/>
+
+    <Button
+        android:id="@+id/pick_group"
+        android:layout_width="250sp"
+        android:layout_height="50dp"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:text="Pick Groups"
+        android:background="@color/white"/>
+
+</LinearLayout>

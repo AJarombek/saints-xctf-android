@@ -292,7 +292,7 @@ public class SignupDialogFragment extends DialogFragment {
                 d.dismiss();
 
                 // Sign In the User and Display the new Fragment
-                ((MainActivity) getActivity()).signIn();
+                ((MainActivity) getActivity()).signUp();
             }
         }
     }
