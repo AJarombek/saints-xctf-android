@@ -91,7 +91,7 @@ public class LogsTab extends Fragment {
             } catch (Exception e) {
                 android.util.Log.e(TAG, "Log object JSON conversion failed.");
                 android.util.Log.e(TAG, e.getMessage());
-                return "no_internet";
+                return null;
             }
 
             return logs;
@@ -115,6 +115,10 @@ public class LogsTab extends Fragment {
                     adapter.notifyItemInserted(logs.size() - 1);
                     adapter.setLoaded();
                 }
+            } else {
+                // The user has no logs
+                logs.remove(logs.size() - 1);
+                adapter.notifyItemRemoved(logs.size());
             }
         }
     }

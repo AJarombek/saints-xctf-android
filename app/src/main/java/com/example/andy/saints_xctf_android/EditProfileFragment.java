@@ -75,7 +75,7 @@ public class EditProfileFragment extends Fragment {
     private Button edit_profile_cancel;
     private Button edit_profile_submit;
     private User user;
-    private String username;
+    private String username, first, last, year, email, location, favorite_event, description;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -126,7 +126,7 @@ public class EditProfileFragment extends Fragment {
             edit_profile_email.setText(email);
 
         String class_year = String.valueOf(user.getClass_year());
-        if (!class_year.equals(""))
+        if (!class_year.equals("null"))
             edit_profile_class_year.setText(class_year);
 
         String location = user.getLocation();
@@ -528,10 +528,10 @@ public class EditProfileFragment extends Fragment {
     }
 
     private boolean validateFields() {
-        String first = edit_profile_first.getText().toString();
-        String last = edit_profile_last.getText().toString();
-        String email = edit_profile_email.getText().toString();
-        String year = edit_profile_class_year.getText().toString();
+        first = edit_profile_first.getText().toString();
+        last = edit_profile_last.getText().toString();
+        email = edit_profile_email.getText().toString();
+        year = edit_profile_class_year.getText().toString();
 
         Pattern email_pattern = Pattern.compile(EMAIL_REGEX);
         Matcher email_matcher = email_pattern.matcher(email);
@@ -551,12 +551,12 @@ public class EditProfileFragment extends Fragment {
             edit_profile_last.requestFocus();
             return false;
         }
-        if (!email_matcher.matches()) {
+        if (!email.equals("") && !email_matcher.matches()) {
             edit_profile_error_message.setText(R.string.invalid_email);
             edit_profile_email.requestFocus();
             return false;
         }
-        if (!year_matcher.matches()) {
+        if (!year.equals("") && !year_matcher.matches()) {
             edit_profile_error_message.setText(R.string.invalid_class_year);
             edit_profile_class_year.requestFocus();
             return false;
@@ -565,21 +565,47 @@ public class EditProfileFragment extends Fragment {
     }
 
     private void updateUser() {
-        user.setFirst(edit_profile_first.getText().toString());
-        user.setLast(edit_profile_last.getText().toString());
-        user.setEmail(edit_profile_email.getText().toString());
-        user.setClass_year(Integer.parseInt(edit_profile_class_year.getText().toString()));
-        user.setLocation(edit_profile_location.getText().toString());
-        user.setFavorite_event(edit_profile_favorite_event.getText().toString());
-        user.setDescription(edit_profile_description.getText().toString());
+        year = edit_profile_class_year.getText().toString();
+        location = edit_profile_location.getText().toString();
+        favorite_event = edit_profile_favorite_event.getText().toString();
+        description = edit_profile_description.getText().toString();
+
+        user.setFirst(first);
+        user.setLast(last);
+        if (email.equals(""))
+            user.setEmail(null);
+        else
+            user.setEmail(email);
+
+        if (year.equals(""))
+            user.setClass_year(null);
+        else
+            user.setClass_year(Integer.parseInt(year));
+
+        if (location.equals(""))
+            user.setLocation(null);
+        else
+            user.setLocation(location);
+
+        if (favorite_event.equals(""))
+            user.setFavorite_event(null);
+        else
+            user.setFavorite_event(favorite_event);
+
+        if (description.equals(""))
+            user.setDescription(null);
+        else
+            user.setDescription(description);
 
         // convert from bitmap to base 64 encoded string
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        profile_picture_bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        if (profile_picture_bitmap != null) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            profile_picture_bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
 
-        String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-        user.setProfilepic(encoded);
+            String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            user.setProfilepic(encoded);
+        }
 
         Map<String,String> groups = new HashMap<>();
         if (mensxc)
@@ -650,8 +676,9 @@ public class EditProfileFragment extends Fragment {
                     return "no_internet";
 
             } catch (Exception e) {
-                Log.e(TAG, "User object JSON conversion failed.");
+                Log.e(TAG, "User object server JSON conversion failed.");
                 Log.e(TAG, e.getMessage());
+                e.printStackTrace();
                 return "no_internet";
             }
 
@@ -672,7 +699,7 @@ public class EditProfileFragment extends Fragment {
                     try {
                         userString = JSONConverter.fromUser(user);
                     } catch (Throwable throwable) {
-                        Log.e(TAG, "User object JSON conversion failed.");
+                        Log.e(TAG, "User object received JSON conversion failed.");
                         Log.e(TAG, throwable.getMessage());
                     }
 

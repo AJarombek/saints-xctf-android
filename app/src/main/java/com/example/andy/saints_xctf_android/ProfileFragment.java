@@ -143,14 +143,20 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
             groupString.append(entry.getValue());
             groupString.append("\n");
         }
-        profile_groups.setText(groupString.substring(0, groupString.length()-1));
+
+        if (groupString.length() > 0)
+            profile_groups.setText(groupString.substring(0, groupString.length()-1));
+        else {
+            profile_groups.setVisibility(View.GONE);
+        }
+
 
         String class_year = String.valueOf(user.getClass_year());
         String location = user.getLocation();
         String favorite_event = user.getFavorite_event();
         String description = user.getDescription();
 
-        if (class_year.equals("")) {
+        if (class_year.equals("0") || class_year.equals("null")) {
             profile_class_year.setVisibility(View.GONE);
             profile_class_year_view.setVisibility(View.GONE);
         } else {

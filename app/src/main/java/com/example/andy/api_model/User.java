@@ -24,7 +24,7 @@ public class User {
     private String description;
     private String activation_code;
     private Date member_since;
-    private int class_year;
+    private Integer class_year;
     private String location;
     private String favorite_event;
     private String[] forgotpassword;
@@ -115,11 +115,11 @@ public class User {
         this.member_since = member_since;
     }
 
-    public int getClass_year() {
+    public Integer getClass_year() {
         return class_year;
     }
 
-    public void setClass_year(int class_year) {
+    public void setClass_year(Integer class_year) {
         this.class_year = class_year;
     }
 

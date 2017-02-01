@@ -150,7 +150,7 @@ public class APIClient {
         try {
             response = APIRequest.post(url, json);
         } catch (Throwable throwable) {
-            Log.e(TAG, "Error Connecting to API with GET Request.");
+            Log.e(TAG, "Error Connecting to API with POST Request.");
             throwable.printStackTrace();
             return "false";
         }
@@ -162,7 +162,7 @@ public class APIClient {
         try {
             response = APIRequest.put(url, json);
         } catch (Throwable throwable) {
-            Log.e(TAG, "Error Connecting to API with GET Request.");
+            Log.e(TAG, "Error Connecting to API with PUT Request.");
             throwable.printStackTrace();
             return "false";
         }
@@ -174,7 +174,7 @@ public class APIClient {
         try {
             response = APIRequest.delete(url);
         } catch (Throwable throwable) {
-            Log.e(TAG, "Error Connecting to API with GET Request.");
+            Log.e(TAG, "Error Connecting to API with DELETE Request.");
             throwable.printStackTrace();
             return false;
         }
