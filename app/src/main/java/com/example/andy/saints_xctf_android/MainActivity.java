@@ -141,6 +141,19 @@ public class MainActivity extends AppCompatActivity {
                 commit();
     }
 
+    protected void viewGroup(String group) {
+        Bundle data = new Bundle();
+        data.putString("group", group);
+
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment fragment = new GroupFragment();
+        fragment.setArguments(data);
+        fm.beginTransaction().
+                replace(R.id.activity_main, fragment).
+                addToBackStack(null).
+                commit();
+    }
+
     protected void editProfile() {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = new EditProfileFragment();
