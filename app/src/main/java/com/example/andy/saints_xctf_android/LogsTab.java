@@ -31,7 +31,8 @@ public class LogsTab extends Fragment {
     private LinearLayoutManager linearLayoutManager;
     private RecyclerAdapter adapter;
     private ArrayList<com.example.andy.api_model.Log> logs;
-    private String username;
+    private String username, groupname;
+    private boolean isProfile;
     private LoadLogTask loadLogTask;
 
     @Override
@@ -42,7 +43,13 @@ public class LogsTab extends Fragment {
         v = view;
 
         Bundle bundle = getArguments();
-        username = bundle.getString("username", "");
+        if (bundle.containsKey("username")) {
+            username = bundle.getString("username", "");
+            isProfile = true;
+        } else {
+            groupname = bundle.getString("groupname", "");
+            isProfile = false;
+        }
 
         logs = new ArrayList<>();
         loadLogTask = new LoadLogTask();
@@ -66,13 +73,19 @@ public class LogsTab extends Fragment {
                     logs.add(null);
                     adapter.notifyItemInserted(logs.size() - 1);
                     LoadLogTask loadLogTask = new LoadLogTask();
-                    loadLogTask.execute("user", username, String.valueOf(itemsLoaded));
+                    if (isProfile)
+                        loadLogTask.execute("user", username, String.valueOf(itemsLoaded));
+                    else
+                        loadLogTask.execute("group", groupname, String.valueOf(itemsLoaded));
                 }
             }
         });
 
         // Load the first ten logs
-        loadLogTask.execute("user",username,"0");
+        if (isProfile)
+            loadLogTask.execute("user",username,"0");
+        else
+            loadLogTask.execute("group",groupname,"0");
 
         return view;
     }

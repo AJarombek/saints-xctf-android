@@ -112,4 +112,7 @@
     <string name="statistics_tab">Statistics</string>
     <string name="at">\@</string>
     <string name="invalid_class_year">Invalid Class Year</string>
+    <string name="group_name">Group Name</string>
+    <string name="members">Members:</string>
+    <string name="no_description">No Description</string>
 </resources>

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.example.andy.api_model.Group;
 import com.example.andy.api_model.User;
 
 import java.util.Map;
@@ -19,11 +20,18 @@ public class ProfilePager extends FragmentStatePagerAdapter {
 
     private int tabCount;
     private User user;
+    private Group group;
 
     public ProfilePager(FragmentManager fm, int tabCount, User user) {
         super(fm);
         this.tabCount = tabCount;
         this.user = user;
+    }
+
+    public ProfilePager(FragmentManager fm, int tabCount, Group group) {
+        super(fm);
+        this.tabCount = tabCount;
+        this.group = group;
     }
 
     @Override
@@ -32,12 +40,20 @@ public class ProfilePager extends FragmentStatePagerAdapter {
         Bundle data = new Bundle();
         switch (position) {
             case 0:
-                data.putString("username", String.valueOf(user.getUsername()));
+                if (user != null)
+                    data.putString("username", String.valueOf(user.getUsername()));
+                else
+                    data.putString("groupname", String.valueOf(group.getGroup_name()));
                 LogsTab logsTab = new LogsTab();
                 logsTab.setArguments(data);
                 return logsTab;
             case 1:
-                Map<String,Double> statistics = user.getStatistics();
+                Map<String,Double> statistics;
+                if (user != null)
+                    statistics = user.getStatistics();
+                else
+                    statistics = group.getStatistics();
+
                 data.putString("workout_career", String.valueOf(statistics.get("miles")));
                 data.putString("workout_year", String.valueOf(statistics.get("milespastyear")));
                 data.putString("workout_month", String.valueOf(statistics.get("milespastmonth")));
