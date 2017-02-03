@@ -1,24 +1,22 @@
 package com.example.andy.saints_xctf_android;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.GridLayout;
 import android.widget.TextView;
 
 import com.example.andy.api_model.APIClient;
-import com.example.andy.api_model.Log;
 import com.example.andy.api_model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +24,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 
 /**
  * Class for the Login DialogFragment which is used as a form to login users
@@ -39,12 +36,15 @@ public class LoginDialogFragment extends DialogFragment {
     public static final String PREFS_NAME = "SaintsxctfUserPrefs";
 
     // Views in the fragment
+    private View v;
     private EditText login_username;
     private EditText login_password;
     private TextView error_message;
     private User user;
     private String username;
     private AlertDialog d;
+    private View progress;
+    private GridLayout login_forms;
 
     /**
      * Create and Run an AlertDialog for Log Submitting
@@ -60,6 +60,7 @@ public class LoginDialogFragment extends DialogFragment {
                 new AlertDialog.Builder(getActivity());
         View loginDialogView = getActivity().getLayoutInflater().inflate(
                 R.layout.fragment_login, null);
+        v = loginDialogView;
         builder.setView(loginDialogView);
 
         // set the AlertDialog's message
@@ -88,6 +89,7 @@ public class LoginDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         d = (AlertDialog) getDialog();
+        d.setCanceledOnTouchOutside(false);
         if (d != null) {
             Button positiveButton = d.getButton(Dialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener(new View.OnClickListener() {
@@ -152,6 +154,17 @@ public class LoginDialogFragment extends DialogFragment {
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progress = v.findViewById(R.id.progress_overlay);
+            login_forms = (GridLayout) v.findViewById(R.id.login_forms);
+            login_forms.setVisibility(View.GONE);
+            progress.setVisibility(View.VISIBLE);
+            d.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(false);
+            d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        }
+
+        @Override
         protected void onPostExecute(Object response) {
             super.onPostExecute(response);
 
@@ -195,6 +208,10 @@ public class LoginDialogFragment extends DialogFragment {
                     ((MainActivity) getActivity()).signIn();
                 }
             }
+            progress.setVisibility(View.GONE);
+            login_forms.setVisibility(View.VISIBLE);
+            d.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(true);
+            d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
         }
     }
 }
