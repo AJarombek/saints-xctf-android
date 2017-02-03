@@ -1,5 +1,7 @@
 package com.example.andy.saints_xctf_android;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -10,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -29,6 +32,8 @@ import java.util.List;
 public class GroupFragment extends Fragment implements TabLayout.OnTabSelectedListener {
 
     private static final String LOG_TAG = GroupFragment.class.getName();
+    public static final String PREFS_NAME = "SaintsxctfUserPrefs";
+    public static final int REQUEST_CODE = 0;
 
     private View v;
     private TabLayout tabLayout;
@@ -97,6 +102,38 @@ public class GroupFragment extends Fragment implements TabLayout.OnTabSelectedLi
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_log:
+                LogDialogFragment logDialog = new LogDialogFragment();
+                logDialog.setTargetFragment(this, REQUEST_CODE);
+                logDialog.show(getFragmentManager(), "log dialog");
+                return true;
+            case R.id.action_home:
+                ((MainActivity) getActivity()).viewMainPage();
+                return true;
+            case R.id.action_profile:
+                SharedPreferences prefs = getContext().getSharedPreferences(
+                        PREFS_NAME, Context.MODE_PRIVATE);
+                String username = prefs.getString("username", "");
+                ((MainActivity) getActivity()).viewProfile(username);
+                return true;
+            case R.id.action_group:
+                GroupDialogFragment groupDialog = new GroupDialogFragment();
+                groupDialog.setTargetFragment(this, REQUEST_CODE);
+                groupDialog.show(getFragmentManager(), "log dialog");
+                return true;
+            case R.id.action_exit:
+                getContext().getSharedPreferences(PREFS_NAME, 0).edit().clear().apply();
+                ((MainActivity) getActivity()).signOut();
+                return true;
+            default:
+                // The user's action was not recognized, invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     class LoadGroupTask extends AsyncTask<String, Void, Object> {
 

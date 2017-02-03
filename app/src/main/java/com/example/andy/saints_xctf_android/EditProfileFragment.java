@@ -660,6 +660,9 @@ public class EditProfileFragment extends Fragment {
                 ((MainActivity) getActivity()).viewProfile(username);
                 return true;
             case R.id.action_group:
+                GroupDialogFragment groupDialog = new GroupDialogFragment();
+                groupDialog.setTargetFragment(this, REQUEST_CODE);
+                groupDialog.show(getFragmentManager(), "log dialog");
                 return true;
             case R.id.action_exit:
                 getContext().getSharedPreferences(PREFS_NAME, 0).edit().clear().apply();
