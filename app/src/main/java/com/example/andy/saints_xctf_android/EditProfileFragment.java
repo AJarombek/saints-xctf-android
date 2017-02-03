@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.andy.api_model.APIClient;
@@ -51,6 +52,8 @@ public class EditProfileFragment extends Fragment {
     private static final String YEAR_REGEX = "^[0-9]+$";
 
     private View v;
+    private View progress;
+    private LinearLayout edit_profile_forms;
     private EditText edit_profile_first;
     private EditText edit_profile_last;
     private EditText edit_profile_email;
@@ -713,6 +716,15 @@ public class EditProfileFragment extends Fragment {
             }
 
             return user;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progress = v.findViewById(R.id.progress_overlay);
+            edit_profile_forms = (LinearLayout) v.findViewById(R.id.edit_profile_forms);
+            edit_profile_forms.setVisibility(View.GONE);
+            progress.setVisibility(View.VISIBLE);
         }
 
         @Override
