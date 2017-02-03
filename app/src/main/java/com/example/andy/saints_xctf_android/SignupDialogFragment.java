@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.TextView;
 
 import com.example.andy.api_model.APIClient;
@@ -43,6 +44,9 @@ public class SignupDialogFragment extends DialogFragment {
     private EditText signup_activation_code;
     private TextView signup_error_message;
     private AlertDialog d;
+    private View v;
+    private View progress;
+    private GridLayout signup_forms;
 
     private static final String LOG_TAG = SignupDialogFragment.class.getName();
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
@@ -63,6 +67,7 @@ public class SignupDialogFragment extends DialogFragment {
                 new AlertDialog.Builder(getActivity());
         View loginDialogView = getActivity().getLayoutInflater().inflate(
                 R.layout.fragment_signup, null);
+        v = loginDialogView;
         builder.setView(loginDialogView);
 
         // set the AlertDialog's message
@@ -96,6 +101,7 @@ public class SignupDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         d = (AlertDialog) getDialog();
+        d.setCanceledOnTouchOutside(false);
         if (d != null) {
             Button positiveButton = d.getButton(Dialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener(new View.OnClickListener() {
@@ -208,7 +214,11 @@ public class SignupDialogFragment extends DialogFragment {
                 // First see if there is already a user with this username
                 user = APIClient.userGetRequest(params[0]);
 
-                if (user == null) return "no_internet";
+                if (user == null) {
+                    return "no_internet";
+                } else {
+                    return "invalid_username";
+                }
 
             } catch (IOException e) {
                 // The username is not already used
@@ -252,12 +262,22 @@ public class SignupDialogFragment extends DialogFragment {
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progress = v.findViewById(R.id.progress_overlay);
+            signup_forms = (GridLayout) v.findViewById(R.id.signup_forms);
+            signup_forms.setVisibility(View.GONE);
+            progress.setVisibility(View.VISIBLE);
+            d.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(false);
+            d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        }
+
+        @Override
         protected void onPostExecute(Object response) {
             super.onPostExecute(response);
 
             if (response.equals("no_internet")) {
-                ((MainActivity) getActivity()).noInternet();
-                d.dismiss();
+                signup_error_message.setText(R.string.no_internet);
             } else if (response.equals("invalid_username")) {
                 signup_error_message.setText(R.string.invalid_username);
                 signup_username.requestFocus();
@@ -294,6 +314,10 @@ public class SignupDialogFragment extends DialogFragment {
                 // Sign In the User and Display the new Fragment
                 ((MainActivity) getActivity()).signUp();
             }
+            progress.setVisibility(View.GONE);
+            signup_forms.setVisibility(View.VISIBLE);
+            d.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(true);
+            d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
         }
     }
 
