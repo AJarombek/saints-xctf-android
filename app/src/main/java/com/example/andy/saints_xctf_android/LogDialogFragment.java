@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -74,6 +75,9 @@ public class LogDialogFragment extends DialogFragment {
     private AlertDialog d;
     private int feel;
     private String name,location,type,distance,metric,minutes,seconds,description,date;
+    private View v;
+    private View progress;
+    private LinearLayout log_forms;
 
     /**
      * Create and Run an AlertDialog for Log Submitting
@@ -89,6 +93,7 @@ public class LogDialogFragment extends DialogFragment {
                 new AlertDialog.Builder(getActivity());
         View logDialogView = getActivity().getLayoutInflater().inflate(
                 R.layout.fragment_log, null);
+        v = logDialogView;
         builder.setView(logDialogView); // add GUI to dialog
 
         // Make this dialog fragment have no title
@@ -179,6 +184,7 @@ public class LogDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         d = (AlertDialog) getDialog();
+        d.setCanceledOnTouchOutside(false);
         if (d != null) {
             Button positiveButton = d.getButton(Dialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener(new View.OnClickListener() {
@@ -360,6 +366,18 @@ public class LogDialogFragment extends DialogFragment {
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progress = v.findViewById(R.id.progress_overlay);
+            log_forms = (LinearLayout) v.findViewById(R.id.log_forms);
+            log_forms.setVisibility(View.GONE);
+            progress.setVisibility(View.VISIBLE);
+            d.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(false);
+            d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
+        }
+
+
+        @Override
         protected void onPostExecute(Object response) {
             super.onPostExecute(response);
 
@@ -384,6 +402,10 @@ public class LogDialogFragment extends DialogFragment {
                 sendResult(logJSON, REQUEST_CODE);
                 d.dismiss();
             }
+            progress.setVisibility(View.GONE);
+            log_forms.setVisibility(View.VISIBLE);
+            d.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(true);
+            d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
         }
     }
 

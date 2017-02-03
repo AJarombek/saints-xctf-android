@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -295,6 +296,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
                 if (response != null) {
                     android.util.Log.d(LOG_TAG, "The Comment Object Received: " + response.toString());
                     logview_add_comment.setText("");
+
+                    // Hide the keyboard
+                    InputMethodManager imm = (InputMethodManager)
+                            v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
                     comments.add(response);
                     adapter.notifyItemInserted(comments.size() - 1);
                 }
