@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void signOut() {
         FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Fragment fragment = new HomeFragment();
         fm.beginTransaction().
                 replace(R.id.activity_main, fragment).

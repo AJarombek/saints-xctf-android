@@ -43,6 +43,8 @@ public class GroupFragment extends Fragment implements TabLayout.OnTabSelectedLi
     private TextView group_members;
     private TextView group_description_view;
     private TextView group_description;
+    private View group_info_progress;
+    private View group_picture_progress;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,8 +59,20 @@ public class GroupFragment extends Fragment implements TabLayout.OnTabSelectedLi
         group_description_view = (TextView) v.findViewById(R.id.group_description_view);
         group_description = (TextView) v.findViewById(R.id.group_description);
 
+        group_info_progress = v.findViewById(R.id.group_info_progress);
+        group_picture_progress = v.findViewById(R.id.group_picture_progress);
+
         Bundle bundle = getArguments();
         String groupname = bundle.getString("group", "");
+
+        group_info_progress.setVisibility(View.VISIBLE);
+        group_picture_progress.setVisibility(View.VISIBLE);
+
+        group_picture.setVisibility(View.GONE);
+        group_name.setVisibility(View.GONE);
+        group_members.setVisibility(View.GONE);
+        group_description_view.setVisibility(View.GONE);
+        group_description.setVisibility(View.GONE);
 
         LoadGroupTask loadUserTask = new LoadGroupTask();
         loadUserTask.execute(groupname);
@@ -89,7 +103,15 @@ public class GroupFragment extends Fragment implements TabLayout.OnTabSelectedLi
             group_description_view.setVisibility(View.GONE);
         } else {
             group_description.setText(description);
+            group_description.setVisibility(View.VISIBLE);
+            group_description_view.setVisibility(View.VISIBLE);
         }
+
+        group_info_progress.setVisibility(View.GONE);
+        group_picture_progress.setVisibility(View.GONE);
+        group_picture.setVisibility(View.VISIBLE);
+        group_name.setVisibility(View.VISIBLE);
+        group_members.setVisibility(View.VISIBLE);
     }
 
     @Override

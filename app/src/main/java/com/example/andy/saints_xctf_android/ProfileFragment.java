@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.andy.api_model.APIClient;
@@ -59,6 +60,7 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
     private Button edit_profile_button;
     private LinearLayout profile_picture_view;
     private LinearLayout profile_info_view;
+    private ProgressBar profile_info_progress;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,6 +72,7 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
 
         profile_picture_view = (LinearLayout) v.findViewById(R.id.profile_picture_view);
         profile_info_view = (LinearLayout) v.findViewById(R.id.profile_info_view);
+        profile_info_progress = (ProgressBar) v.findViewById(R.id.profile_info_progress);
 
         profile_picture = (ImageView) v.findViewById(R.id.profile_picture);
         profile_name = (TextView) v.findViewById(R.id.profile_name);
@@ -125,8 +128,9 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
         } else {
             // This is someone else's profile page
             edit_profile_button.setVisibility(View.GONE);
-            profile_picture_view.setVisibility(View.INVISIBLE);
-            profile_info_view.setVisibility(View.INVISIBLE);
+            profile_picture_view.setVisibility(View.GONE);
+            profile_info_view.setVisibility(View.GONE);
+            profile_info_progress.setVisibility(View.VISIBLE);
 
             LoadUserTask loadUserTask = new LoadUserTask();
             loadUserTask.execute(username);
@@ -147,6 +151,7 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
             byte[] decodedString = Base64.decode(base64encoding, Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             profile_picture.setImageBitmap(decodedByte);
+            profile_picture.setBackground(null);
         }
 
         SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
@@ -282,6 +287,7 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
                     populateProfileInfo(user);
                     profile_info_view.setVisibility(View.VISIBLE);
                     profile_picture_view.setVisibility(View.VISIBLE);
+                    profile_info_progress.setVisibility(View.GONE);
 
                     tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
                     tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
