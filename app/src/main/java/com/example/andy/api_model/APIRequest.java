@@ -1,12 +1,18 @@
 package com.example.andy.api_model;
 
+import android.util.Base64;
 import android.util.Log;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Arrays;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * @author Andrew Jarombek
@@ -17,10 +23,26 @@ public class APIRequest {
     private static final String TAG = "APIRequest: ";
 
     public static String get(String url) throws Throwable {
+
+        // Add credentials to the connection
+        Credentials credentials = new Credentials();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String credentialsJsonString = mapper.writeValueAsString(credentials);
+        Log.d(TAG, credentialsJsonString);
+
+        byte[] cred = Base64.encode(credentialsJsonString.getBytes(), Base64.DEFAULT);
+        String credString = new String(cred);
+        credString = credString.replace("\n", "");
+        Log.d(TAG, credString);
+
         URL api_url = new URL(url);
         HttpURLConnection connection = (HttpURLConnection) api_url.openConnection();
+        connection.addRequestProperty("Accept", "application/json");
+        connection.addRequestProperty("Authorization", credString);
         connection.setRequestMethod("GET");
-        connection.setRequestProperty("Accept", "application/json");
+
+        Log.d(TAG, Arrays.toString(connection.getRequestProperties().entrySet().toArray()));
 
         if (connection.getResponseCode() != HttpURLConnection.HTTP_INTERNAL_ERROR) {
             throw new RuntimeException("API Response Failed: Error Code = "
@@ -49,6 +71,15 @@ public class APIRequest {
         connection.setDoOutput(true);
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Accept", "application/json");
+
+        // Add credentials to the connection
+        Credentials credentials = new Credentials();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String credentialsJsonString = mapper.writeValueAsString(credentials);
+
+        byte[] cred = Base64.encode(credentialsJsonString.getBytes(), Base64.DEFAULT);
+        connection.addRequestProperty("Authorization", new String(cred));
 
         OutputStream outputStream = connection.getOutputStream();
         outputStream.write(input.getBytes());
@@ -82,6 +113,15 @@ public class APIRequest {
         connection.setRequestMethod("PUT");
         connection.setRequestProperty("Accept", "application/json");
 
+        // Add credentials to the connection
+        Credentials credentials = new Credentials();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String credentialsJsonString = mapper.writeValueAsString(credentials);
+
+        byte[] cred = Base64.encode(credentialsJsonString.getBytes(), Base64.DEFAULT);
+        connection.addRequestProperty("Authorization", new String(cred));
+
         OutputStream outputStream = connection.getOutputStream();
         outputStream.write(input.getBytes());
         outputStream.flush();
@@ -112,6 +152,15 @@ public class APIRequest {
         HttpURLConnection connection = (HttpURLConnection) api_url.openConnection();
         connection.setRequestMethod("DELETE");
         connection.setRequestProperty("Accept", "application/json");
+
+        // Add credentials to the connection
+        Credentials credentials = new Credentials();
+
+        ObjectMapper mapper = new ObjectMapper();
+        String credentialsJsonString = mapper.writeValueAsString(credentials);
+
+        byte[] cred = Base64.encode(credentialsJsonString.getBytes(), Base64.DEFAULT);
+        connection.addRequestProperty("Authorization", new String(cred));
 
         Log.d(TAG, "API DELETE Response Code: " + connection.getResponseCode());
 
