@@ -161,7 +161,7 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
         StringBuilder groupString = new StringBuilder();
         List<GroupInfo> groups = user.getGroups();
         for (GroupInfo group : groups) {
-            groupString.append(group.getGroup_name());
+            groupString.append(group.getGroup_title());
             groupString.append("\n");
         }
 

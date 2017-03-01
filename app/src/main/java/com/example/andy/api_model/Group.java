@@ -16,15 +16,16 @@ public class Group {
     private String grouppic;
     private String grouppic_name;
     private String description;
-    private List<String> members;
+    private List<GroupMember> members;
     private Map<String, Double> statistics;
+    private Map<String, List<LeaderboardItem>> leaderboards;
 
     @Override
     public String toString() {
         return "Group: [ group_name: " + group_name + ", group_title: " + group_title +
                 ", grouppic: " + grouppic + ", grouppic_name: " + grouppic_name +
                 ", description: " + description + ", members: [" + members.toString() +
-                "], statistics: " + statistics + "]]";
+                "], statistics: " + statistics + "], leaderboards: " + leaderboards + "]]";
     }
 
     public String getGroup_name() {
@@ -67,11 +68,11 @@ public class Group {
         this.description = description;
     }
 
-    public List<String> getMembers() {
+    public List<GroupMember> getMembers() {
         return members;
     }
 
-    public void setMembers(List<String> members) {
+    public void setMembers(List<GroupMember> members) {
         this.members = members;
     }
 
@@ -81,5 +82,13 @@ public class Group {
 
     public void setStatistics(Map<String, Double> statistics) {
         this.statistics = statistics;
+    }
+
+    public Map<String, List<LeaderboardItem>> getLeaderboards() {
+        return leaderboards;
+    }
+
+    public void setLeaderboards(Map<String, List<LeaderboardItem>> leaderboards) {
+        this.leaderboards = leaderboards;
     }
 }

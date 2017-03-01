@@ -27,6 +27,7 @@ public class Log {
     private String pace;
     private Integer feel;
     private String description;
+    private String time_created;
     private ArrayList<Comment> comments;
 
     @Override
@@ -35,8 +36,8 @@ public class Log {
                 ", name: " + name + ", location: " + location + ", date: " + date +
                 ", type: " + type + ", distance: " + distance.toString() + ", metric: " + metric +
                 ", miles: " + miles.toString() + ", time: " + time + ", pace:" + pace +
-                ", feel: " + feel.toString() + ", comments:" + comments.toString() + ", description: " +
-                description + "]";
+                ", feel: " + feel.toString() + ", comments: " + comments.toString() + ", time_created: "
+                + time_created + ", description: " + description + "]";
     }
 
     public Integer getLog_id() {
@@ -165,5 +166,13 @@ public class Log {
 
     public void setComments(ArrayList<Comment> comments) {
         this.comments = comments;
+    }
+
+    public String getTime_created() {
+        return time_created;
+    }
+
+    public void setTime_created(String time_created) {
+        this.time_created = time_created;
     }
 }
