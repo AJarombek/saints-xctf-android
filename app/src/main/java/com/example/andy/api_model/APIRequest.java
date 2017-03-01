@@ -66,20 +66,25 @@ public class APIRequest {
     }
 
     public static String post(String url, String input) throws Throwable {
-        URL api_url = new URL(url);
-        HttpURLConnection connection = (HttpURLConnection) api_url.openConnection();
-        connection.setDoOutput(true);
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Accept", "application/json");
 
         // Add credentials to the connection
         Credentials credentials = new Credentials();
 
         ObjectMapper mapper = new ObjectMapper();
         String credentialsJsonString = mapper.writeValueAsString(credentials);
+        Log.d(TAG, credentialsJsonString);
 
         byte[] cred = Base64.encode(credentialsJsonString.getBytes(), Base64.DEFAULT);
-        connection.addRequestProperty("Authorization", new String(cred));
+        String credString = new String(cred);
+        credString = credString.replace("\n", "");
+        Log.d(TAG, credString);
+
+        URL api_url = new URL(url);
+        HttpURLConnection connection = (HttpURLConnection) api_url.openConnection();
+        connection.setDoOutput(true);
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Accept", "application/json");
+        connection.addRequestProperty("Authorization", credString);
 
         OutputStream outputStream = connection.getOutputStream();
         outputStream.write(input.getBytes());
@@ -107,20 +112,25 @@ public class APIRequest {
     }
 
     public static String put(String url, String input) throws Throwable {
-        URL api_url = new URL(url);
-        HttpURLConnection connection = (HttpURLConnection) api_url.openConnection();
-        connection.setDoOutput(true);
-        connection.setRequestMethod("PUT");
-        connection.setRequestProperty("Accept", "application/json");
 
         // Add credentials to the connection
         Credentials credentials = new Credentials();
 
         ObjectMapper mapper = new ObjectMapper();
         String credentialsJsonString = mapper.writeValueAsString(credentials);
+        Log.d(TAG, credentialsJsonString);
 
         byte[] cred = Base64.encode(credentialsJsonString.getBytes(), Base64.DEFAULT);
-        connection.addRequestProperty("Authorization", new String(cred));
+        String credString = new String(cred);
+        credString = credString.replace("\n", "");
+        Log.d(TAG, credString);
+
+        URL api_url = new URL(url);
+        HttpURLConnection connection = (HttpURLConnection) api_url.openConnection();
+        connection.setDoOutput(true);
+        connection.setRequestMethod("PUT");
+        connection.setRequestProperty("Accept", "application/json");
+        connection.addRequestProperty("Authorization", credString);
 
         OutputStream outputStream = connection.getOutputStream();
         outputStream.write(input.getBytes());
@@ -148,19 +158,24 @@ public class APIRequest {
     }
 
     public static boolean delete(String url) throws Throwable {
-        URL api_url = new URL(url);
-        HttpURLConnection connection = (HttpURLConnection) api_url.openConnection();
-        connection.setRequestMethod("DELETE");
-        connection.setRequestProperty("Accept", "application/json");
 
         // Add credentials to the connection
         Credentials credentials = new Credentials();
 
         ObjectMapper mapper = new ObjectMapper();
         String credentialsJsonString = mapper.writeValueAsString(credentials);
+        Log.d(TAG, credentialsJsonString);
 
         byte[] cred = Base64.encode(credentialsJsonString.getBytes(), Base64.DEFAULT);
-        connection.addRequestProperty("Authorization", new String(cred));
+        String credString = new String(cred);
+        credString = credString.replace("\n", "");
+        Log.d(TAG, credString);
+
+        URL api_url = new URL(url);
+        HttpURLConnection connection = (HttpURLConnection) api_url.openConnection();
+        connection.setRequestMethod("DELETE");
+        connection.setRequestProperty("Accept", "application/json");
+        connection.addRequestProperty("Authorization", credString);
 
         Log.d(TAG, "API DELETE Response Code: " + connection.getResponseCode());
 

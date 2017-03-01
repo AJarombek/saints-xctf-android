@@ -6,10 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Base64;
 import android.util.Log;
@@ -24,12 +22,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.andy.api_model.APIClient;
+import com.example.andy.api_model.GroupInfo;
 import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.User;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Map;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -160,9 +159,9 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
         profile_member_since.setText(date);
 
         StringBuilder groupString = new StringBuilder();
-        Map<String,String> groups = user.getGroups();
-        for (Map.Entry<String,String> entry : groups.entrySet()) {
-            groupString.append(entry.getValue());
+        List<GroupInfo> groups = user.getGroups();
+        for (GroupInfo group : groups) {
+            groupString.append(group.getGroup_name());
             groupString.append("\n");
         }
 
@@ -171,7 +170,6 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
         else {
             profile_groups.setVisibility(View.GONE);
         }
-
 
         String class_year = String.valueOf(user.getClass_year());
         String location = user.getLocation();

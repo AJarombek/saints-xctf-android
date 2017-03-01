@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.andy.api_model.APIClient;
+import com.example.andy.api_model.GroupInfo;
 import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.User;
 
@@ -33,7 +34,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -483,9 +486,9 @@ public class EditProfileFragment extends Fragment {
             }
         });
 
-        Map<String,String> groups = user.getGroups();
-        for (Map.Entry<String,String> entry : groups.entrySet()) {
-            String group = entry.getKey();
+        List<GroupInfo> groups = user.getGroups();
+        for (GroupInfo entry : groups) {
+            String group = entry.getGroup_name();
             clickGroup(group);
         }
 
@@ -611,17 +614,37 @@ public class EditProfileFragment extends Fragment {
             user.setProfilepic("data:image/jpeg;base64," + encoded);
         }
 
-        Map<String,String> groups = new HashMap<>();
-        if (mensxc)
-            groups.put("mensxc", "Men's Cross Country");
-        if (wmensxc)
-            groups.put("wmensxc", "Women's Cross Country");
-        if (menstf)
-            groups.put("menstf", "Men's Track & Field");
-        if (wmenstf)
-            groups.put("wmenstf", "Women's Track & Field");
-        if (alumni)
-            groups.put("alumni", "Alumni");
+        List<GroupInfo> groups = new ArrayList<>();
+        if (mensxc) {
+            GroupInfo mensxc_info = new GroupInfo();
+            mensxc_info.setGroup_name("mensxc");
+            mensxc_info.setGroup_title("Men's Cross Country");
+            groups.add(mensxc_info);
+        }
+        if (wmensxc) {
+            GroupInfo wmensxc_info = new GroupInfo();
+            wmensxc_info.setGroup_name("wmensxc");
+            wmensxc_info.setGroup_title("Women's Cross Country");
+            groups.add(wmensxc_info);
+        }
+        if (menstf) {
+            GroupInfo menstf_info = new GroupInfo();
+            menstf_info.setGroup_name("menstf");
+            menstf_info.setGroup_title("Men's Track & Field");
+            groups.add(menstf_info);
+        }
+        if (wmenstf) {
+            GroupInfo wmenstf_info = new GroupInfo();
+            wmenstf_info.setGroup_name("wmenstf");
+            wmenstf_info.setGroup_title("Women's Track & Field");
+            groups.add(wmenstf_info);
+        }
+        if (alumni) {
+            GroupInfo alumni_info = new GroupInfo();
+            alumni_info.setGroup_name("alumni");
+            alumni_info.setGroup_title("Alumni");
+            groups.add(alumni_info);
+        }
         user.setGroups(groups);
     }
 

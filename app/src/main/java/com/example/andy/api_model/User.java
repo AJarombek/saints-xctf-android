@@ -5,12 +5,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * POJO representing a user from the REST API
  * @author Andrew Jarombek
  * @since 11/8/2016
+ * @version 0.1 BETA RELEASE
  */
 
 public class User {
@@ -30,8 +32,9 @@ public class User {
     private String location;
     private String favorite_event;
     private String[] forgotpassword;
-    private Map<String, String> groups;
+    private List<GroupInfo> groups;
     private Map<String, Double> statistics;
+    private String last_signin;
 
     @Override
     public String toString() {
@@ -40,9 +43,9 @@ public class User {
                 ", profilepic: " + profilepic + ", profilepic_name: " + profilepic_name +
                 ", description: " + description + ", member_since: " + member_since.toString() +
                 ", class_year: " + class_year + ", location: " + location + ", favorite_event: " +
-                favorite_event + ", activation_code: " + activation_code + ", groups: [" +
-                groups.toString() + "], forgotpassword: [" + Arrays.toString(forgotpassword) +
-                "], statistics: [" + statistics.toString() + "]]";
+                favorite_event + ", last_signin: " + last_signin + ", activation_code: " +
+                activation_code + ", groups: [" + groups.toString() + "], forgotpassword: [" +
+                Arrays.toString(forgotpassword) + "], statistics: [" + statistics.toString() + "]]";
     }
 
     public String getUsername() {
@@ -146,11 +149,11 @@ public class User {
         this.favorite_event = favorite_event;
     }
 
-    public Map<String, String> getGroups() {
+    public List<GroupInfo> getGroups() {
         return groups;
     }
 
-    public void setGroups(Map<String, String> groups) {
+    public void setGroups(List<GroupInfo> groups) {
         this.groups = groups;
     }
 
@@ -184,5 +187,13 @@ public class User {
 
     public String[] getForgotpassword() {
         return forgotpassword;
+    }
+
+    public String getLast_signin() {
+        return last_signin;
+    }
+
+    public void setLast_signin(String last_signin) {
+        this.last_signin = last_signin;
     }
 }

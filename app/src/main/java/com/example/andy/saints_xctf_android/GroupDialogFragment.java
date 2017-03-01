@@ -10,10 +10,14 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+
+import com.example.andy.api_model.GroupInfo;
 import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.User;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -78,8 +82,13 @@ public class GroupDialogFragment extends DialogFragment {
                 android.util.Log.e(LOG_TAG, e.getMessage());
             }
 
-            Map<String,String> groups = user.getGroups();
-            if (!groups.containsKey("mensxc")) {
+            List<GroupInfo> groups = user.getGroups();
+            List<String> group_names = new ArrayList<>();
+            for (GroupInfo group : groups) {
+                group_names.add(group.getGroup_name());
+            }
+
+            if (!group_names.contains("mensxc")) {
                 view_group_mensxc.setVisibility(View.GONE);
             } else {
                 view_group_mensxc.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +100,7 @@ public class GroupDialogFragment extends DialogFragment {
                 });
             }
 
-            if (!groups.containsKey("wmensxc")) {
+            if (!group_names.contains("wmensxc")) {
                 view_group_wmensxc.setVisibility(View.GONE);
             } else {
                 view_group_wmensxc.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +112,7 @@ public class GroupDialogFragment extends DialogFragment {
                 });
             }
 
-            if (!groups.containsKey("menstf")) {
+            if (!group_names.contains("menstf")) {
                 view_group_menstf.setVisibility(View.GONE);
             } else {
                 view_group_menstf.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +124,7 @@ public class GroupDialogFragment extends DialogFragment {
                 });
             }
 
-            if (!groups.containsKey("wmenstf")) {
+            if (!group_names.contains("wmenstf")) {
                 view_group_wmenstf.setVisibility(View.GONE);
             } else {
                 view_group_wmenstf.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +136,7 @@ public class GroupDialogFragment extends DialogFragment {
                 });
             }
 
-            if (!groups.containsKey("alumni")) {
+            if (!group_names.contains("alumni")) {
                 view_group_alumni.setVisibility(View.GONE);
             } else {
                 view_group_alumni.setOnClickListener(new View.OnClickListener() {
