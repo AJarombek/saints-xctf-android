@@ -219,9 +219,17 @@ public class LogDialogFragment extends DialogFragment {
                         String first = prefs.getString("first", "");
                         String last = prefs.getString("last", "");
 
+                        // Get the time in the correct format
+                        int hours = Integer.parseInt(minutes) / 60;
+                        minutes = String.valueOf(Integer.parseInt(minutes) % 60);
+                        String time = hours + ":" + minutes + ":" + seconds;
+
+                        if (distance.equals(""))
+                            distance = "0";
+
                         LogTask logTask = new LogTask();
                         logTask.execute(username,first,last,name,location,type,distance,
-                                metric,(minutes + ":" + seconds),minutes,seconds,
+                                metric,time,minutes,seconds,
                                 String.valueOf(feel),description,date);
                     }
                 }

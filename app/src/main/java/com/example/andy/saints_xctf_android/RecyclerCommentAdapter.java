@@ -12,6 +12,7 @@ import com.example.andy.api_model.Comment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 /**
  * Adapter for the RecycleView (which shows workout logs)
@@ -69,6 +70,7 @@ public class RecyclerCommentAdapter extends RecyclerView.Adapter<RecyclerComment
             commentview_username.setText(comment.getFirst() + " " + comment.getLast());
 
             SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy HH:mm a");
+            df.setTimeZone(TimeZone.getTimeZone("UTC"));
             String date = df.format(comment.getTime());
             commentview_date.setText(date);
 

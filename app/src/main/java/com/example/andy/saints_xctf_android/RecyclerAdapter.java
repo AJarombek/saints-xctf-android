@@ -191,19 +191,30 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             logview_add_comment.setOnKeyListener(new View.OnKeyListener() {
                 @Override
                 public boolean onKey(View v, int keyCode, KeyEvent event) {
+                    String newcomment = logview_add_comment.getText().toString().trim();
+
                     // If the event is a key down on the enter button
                     if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                             (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                        SharedPreferences prefs = v.getContext().getSharedPreferences(
-                                PREFS_NAME, Context.MODE_PRIVATE);
-                        String username = prefs.getString("username", "");
-                        String first = prefs.getString("first", "");
-                        String last = prefs.getString("last", "");
 
-                        CommentTask commentTask = new CommentTask();
-                        commentTask.execute(logview_add_comment.getText().toString(),
-                                String.valueOf(log.getLog_id()), username, first, last);
-                        return true;
+                        // Make sure the comment contains content
+                        if (!newcomment.equals("")) {
+                            SharedPreferences prefs = v.getContext().getSharedPreferences(
+                                    PREFS_NAME, Context.MODE_PRIVATE);
+                            String username = prefs.getString("username", "");
+                            String first = prefs.getString("first", "");
+                            String last = prefs.getString("last", "");
+
+                            CommentTask commentTask = new CommentTask();
+                            commentTask.execute(newcomment,
+                                    String.valueOf(log.getLog_id()), username, first, last);
+                            return true;
+                        } else {
+                            // Hide the keyboard
+                            InputMethodManager imm = (InputMethodManager)
+                                    v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                        }
                     }
                     return false;
                 }
@@ -242,8 +253,32 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             String time = log.getTime();
             if (time == null || time.equals("00:00:00")) {
                 logview_time.setVisibility(View.GONE);
+            } else {
+                // Format the log time correctly removing zeros
+                for (int i = 0; i < time.length(); i++) {
+                    char c = time.charAt(i);
+                    if (c != '0' && c != ':') {
+                        time = time.substring(i);
+                        break;
+                    }
+                }
+
+                String pace = log.getPace();
+                if (distance.equals("0.0")) {
+                    pace = "";
+                } else {
+                    // Format the log pace correctly removing zeros
+                    for (int i = 0; i < pace.length(); i++) {
+                        char c = pace.charAt(i);
+                        if (c != '0' && c != ':') {
+                            pace = "(" + pace.substring(i) + "/mi)";
+                            break;
+                        }
+                    }
+                }
+                logview_time.setText(time + " " + pace);
             }
-            logview_time.setText(log.getTime());
+
             logview_description.setText(log.getDescription());
 
             // Add the comment recycler view
