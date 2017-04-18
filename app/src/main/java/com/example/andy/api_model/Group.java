@@ -16,6 +16,7 @@ public class Group {
     private String grouppic;
     private String grouppic_name;
     private String description;
+    private String week_start;
     private List<GroupMember> members;
     private Map<String, Double> statistics;
     private Map<String, List<LeaderboardItem>> leaderboards;
@@ -24,8 +25,9 @@ public class Group {
     public String toString() {
         return "Group: [ group_name: " + group_name + ", group_title: " + group_title +
                 ", grouppic: " + grouppic + ", grouppic_name: " + grouppic_name +
-                ", description: " + description + ", members: [" + members.toString() +
-                "], statistics: " + statistics + "], leaderboards: " + leaderboards + "]]";
+                ", description: " + description + ", week_start: " + week_start + ", members: [" +
+                members.toString() + "], statistics: " + statistics + "], leaderboards: " +
+                leaderboards + "]]";
     }
 
     public String getGroup_name() {
@@ -90,5 +92,13 @@ public class Group {
 
     public void setLeaderboards(Map<String, List<LeaderboardItem>> leaderboards) {
         this.leaderboards = leaderboards;
+    }
+
+    public String getWeek_start() {
+        return week_start;
+    }
+
+    public void setWeek_start(String week_start) {
+        this.week_start = week_start;
     }
 }

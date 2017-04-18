@@ -12,11 +12,14 @@ public class GroupMember {
     private String first;
     private String last;
     private String member_since;
+    private String status;
+    private String user;
 
     @Override
     public String toString() {
         return "GroupMember: [ username: " + username + ", first: " + first +
-                ", last: " + last + ", member_since: " + member_since + "]";
+                ", last: " + last + ", member_since: " + member_since + ", status: " +
+                status + ", user: " + user + "]";
     }
 
     public String getUsername() {
@@ -49,6 +52,22 @@ public class GroupMember {
 
     public void setMember_since(String member_since) {
         this.member_since = member_since;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }
 

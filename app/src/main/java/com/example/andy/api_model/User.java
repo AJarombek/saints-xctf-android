@@ -32,9 +32,11 @@ public class User {
     private String location;
     private String favorite_event;
     private String[] forgotpassword;
+    private String[] flair;
     private List<GroupInfo> groups;
     private Map<String, Double> statistics;
     private String last_signin;
+    private String week_start;
 
     @Override
     public String toString() {
@@ -43,9 +45,10 @@ public class User {
                 ", profilepic: " + profilepic + ", profilepic_name: " + profilepic_name +
                 ", description: " + description + ", member_since: " + member_since.toString() +
                 ", class_year: " + class_year + ", location: " + location + ", favorite_event: " +
-                favorite_event + ", last_signin: " + last_signin + ", activation_code: " +
-                activation_code + ", groups: [" + groups.toString() + "], forgotpassword: [" +
-                Arrays.toString(forgotpassword) + "], statistics: [" + statistics.toString() + "]]";
+                favorite_event + ", week_start: " + week_start + ", last_signin: " + last_signin +
+                ", activation_code: " + activation_code + ", groups: [" + groups.toString() +
+                "], forgotpassword: [" + Arrays.toString(forgotpassword) + "], flair: [" +
+                Arrays.toString(flair) + "], statistics: [" + statistics.toString() + "]]";
     }
 
     public String getUsername() {
@@ -195,5 +198,21 @@ public class User {
 
     public void setLast_signin(String last_signin) {
         this.last_signin = last_signin;
+    }
+
+    public String getWeek_start() {
+        return week_start;
+    }
+
+    public void setWeek_start(String week_start) {
+        this.week_start = week_start;
+    }
+
+    public String[] getFlair() {
+        return flair;
+    }
+
+    public void setFlair(String[] flair) {
+        this.flair = flair;
     }
 }

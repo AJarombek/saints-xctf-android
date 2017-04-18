@@ -10,13 +10,16 @@ public class GroupInfo {
 
     private String group_name;
     private String group_title;
+    private String status;
+    private String user;
     private String newest_log;
     private String newest_message;
 
     @Override
     public String toString() {
         return "GroupInfo: [ group_name: " + group_name + ", group_title: " + group_title +
-                ", newest_log: " + newest_log + ", newest_message: " + newest_message + "]";
+                ", status: " + status + ", user: " + user + ", newest_log: " + newest_log +
+                ", newest_message: " + newest_message + "]";
     }
 
     public String getGroup_name() {
@@ -49,5 +52,21 @@ public class GroupInfo {
 
     public void setNewest_message(String newest_message) {
         this.newest_message = newest_message;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }
