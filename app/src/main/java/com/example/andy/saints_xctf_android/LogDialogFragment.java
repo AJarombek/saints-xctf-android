@@ -220,9 +220,12 @@ public class LogDialogFragment extends DialogFragment {
                         String last = prefs.getString("last", "");
 
                         // Get the time in the correct format
-                        int hours = Integer.parseInt(minutes) / 60;
-                        minutes = String.valueOf(Integer.parseInt(minutes) % 60);
-                        String time = hours + ":" + minutes + ":" + seconds;
+                        String time = null;
+                        if (!minutes.equals("")) {
+                            int hours = Integer.parseInt(minutes) / 60;
+                            minutes = String.valueOf(Integer.parseInt(minutes) % 60);
+                            time = hours + ":" + minutes + ":" + seconds;
+                        }
 
                         if (distance.equals(""))
                             distance = "0";
@@ -338,8 +341,8 @@ public class LogDialogFragment extends DialogFragment {
             log.setMetric(params[7]);
 
             String time = params[8];
-            if (time.equals(":"))
-                time = null;
+            if (time == null || time.equals(":"))
+                time = "00:00:00";
 
             log.setTime(time);
             log.setPace(ControllerUtils.milePace(distance, params[9], params[10]));

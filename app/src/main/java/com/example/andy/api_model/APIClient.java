@@ -16,6 +16,10 @@ public class APIClient {
 
     private static final String TAG = "APIRequest: ";
 
+    /*
+     * GET REQUESTS
+     */
+
     public static List<User> usersGetRequest() throws IOException {
         String response = getRequest("https://www.saintsxctf.com/api/api.php/users");
         if (response.equals("false")) return null;
@@ -64,6 +68,18 @@ public class APIClient {
         return JSONConverter.toGroup(response);
     }
 
+    public static List<Message> messagesGetRequest() throws IOException {
+        String response = getRequest("https://www.saintsxctf.com/api/api.php/messages");
+        if (response.equals("false")) return null;
+        return JSONConverter.toMessageList(response);
+    }
+
+    public static Message messageGetRequest(String messageno) throws IOException {
+        String response = getRequest("https://www.saintsxctf.com/api/api.php/message/" + messageno);
+        if (response.equals("false")) return null;
+        return JSONConverter.toMessage(response);
+    }
+
     public static List<com.example.andy.api_model.Log> logfeedGetRequest(String... params)
             throws IOException {
         String paramtype = params[0];
@@ -76,6 +92,23 @@ public class APIClient {
         if (response.equals("false")) return null;
         return JSONConverter.toLogList(response);
     }
+
+    public static List<Message> messagefeedGetRequest(String... params)
+            throws IOException {
+        String paramtype = params[0];
+        String sortparam = params[1];
+        String limit = params[2];
+        String offset = params[3];
+
+        String response = getRequest("https://www.saintsxctf.com/api/api.php/messagefeed/" + paramtype + "/"
+                + sortparam + "/" + limit + "/" + offset);
+        if (response.equals("false")) return null;
+        return JSONConverter.toMessageList(response);
+    }
+
+    /*
+     * POST REQUESTS
+     */
 
     public static User userPostRequest(String user) throws IOException {
         String response = postRequest("https://www.saintsxctf.com/api/api.php/user/", user);
@@ -94,6 +127,16 @@ public class APIClient {
         if (response.equals("false")) return null;
         return JSONConverter.toComment(response);
     }
+
+    public static Message messagePostRequest(String message) throws IOException {
+        String response = postRequest("https://www.saintsxctf.com/api/api.php/message/", message);
+        if (response.equals("false")) return null;
+        return JSONConverter.toMessage(response);
+    }
+
+    /*
+     * PUT REQUESTS
+     */
 
     public static User userPutRequest(String username, String user) throws IOException {
         String response = putRequest("https://www.saintsxctf.com/api/api.php/users/" + username, user);
@@ -121,6 +164,16 @@ public class APIClient {
         return JSONConverter.toGroup(response);
     }
 
+    public static Message messagePutRequest(String messageno, String message) throws IOException {
+        String response = putRequest("https://www.saintsxctf.com/api/api.php/message/" + messageno, message);
+        if (response.equals("false")) return null;
+        return JSONConverter.toMessage(response);
+    }
+
+    /*
+     * DELETE REQUESTS
+     */
+
     public static boolean userDeleteRequest(String username) {
         return deleteRequest("https://www.saintsxctf.com/api/api.php/users/" + username);
     }
@@ -132,6 +185,14 @@ public class APIClient {
     public static boolean commentDeleteRequest(int commentno) {
         return deleteRequest("https://www.saintsxctf.com/api/api.php/comments/" + commentno);
     }
+
+    public static boolean messageDeleteRequest(int messageno) {
+        return deleteRequest("https://www.saintsxctf.com/api/api.php/message/" + messageno);
+    }
+
+    /*
+     * API VERB REQUESTS
+     */
 
     private static String getRequest(String url) {
         String response = "";

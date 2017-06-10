@@ -25,7 +25,8 @@ public class Comment {
     @Override
     public String toString() {
         return "Comment: [ comment_id: " + comment_id + ",log_id: " + log_id + ",username: " +
-                ", time: " + time.toString() + "]";
+                username + ",first: " + first + ",last: " + last + ",time: " + time.toString() +
+                ",content: " + content + "]";
     }
 
     public int getComment_id() {

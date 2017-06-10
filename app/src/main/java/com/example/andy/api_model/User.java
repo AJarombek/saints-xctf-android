@@ -33,6 +33,7 @@ public class User {
     private String favorite_event;
     private String[] forgotpassword;
     private String[] flair;
+    private List<Notification> notifications;
     private List<GroupInfo> groups;
     private Map<String, Double> statistics;
     private String last_signin;
@@ -48,7 +49,8 @@ public class User {
                 favorite_event + ", week_start: " + week_start + ", last_signin: " + last_signin +
                 ", activation_code: " + activation_code + ", groups: [" + groups.toString() +
                 "], forgotpassword: [" + Arrays.toString(forgotpassword) + "], flair: [" +
-                Arrays.toString(flair) + "], statistics: [" + statistics.toString() + "]]";
+                Arrays.toString(flair) + "], notifications: [" + notifications.toString() +
+                "], statistics: [" + statistics.toString() + "]]";
     }
 
     public String getUsername() {
@@ -214,5 +216,13 @@ public class User {
 
     public void setFlair(String[] flair) {
         this.flair = flair;
+    }
+
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
     }
 }
