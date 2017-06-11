@@ -80,6 +80,18 @@ public class APIClient {
         return JSONConverter.toMessage(response);
     }
 
+    public static ActivationCode activationcodeGetRequest(String code) throws IOException {
+        String response = getRequest("https://www.saintsxctf.com/api/api.php/activationcode/" + code);
+        if (response.equals("false")) return null;
+        return JSONConverter.toActivationCode(response);
+    }
+
+    public static List<Notification> notificationsGetRequest() throws IOException {
+        String response = getRequest("https://www.saintsxctf.com/api/api.php/notifications");
+        if (response.equals("false")) return null;
+        return JSONConverter.toNotificationList(response);
+    }
+
     public static List<com.example.andy.api_model.Log> logfeedGetRequest(String... params)
             throws IOException {
         String paramtype = params[0];
@@ -104,6 +116,19 @@ public class APIClient {
                 + sortparam + "/" + limit + "/" + offset);
         if (response.equals("false")) return null;
         return JSONConverter.toMessageList(response);
+    }
+
+    public static List<RangeView> rangeviewGetRequest(String... params)
+            throws IOException {
+        String paramtype = params[0];
+        String sortparam = params[1];
+        String start = params[2];
+        String end = params[3];
+
+        String response = getRequest("https://www.saintsxctf.com/api/api.php/rangeview/" + paramtype +
+                "/" + sortparam + "/" + start + "/" + end);
+        if (response.equals("false")) return null;
+        return JSONConverter.toRangeViewList(response);
     }
 
     /*
@@ -132,6 +157,18 @@ public class APIClient {
         String response = postRequest("https://www.saintsxctf.com/api/api.php/message/", message);
         if (response.equals("false")) return null;
         return JSONConverter.toMessage(response);
+    }
+
+    public static ActivationCode activationcodePostRequest(String code) throws IOException {
+        String response = postRequest("https://www.saintsxctf.com/api/api.php/activationcode/", code);
+        if (response.equals("false")) return null;
+        return JSONConverter.toActivationCode(response);
+    }
+
+    public static Notification notificationPostRequest(String notification) throws IOException {
+        String response = postRequest("https://www.saintsxctf.com/api/api.php/notification/", notification);
+        if (response.equals("false")) return null;
+        return JSONConverter.toNotification(response);
     }
 
     /*
@@ -188,6 +225,14 @@ public class APIClient {
 
     public static boolean messageDeleteRequest(int messageno) {
         return deleteRequest("https://www.saintsxctf.com/api/api.php/message/" + messageno);
+    }
+
+    public static boolean activationcodeDeleteRequest(int code) {
+        return deleteRequest("https://www.saintsxctf.com/api/api.php/activationcode/" + code);
+    }
+
+    public static boolean notificationDeleteRequest(int notificationno) {
+        return deleteRequest("https://www.saintsxctf.com/api/api.php/notification/" + notificationno);
     }
 
     /*

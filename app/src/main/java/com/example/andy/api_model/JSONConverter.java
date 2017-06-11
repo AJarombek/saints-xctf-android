@@ -55,6 +55,18 @@ public class JSONConverter {
         return message;
     }
 
+    public static ActivationCode toActivationCode(String JSON) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        ActivationCode code = mapper.readValue(JSON, ActivationCode.class);
+        return code;
+    }
+
+    public static Notification toNotification(String JSON) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        Notification notification = mapper.readValue(JSON, Notification.class);
+        return notification;
+    }
+
     public static List<User> toUserList(String JSON) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         List<User> userArray = mapper.readValue(JSON, new TypeReference<List<User>>(){});
@@ -85,6 +97,18 @@ public class JSONConverter {
         ObjectMapper mapper = new ObjectMapper();
         List<Message> messageArray = mapper.readValue(JSON, new TypeReference<List<Message>>(){});
         return messageArray;
+    }
+
+    public static List<RangeView> toRangeViewList(String JSON) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        List<RangeView> rangeViewArray = mapper.readValue(JSON, new TypeReference<List<RangeView>>(){});
+        return rangeViewArray;
+    }
+
+    public static List<Notification> toNotificationList(String JSON) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        List<Notification> notificationArray = mapper.readValue(JSON, new TypeReference<List<Notification>>(){});
+        return notificationArray;
     }
 
     public static String fromUser(User user) throws Throwable {
@@ -124,6 +148,20 @@ public class JSONConverter {
         return messageJsonString;
     }
 
+    public static String fromActivationCode(ActivationCode code) throws Throwable {
+        ObjectMapper mapper = new ObjectMapper();
+        String codeJsonString = mapper.writeValueAsString(code);
+        android.util.Log.d(LOG_TAG, "The ActivationCode JSON String\n" + codeJsonString);
+        return codeJsonString;
+    }
+
+    public static String fromNotification(Notification notification) throws Throwable {
+        ObjectMapper mapper = new ObjectMapper();
+        String notificationJsonString = mapper.writeValueAsString(notification);
+        android.util.Log.d(LOG_TAG, "The Notification JSON String\n" + notificationJsonString);
+        return notificationJsonString;
+    }
+
     public static String fromUserList(List<User> users) throws Throwable {
         ObjectMapper mapper = new ObjectMapper();
         String usersJsonString = mapper.writeValueAsString(users);
@@ -155,7 +193,21 @@ public class JSONConverter {
     public static String fromMessageList(List<Message> messages) throws Throwable {
         ObjectMapper mapper = new ObjectMapper();
         String messagesJsonString = mapper.writeValueAsString(messages);
-        android.util.Log.d(LOG_TAG, "The Comments JSON String\n" + messagesJsonString);
+        android.util.Log.d(LOG_TAG, "The Messages JSON String\n" + messagesJsonString);
         return messagesJsonString;
+    }
+
+    public static String fromRangeViewList(List<RangeView> rangeView) throws Throwable {
+        ObjectMapper mapper = new ObjectMapper();
+        String rangeViewJsonString = mapper.writeValueAsString(rangeView);
+        android.util.Log.d(LOG_TAG, "The Range View JSON String\n" + rangeViewJsonString);
+        return rangeViewJsonString;
+    }
+
+    public static String fromNotificationList(List<Notification> notifications) throws Throwable {
+        ObjectMapper mapper = new ObjectMapper();
+        String notificationsJsonString = mapper.writeValueAsString(notifications);
+        android.util.Log.d(LOG_TAG, "The Notifications JSON String\n" + notificationsJsonString);
+        return notificationsJsonString;
     }
 }
