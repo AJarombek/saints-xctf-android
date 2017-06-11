@@ -40,6 +40,7 @@ public class LoginDialogFragment extends DialogFragment {
     private EditText login_username;
     private EditText login_password;
     private TextView error_message;
+    private Button forgot_password;
     private User user;
     private String username;
     private AlertDialog d;
@@ -70,6 +71,7 @@ public class LoginDialogFragment extends DialogFragment {
         login_username = (EditText) loginDialogView.findViewById(R.id.login_username);
         login_password = (EditText) loginDialogView.findViewById(R.id.login_password);
         error_message = (TextView) loginDialogView.findViewById(R.id.error_message);
+        forgot_password = (Button) loginDialogView.findViewById(R.id.forgot_password_button);
 
         // Attempt to Log In the user
         builder.setPositiveButton("Log In", new DialogInterface.OnClickListener() {
@@ -80,6 +82,17 @@ public class LoginDialogFragment extends DialogFragment {
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {}
+        });
+
+        // Create a click listener on the forgot_password button
+        forgot_password.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // dismiss the login dialog and show the forgot password dialog
+                d.dismiss();
+                ForgotPasswordDialogFragment fpDialogFragment = new ForgotPasswordDialogFragment();
+                fpDialogFragment.show(getFragmentManager(), "forgot password dialog");
+            }
         });
 
         return builder.create();

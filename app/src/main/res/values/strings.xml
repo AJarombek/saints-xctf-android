@@ -116,4 +116,8 @@
     <string name="members">Members:</string>
     <string name="no_description">No Description</string>
     <string name="no_internet">No Internet Connection. Try Again.</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="enter_email">Enter Your Email Address:</string>
+    <string name="submit_new_pw">Submit New Password</string>
+    <string name="verification_code">Verification Code:</string>
 </resources>
