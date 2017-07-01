@@ -1,9 +1,6 @@
 package com.example.andy.saints_xctf_android;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,16 +10,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
 import com.example.andy.api_model.APIClient;
+import com.example.andy.api_model.Mail;
+import com.example.andy.api_model.MailUtils;
 import com.example.andy.api_model.User;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -50,6 +44,7 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
     private GridLayout forgotPasswordEnterEmail;
     private GridLayout forgotPasswordCreateNew;
     private GridLayout forgotPasswordChanged;
+    private TextView changePasswordError;
 
     private TextView newPassword;
     private TextView confirmNewPassword;
@@ -79,17 +74,19 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
         builder.setTitle("Forgot Password");
 
         // Initialize View variables
-        enterEmail = (EditText) forgotPasswordDialogView.findViewById(R.id.enter_email);
-        submitEmail = (Button) forgotPasswordDialogView.findViewById(R.id.submit_email_button);
-        submitEmailError = (TextView) forgotPasswordDialogView.findViewById(R.id.forgot_password_enter_email_error_message);
         forgotPasswordEnterEmail = (GridLayout) v.findViewById(R.id.forgot_password_enter_email);
         forgotPasswordCreateNew = (GridLayout) v.findViewById(R.id.forgot_password_create_new);
         forgotPasswordChanged = (GridLayout) v.findViewById(R.id.forgot_password_changed);
+
+        enterEmail = (EditText) forgotPasswordDialogView.findViewById(R.id.enter_email);
+        submitEmail = (Button) forgotPasswordDialogView.findViewById(R.id.submit_email_button);
+        submitEmailError = (TextView) forgotPasswordDialogView.findViewById(R.id.forgot_password_enter_email_error_message);
 
         newPassword = (TextView) v.findViewById(R.id.new_password);
         confirmNewPassword = (TextView) v.findViewById(R.id.confirm_new_password);
         verificationCode = (TextView) v.findViewById(R.id.verification_code);
         submitNewPassword = (Button) v.findViewById(R.id.submit_new_password_button);
+        changePasswordError = (TextView) forgotPasswordDialogView.findViewById(R.id.change_password_error_message);
 
         return builder.create();
     }
@@ -100,6 +97,8 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
         d = (AlertDialog) getDialog();
         d.setCanceledOnTouchOutside(false);
         if (d != null) {
+
+            forgotPasswordEnterEmail.setVisibility(View.VISIBLE);
 
             // At First, the Forgot Password - Enter Email Fragment is Visible
 
@@ -133,6 +132,14 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                 @Override
                 public void onClick(View v) {
 
+                    boolean formError = false;
+
+                    // Validate the Inputs
+                    if (verificationCode.length() == 0) {
+                        changePasswordError.setText(R.string.no_activation_code);
+                        verificationCode.requestFocus();
+                        formError = true;
+                    }
                 }
             });
         }
@@ -150,10 +157,15 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                 if (user == null) {
                     return "no_internet";
                 } else {
+                    // Send an email to the user with forgot password code
+                    String code = MailUtils.sendForgotPasswordEmail(params[0], user.getUsername());
+
+                    user.setFpw_code(code);
+
                     return user;
                 }
 
-            } catch(IOException e) {
+            } catch (IOException e) {
                 Log.d(LOG_TAG, "There is no user with this email.");
                 return "invalid_email";
             }

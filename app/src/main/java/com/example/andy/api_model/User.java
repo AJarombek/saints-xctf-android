@@ -38,6 +38,7 @@ public class User {
     private Map<String, Double> statistics;
     private String last_signin;
     private String week_start;
+    private String fpw_code;
 
     @Override
     public String toString() {
@@ -224,5 +225,13 @@ public class User {
 
     public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
+    }
+
+    public String getFpw_code() {
+        return fpw_code;
+    }
+
+    public void setFpw_code(String fpw_code) {
+        this.fpw_code = fpw_code;
     }
 }
