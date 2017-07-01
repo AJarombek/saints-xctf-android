@@ -51,6 +51,8 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
     private TextView verificationCode;
     private Button submitNewPassword;
 
+    private String currentView = "forgotPasswordEnterEmail";
+
     private User user;
 
     /**
@@ -78,15 +80,28 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
         forgotPasswordCreateNew = (GridLayout) v.findViewById(R.id.forgot_password_create_new);
         forgotPasswordChanged = (GridLayout) v.findViewById(R.id.forgot_password_changed);
 
-        enterEmail = (EditText) forgotPasswordDialogView.findViewById(R.id.enter_email);
-        submitEmail = (Button) forgotPasswordDialogView.findViewById(R.id.submit_email_button);
-        submitEmailError = (TextView) forgotPasswordDialogView.findViewById(R.id.forgot_password_enter_email_error_message);
+        enterEmail = (EditText) v.findViewById(R.id.enter_email);
+        submitEmail = (Button) v.findViewById(R.id.submit_email_button);
+        submitEmailError = (TextView) v.findViewById(R.id.forgot_password_enter_email_error_message);
 
         newPassword = (TextView) v.findViewById(R.id.new_password);
         confirmNewPassword = (TextView) v.findViewById(R.id.confirm_new_password);
         verificationCode = (TextView) v.findViewById(R.id.verification_code);
         submitNewPassword = (Button) v.findViewById(R.id.submit_new_password_button);
-        changePasswordError = (TextView) forgotPasswordDialogView.findViewById(R.id.change_password_error_message);
+        changePasswordError = (TextView) v.findViewById(R.id.change_password_error_message);
+
+        // Check the saved state on rotations - see which view should be visible
+        if (bundle != null && bundle.containsKey("forgotPasswordCreateNew")) {
+            currentView = "forgotPasswordCreateNew";
+            forgotPasswordEnterEmail.setVisibility(View.GONE);
+            forgotPasswordCreateNew.setVisibility(View.VISIBLE);
+            forgotPasswordChanged.setVisibility(View.GONE);
+        } else if (bundle != null && bundle.containsKey("forgotPasswordChanged")) {
+            currentView = "forgotPasswordChanged";
+            forgotPasswordEnterEmail.setVisibility(View.GONE);
+            forgotPasswordCreateNew.setVisibility(View.GONE);
+            forgotPasswordChanged.setVisibility(View.VISIBLE);
+        }
 
         return builder.create();
     }
@@ -97,8 +112,6 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
         d = (AlertDialog) getDialog();
         d.setCanceledOnTouchOutside(false);
         if (d != null) {
-
-            forgotPasswordEnterEmail.setVisibility(View.VISIBLE);
 
             // At First, the Forgot Password - Enter Email Fragment is Visible
 
@@ -134,15 +147,50 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
 
                     boolean formError = false;
 
+                    String verCode = verificationCode.getText().toString();
+                    String pw = newPassword.getText().toString();
+                    String cpw = confirmNewPassword.getText().toString();
+
                     // Validate the Inputs
-                    if (verificationCode.length() == 0) {
+                    if (verCode.length() == 0) {
                         changePasswordError.setText(R.string.no_activation_code);
                         verificationCode.requestFocus();
                         formError = true;
                     }
+
+                    if (cpw.length() == 0) {
+                        changePasswordError.setText(R.string.no_cpassword);
+                        confirmNewPassword.requestFocus();
+                        formError = true;
+                    } else if (cpw.length() < 6 || !cpw.equals(pw)) {
+                        changePasswordError.setText(R.string.no_password_match);
+                        confirmNewPassword.requestFocus();
+                        formError = true;
+                    }
+
+                    if (pw.length() == 0) {
+                        changePasswordError.setText(R.string.no_password);
+                        newPassword.requestFocus();
+                        formError = true;
+                    } else if (pw.length() < 6) {
+                        changePasswordError.setText(R.string.password_length);
+                        newPassword.requestFocus();
+                        formError = true;
+                    }
+
+                    if (!formError) {
+                        NewPasswordTask newPasswordTask = new NewPasswordTask();
+                        newPasswordTask.execute(pw, verCode);
+                    }
                 }
             });
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(currentView, "true");
     }
 
     class ForgotPasswordEmailTask extends AsyncTask<String, Void, Object> {
@@ -158,7 +206,7 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                     return "no_internet";
                 } else {
                     // Send an email to the user with forgot password code
-                    String code = "";
+                    String code = ControllerUtils.generateCode(8);
 
                     Mail mail = new Mail();
                     mail.setEmailAddress(params[0]);
@@ -232,6 +280,25 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
 
             progress.setVisibility(View.GONE);
             forgotPasswordCreateNew.setVisibility(View.VISIBLE);
+            currentView = "forgotPasswordCreateNew";
+        }
+    }
+
+    class NewPasswordTask extends AsyncTask<String, Void, Object> {
+
+        @Override
+        protected Object doInBackground(String... params) {
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
         }
     }
 }
