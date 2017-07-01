@@ -162,6 +162,13 @@ public class JSONConverter {
         return notificationJsonString;
     }
 
+    public static String fromMail(Mail mail) throws Throwable {
+        ObjectMapper mapper = new ObjectMapper();
+        String mailJsonString = mapper.writeValueAsString(mail);
+        android.util.Log.d(LOG_TAG, "The JSON String\n" + mailJsonString);
+        return mailJsonString;
+    }
+
     public static String fromUserList(List<User> users) throws Throwable {
         ObjectMapper mapper = new ObjectMapper();
         String usersJsonString = mapper.writeValueAsString(users);

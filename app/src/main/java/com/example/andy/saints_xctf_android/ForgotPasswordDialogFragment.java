@@ -14,8 +14,8 @@ import android.widget.GridLayout;
 import android.widget.TextView;
 
 import com.example.andy.api_model.APIClient;
+import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.Mail;
-import com.example.andy.api_model.MailUtils;
 import com.example.andy.api_model.User;
 
 import java.io.IOException;
@@ -158,15 +158,51 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                     return "no_internet";
                 } else {
                     // Send an email to the user with forgot password code
-                    String code = MailUtils.sendForgotPasswordEmail(params[0], user.getUsername());
+                    String code = "";
+
+                    Mail mail = new Mail();
+                    mail.setEmailAddress(params[0]);
+                    mail.setSubject("Saintsxctf.com Forgot Password");
+                    mail.setBody("<html>" +
+                            "<head>" +
+                            "<title>HTML email</title>" +
+                            "</head>" +
+                            "<body>" +
+                                "<h3>Forgot Password</h3>" +
+                                "<br><p>You Forgot Your Password!  Your password is one-way encrypted and salted in our database" +
+                                " (AKA There is currently no known way for anyone to hack it).  So make it simple!</p>" +
+                                "<br><br><p>Use the following confirmation code to reset your password:</p><br>" +
+                                "<p><b>Code: </b> " + code + "</p>" +
+                                "<p><b>Username: </b> " + user.getUsername() + "</p>" +
+                                "</body>" +
+                            "</html>");
+
+                    String mailString = "";
+                    try {
+                        mailString = JSONConverter.fromMail(mail);
+                    } catch (Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+
+                    APIClient.mailPostRequest(mailString);
 
                     user.setFpw_code(code);
+
+                    String userString = "";
+
+                    try {
+                        userString = JSONConverter.fromUser(user);
+                    } catch (Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                    APIClient.userPutRequest(user.getUsername(), userString);
 
                     return user;
                 }
 
             } catch (IOException e) {
                 Log.d(LOG_TAG, "There is no user with this email.");
+                e.printStackTrace();
                 return "invalid_email";
             }
         }

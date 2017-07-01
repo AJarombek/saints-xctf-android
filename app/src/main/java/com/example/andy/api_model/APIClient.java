@@ -171,6 +171,10 @@ public class APIClient {
         return JSONConverter.toNotification(response);
     }
 
+    public static void mailPostRequest(String mail) throws IOException {
+        postRequest("https://www.saintsxctf.com/api/api.php/mail/", mail);
+    }
+
     /*
      * PUT REQUESTS
      */

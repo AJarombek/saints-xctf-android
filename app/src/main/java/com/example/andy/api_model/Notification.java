@@ -15,12 +15,13 @@ public class Notification {
     private Date time;
     private String link;
     private String description;
+    private String viewed;
 
     @Override
     public String toString() {
         return "Notification: [ notification_id: " + notification_id + ", username: " +
-                username + ", time: " + time + ", link: " + link + ", description: " +
-                description + "]";
+                username + ", time: " + time + ", link: " + link + ", viewed: " + viewed +
+                ", description: " + description + "]";
     }
 
     public String getNotification_id() {
@@ -61,5 +62,13 @@ public class Notification {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getViewed() {
+        return viewed;
+    }
+
+    public void setViewed(String viewed) {
+        this.viewed = viewed;
     }
 }

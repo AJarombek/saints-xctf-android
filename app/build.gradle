@@ -18,7 +18,6 @@ android {
         }
     }
     packagingOptions {
-        pickFirst 'META-INF/LICENSE.txt'
         exclude  'META-INF/DEPENDENCIES.txt'
         exclude  'META-INF/LICENSE.txt'
         exclude  'META-INF/NOTICE.txt'
@@ -39,6 +38,4 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
     compile 'org.mindrot:jbcrypt:0.4-atlassian-1'
-    compile 'com.sun.mail:android-mail:1.5.5'
-    compile 'com.sun.mail:android-activation:1.5.5'
 }
