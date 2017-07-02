@@ -129,6 +129,7 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                     Pattern pattern = Pattern.compile(EMAIL_REGEX);
                     Matcher matcher = pattern.matcher(email);
 
+                    // Validate the Email Input
                     if (email.length() == 0) {
                         submitEmailError.setText(R.string.no_email);
                         enterEmail.requestFocus();
@@ -183,6 +184,7 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                     }
 
                     if (!formError) {
+                        // If no errors, try to set the new password
                         NewPasswordTask newPasswordTask = new NewPasswordTask();
                         newPasswordTask.execute(pw, verCode);
                     }
@@ -212,6 +214,7 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                     // Send an email to the user with forgot password code
                     String code = ControllerUtils.generateCode(8);
 
+                    // Build the Mail Object
                     Mail mail = new Mail();
                     mail.setEmailAddress(params[0]);
                     mail.setSubject("Saintsxctf.com Forgot Password");
@@ -229,6 +232,7 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                                 "</body>" +
                             "</html>");
 
+                    // Convert the mail object to JSON
                     String mailString = "";
                     try {
                         mailString = JSONConverter.fromMail(mail);
@@ -237,8 +241,10 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                         return "server error";
                     }
 
+                    // Send the Mail
                     APIClient.mailPostRequest(mailString);
 
+                    // Set the forgot password code for the user
                     user.setFpw_code(code);
 
                     String userString = "";
@@ -249,7 +255,9 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                         throwable.printStackTrace();
                         return "server error";
                     }
-                    APIClient.userPutRequest(user.getUsername(), userString);
+
+                    // PUT request to add forgot password code on user
+                    user = APIClient.userPutRequest(user.getUsername(), userString);
 
                     return user;
                 }
@@ -264,6 +272,8 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            // Display the progress spinner
             progress = v.findViewById(R.id.progress_overlay);
             forgotPasswordEnterEmail.setVisibility(View.GONE);
             progress.setVisibility(View.VISIBLE);
@@ -273,6 +283,7 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
         protected void onPostExecute(Object response) {
             super.onPostExecute(response);
 
+            // display error messages if operation failed
             if (response.equals("no_internet")) {
                 submitEmailError.setText(R.string.no_internet);
             } else if (response.equals("invalid_email")) {
@@ -285,6 +296,7 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                 android.util.Log.d(LOG_TAG, "The User Object Received: " + user.toString());
             }
 
+            // Move to the forgot password - create new view
             progress.setVisibility(View.GONE);
             forgotPasswordCreateNew.setVisibility(View.VISIBLE);
             currentView = "forgotPasswordCreateNew";
@@ -296,9 +308,11 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
         @Override
         protected Object doInBackground(String... params) {
 
+            // If the verification code matches one on the user object, change the password
             if (Arrays.asList(user.getForgotpassword()).contains(params[1])) {
                 android.util.Log.d(LOG_TAG, "The Forgot Password Code Is Valid.");
 
+                // Hash & Salt New Password
                 String hash = BCrypt.hashpw(params[0], BCrypt.gensalt());
 
                 user.setFpw_delete_code(params[1]);
@@ -312,6 +326,7 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                     return "server error";
                 }
 
+                // PUT request to alter user with the delete verification code and new password
                 User newuser;
                 try {
                     newuser = APIClient.userPutRequest(user.getUsername(), userString);
@@ -331,6 +346,8 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+
+            // Display the progress spinner
             progress = v.findViewById(R.id.progress_overlay);
             forgotPasswordCreateNew.setVisibility(View.GONE);
             progress.setVisibility(View.VISIBLE);
@@ -340,6 +357,7 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
         protected void onPostExecute(Object response) {
             super.onPostExecute(response);
 
+            // Display errors if operation failed
             if (response.equals("no_internet")) {
                 submitEmailError.setText(R.string.no_internet);
             } else if (response.equals("server error")) {
@@ -350,6 +368,7 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                 android.util.Log.d(LOG_TAG, "The User Object Received: " + user.toString());
             }
 
+            // Change the view to forgot password changed
             progress.setVisibility(View.GONE);
             forgotPasswordChanged.setVisibility(View.VISIBLE);
             currentView = "forgotPasswordChanged";
