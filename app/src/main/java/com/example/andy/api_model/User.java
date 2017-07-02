@@ -39,6 +39,8 @@ public class User {
     private String last_signin;
     private String week_start;
     private String fpw_code;
+    private String fpw_delete_code;
+    private String fpw_password;
 
     @Override
     public String toString() {
@@ -233,5 +235,21 @@ public class User {
 
     public void setFpw_code(String fpw_code) {
         this.fpw_code = fpw_code;
+    }
+
+    public String getFpw_delete_code() {
+        return fpw_delete_code;
+    }
+
+    public void setFpw_delete_code(String fpw_delete_code) {
+        this.fpw_delete_code = fpw_delete_code;
+    }
+
+    public String getFpw_password() {
+        return fpw_password;
+    }
+
+    public void setFpw_password(String fpw_password) {
+        this.fpw_password = fpw_password;
     }
 }

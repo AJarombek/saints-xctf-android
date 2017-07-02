@@ -3,6 +3,7 @@ package com.example.andy.saints_xctf_android;
 import android.app.Dialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
@@ -18,7 +19,10 @@ import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.Mail;
 import com.example.andy.api_model.User;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -110,7 +114,7 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
     public void onStart() {
         super.onStart();
         d = (AlertDialog) getDialog();
-        d.setCanceledOnTouchOutside(false);
+        d.setCanceledOnTouchOutside(true);
         if (d != null) {
 
             // At First, the Forgot Password - Enter Email Fragment is Visible
@@ -230,6 +234,7 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                         mailString = JSONConverter.fromMail(mail);
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
+                        return "server error";
                     }
 
                     APIClient.mailPostRequest(mailString);
@@ -242,6 +247,7 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                         userString = JSONConverter.fromUser(user);
                     } catch (Throwable throwable) {
                         throwable.printStackTrace();
+                        return "server error";
                     }
                     APIClient.userPutRequest(user.getUsername(), userString);
 
@@ -261,7 +267,6 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
             progress = v.findViewById(R.id.progress_overlay);
             forgotPasswordEnterEmail.setVisibility(View.GONE);
             progress.setVisibility(View.VISIBLE);
-            d.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(false);
         }
 
         @Override
@@ -272,6 +277,8 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                 submitEmailError.setText(R.string.no_internet);
             } else if (response.equals("invalid_email")) {
                 submitEmailError.setText(R.string.no_user_email);
+            } else if (response.equals("server error")) {
+                submitEmailError.setText(R.string.server_errors);
             } else if (response instanceof User) {
 
                 user = (User) response;
@@ -288,17 +295,72 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
 
         @Override
         protected Object doInBackground(String... params) {
-            return null;
+
+            if (Arrays.asList(user.getForgotpassword()).contains(params[1])) {
+                android.util.Log.d(LOG_TAG, "The Forgot Password Code Is Valid.");
+
+                String hash = BCrypt.hashpw(params[0], BCrypt.gensalt());
+
+                user.setFpw_delete_code(params[1]);
+                user.setFpw_password(hash);
+
+                String userString;
+                try {
+                    userString = JSONConverter.fromUser(user);
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                    return "server error";
+                }
+
+                User newuser;
+                try {
+                    newuser = APIClient.userPutRequest(user.getUsername(), userString);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return "no internet";
+                }
+
+                return newuser;
+
+            } else {
+                return "invalidVerificationCode";
+            }
+
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            progress = v.findViewById(R.id.progress_overlay);
+            forgotPasswordCreateNew.setVisibility(View.GONE);
+            progress.setVisibility(View.VISIBLE);
         }
 
         @Override
-        protected void onPostExecute(Object o) {
-            super.onPostExecute(o);
+        protected void onPostExecute(Object response) {
+            super.onPostExecute(response);
+
+            if (response.equals("no_internet")) {
+                submitEmailError.setText(R.string.no_internet);
+            } else if (response.equals("server error")) {
+                submitEmailError.setText(R.string.server_errors);
+            } else if (response instanceof User) {
+
+                user = (User) response;
+                android.util.Log.d(LOG_TAG, "The User Object Received: " + user.toString());
+            }
+
+            progress.setVisibility(View.GONE);
+            forgotPasswordChanged.setVisibility(View.VISIBLE);
+            currentView = "forgotPasswordChanged";
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    // Dismiss the Dialog Fragment After 3 Seconds
+                    d.dismiss();
+                }
+            }, 3000);
         }
     }
 }

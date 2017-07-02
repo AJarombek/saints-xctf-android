@@ -12,11 +12,16 @@ public class LeaderboardItem {
     private String first;
     private String last;
     private Double miles;
+    private Double milesrun;
+    private Double milesbiked;
+    private Double milesswam;
+    private Double milesother;
 
     @Override
     public String toString() {
         return "GroupMember: [ username: " + username + ", first: " + first +
-                ", last: " + last + ", miles: " + miles + "]";
+                ", last: " + last + ", miles: " + miles + ", miles: " + milesrun + ", miles: " +
+                milesbiked + ", miles: " + milesswam + ", miles: " + milesother + "]";
     }
 
     public String getUsername() {
@@ -49,6 +54,38 @@ public class LeaderboardItem {
 
     public void setMiles(Double miles) {
         this.miles = miles;
+    }
+
+    public Double getMilesrun() {
+        return milesrun;
+    }
+
+    public void setMilesrun(Double milesrun) {
+        this.milesrun = milesrun;
+    }
+
+    public Double getMilesbiked() {
+        return milesbiked;
+    }
+
+    public void setMilesbiked(Double milesbiked) {
+        this.milesbiked = milesbiked;
+    }
+
+    public Double getMilesswam() {
+        return milesswam;
+    }
+
+    public void setMilesswam(Double milesswam) {
+        this.milesswam = milesswam;
+    }
+
+    public Double getMilesother() {
+        return milesother;
+    }
+
+    public void setMilesother(Double milesother) {
+        this.milesother = milesother;
     }
 }
 
