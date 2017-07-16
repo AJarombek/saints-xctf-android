@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 
 import com.example.andy.api_model.APIClient;
 import com.example.andy.api_model.Comment;
+import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.Log;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -41,18 +44,21 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
 
     private static final String LOG_TAG = RecyclerAdapter.class.getName();
     public static final String PREFS_NAME = "SaintsxctfUserPrefs";
+    public static final int REQUEST_CODE = 0;
 
     private ArrayList<Log> logs;
-    private static Context context;
+    private Context context;
+    private Fragment fragment;
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
     private boolean loading;
     private OnLoadMoreListener onLoadMoreListener;
 
-    public RecyclerAdapter(Context context, ArrayList<Log> logs,
+    public RecyclerAdapter(Context context, Fragment fragment, ArrayList<Log> logs,
                            RecyclerView recyclerView) {
         this.logs = logs;
-        RecyclerAdapter.context = context;
+        this.context = context;
+        this.fragment = fragment;
         if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
             final LinearLayoutManager linearLayoutManager =
                     (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -124,10 +130,37 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
         this.onLoadMoreListener = onLoadMoreListener;
     }
 
+    /**
+     * Remove a single log from the recyclerAdapter
+     * @param position the index of the log to be removed
+     */
     public void removeAt(int position) {
         logs.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, logs.size());
+    }
+
+    /**
+     * Edit a single log in the recyclerAdapter
+     * @param position the index of the log that needs to be edited
+     */
+    public void edit(int position) {
+        try {
+            String log = JSONConverter.fromLog(logs.get(position));
+
+            // Pass the log dialog the current logs information
+            Bundle args = new Bundle();
+            args.putString("logString", log);
+
+            LogDialogFragment logDialog = new LogDialogFragment();
+            logDialog.setArguments(args);
+            logDialog.setTargetFragment(fragment, REQUEST_CODE);
+            logDialog.show(fragment.getFragmentManager(), "log dialog");
+
+        } catch (Throwable throwable) {
+            android.util.Log.e(LOG_TAG, "Failed to Convert Log to String for Editing");
+            throwable.printStackTrace();
+        }
     }
 
     @Override
@@ -135,6 +168,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
         return logs.size();
     }
 
+    /**
+     * Inner Class to Hold each Individual Log and its Corresponding logic in the RecyclerAdapter
+     */
     public static class LogHolder extends RecyclerView.ViewHolder {
 
         private RecyclerAdapter recyclerAdapter;
@@ -223,10 +259,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             edit_fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    recyclerAdapter.edit(getAdapterPosition());
                 }
             });
 
+            // When clicking the delete action button, make an async call to delete
             delete_fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -240,7 +277,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
                 @Override
                 public void onClick(View v) {
                     android.util.Log.d(LOG_TAG, username);
-                    ((MainActivity) context).viewProfile(username);
+                    ((MainActivity) recyclerAdapter.context).viewProfile(username);
                 }
             });
 

@@ -59,7 +59,7 @@ public class LogsTab extends Fragment {
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerProfileView);
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new RecyclerAdapter(getContext(), logs, recyclerView);
+        adapter = new RecyclerAdapter(getContext(), getParentFragment(), logs, recyclerView);
         recyclerView.setAdapter(adapter);
 
         // Initiate the progress bar
