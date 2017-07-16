@@ -153,8 +153,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             args.putString("logString", log);
 
             LogDialogFragment logDialog = new LogDialogFragment();
-            logDialog.setArguments(args);
             logDialog.setTargetFragment(fragment, REQUEST_CODE);
+            logDialog.setArguments(args);
             logDialog.show(fragment.getFragmentManager(), "log dialog");
 
         } catch (Throwable throwable) {

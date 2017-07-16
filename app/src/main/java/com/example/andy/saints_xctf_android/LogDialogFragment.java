@@ -27,6 +27,7 @@ import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.Log;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -78,6 +79,7 @@ public class LogDialogFragment extends DialogFragment {
     private View v;
     private View progress;
     private LinearLayout log_forms;
+    private boolean isNew;
 
     /**
      * Create and Run an AlertDialog for Log Submitting
@@ -176,6 +178,59 @@ public class LogDialogFragment extends DialogFragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {}
         });
+
+        // If the log already exists, populate the fields with the existing values
+        if (getArguments().containsKey("logString")) {
+            isNew = false;
+
+            try {
+                Log log = JSONConverter.toLog(getArguments().getString("logString"));
+
+                android.util.Log.i(LOG_TAG, log.toString());
+
+                log_run_name.setText(log.getName());
+                log_location.setText(log.getLocation());
+
+                int typePosition = typeAdapter.getPosition(log.getType());
+                log_type.setSelection(typePosition);
+
+                log_distance.setText(String.valueOf(log.getDistance()));
+
+                int metricPosition = metricAdapter.getPosition(log.getMetric());
+                log_metric.setSelection(metricPosition);
+
+                String time = log.getTime();
+
+                int minutes = (Integer.parseInt(time.substring(0, 2)) * 60) +
+                                Integer.parseInt(time.substring(3, 5));
+                int seconds = Integer.parseInt(time.substring(6, 8));
+
+                log_time_minutes.setText(String.valueOf(minutes));
+                log_time_seconds.setText(String.valueOf(seconds));
+
+                log_feel.setProgress(log.getFeel() - 1);
+                log_description.setText(log.getDescription());
+
+                String dateString = log.getDate();
+                int year = Integer.parseInt(dateString.substring(0,4));
+                int month = Integer.parseInt(dateString.substring(5,7));
+                int day = Integer.parseInt(dateString.substring(8,10));
+
+                Calendar calendar = GregorianCalendar.getInstance();
+                calendar.set(year,month-1,day);
+
+                SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+                df.setCalendar(calendar);
+                String date = df.format(calendar.getTime());
+                log_date.setText(date);
+
+            } catch (IOException e) {
+                android.util.Log.e(LOG_TAG, "Failed to Convert Existing Log Bundle to Log");
+                e.printStackTrace();
+            }
+        } else {
+            isNew = true;
+        }
 
         return builder.create(); // return dialog
     }
