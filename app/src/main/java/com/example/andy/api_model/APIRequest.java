@@ -180,6 +180,6 @@ public class APIRequest {
         Log.d(TAG, "API DELETE Response Code: " + connection.getResponseCode());
 
         connection.disconnect();
-        return (connection.getResponseCode() == HttpURLConnection.HTTP_NO_CONTENT);
+        return (connection.getResponseCode() == HttpURLConnection.HTTP_INTERNAL_ERROR);
     }
 }

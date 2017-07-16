@@ -85,11 +85,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
         if (viewType == 1) {
             layoutView = LayoutInflater.from(parent.getContext()).
                     inflate(R.layout.recyclerview_item_row, parent, false);
-            logHolder = new LogHolder(layoutView);
+            logHolder = new LogHolder(layoutView, this);
         } else {
             layoutView = LayoutInflater.from(parent.getContext()).
                     inflate(R.layout.progress_item, parent, false);
-            logHolder = new ProgressHolder(layoutView);
+            logHolder = new ProgressHolder(layoutView, this);
         }
         return logHolder;
     }
@@ -124,6 +124,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
         this.onLoadMoreListener = onLoadMoreListener;
     }
 
+    public void removeAt(int position) {
+        logs.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, logs.size());
+    }
+
     @Override
     public int getItemCount() {
         return logs.size();
@@ -131,12 +137,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
 
     public static class LogHolder extends RecyclerView.ViewHolder {
 
+        private RecyclerAdapter recyclerAdapter;
         private View v;
         private RecyclerView recyclerCommentView;
         private LinearLayoutManager linearLayoutManager;
         private RecyclerCommentAdapter adapter;
 
         private LinearLayout logview;
+        private FloatingActionButton edit_fab;
+        private FloatingActionButton delete_fab;
         private TextView logview_un;
         private TextView logview_username;
         private TextView logview_name;
@@ -149,6 +158,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
         private EditText logview_add_comment;
         private Log log;
         private String username;
+        private boolean isFabVisible = false;
         private ArrayList<Comment> comments;
 
         private static final String LOG_KEY = "LOGVIEW";
@@ -158,11 +168,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
                 MainActivity.COLOR_FAIRLYGOOD, MainActivity.COLOR_GOOD,
                 MainActivity.COLOR_GREAT, MainActivity.COLOR_FANTASTIC};
 
-        public LogHolder(View v) {
+        public LogHolder(View v, RecyclerAdapter recyclerAdapter) {
             super(v);
 
             this.v = v;
+            this.recyclerAdapter = recyclerAdapter;
             logview = (LinearLayout) v.findViewById(R.id.logview);
+            edit_fab = (FloatingActionButton) v.findViewById(R.id.edit_fab);
+            delete_fab = (FloatingActionButton) v.findViewById(R.id.delete_fab);
             logview_un = (TextView) v.findViewById(R.id.logview_un);
             logview_username = (TextView) v.findViewById(R.id.logview_username);
             logview_name = (TextView) v.findViewById(R.id.logview_name);
@@ -179,6 +192,48 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             this.log = logObject;
             logview_un.setText(log.getUsername());
             username = logview_un.getText().toString();
+
+            // Get the users preferences (username, first, last)
+            SharedPreferences prefs = v.getContext().getSharedPreferences(
+                    PREFS_NAME, Context.MODE_PRIVATE);
+            final String my_username = prefs.getString("username", "");
+            final String my_first = prefs.getString("first", "");
+            final String my_last = prefs.getString("last", "");
+
+
+            // If this is the users log, display the edit and delete action buttons on click
+            logview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (username.equals(my_username)) {
+                        if (isFabVisible) {
+                            edit_fab.setVisibility(View.GONE);
+                            delete_fab.setVisibility(View.GONE);
+                            isFabVisible = false;
+                        } else {
+                            edit_fab.setVisibility(View.VISIBLE);
+                            delete_fab.setVisibility(View.VISIBLE);
+                            isFabVisible = true;
+                        }
+
+                    }
+                }
+            });
+
+            edit_fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+            delete_fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DeleteLogTask deleteLogTask = new DeleteLogTask();
+                    deleteLogTask.execute(log.getLog_id());
+                }
+            });
 
             // Go to the users profile when you click on their name
             logview_username.setOnClickListener(new View.OnClickListener() {
@@ -201,15 +256,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
 
                         // Make sure the comment contains content
                         if (!newcomment.equals("")) {
-                            SharedPreferences prefs = v.getContext().getSharedPreferences(
-                                    PREFS_NAME, Context.MODE_PRIVATE);
-                            String username = prefs.getString("username", "");
-                            String first = prefs.getString("first", "");
-                            String last = prefs.getString("last", "");
 
                             CommentTask commentTask = new CommentTask();
                             commentTask.execute(newcomment,
-                                    String.valueOf(log.getLog_id()), username, first, last);
+                                    String.valueOf(log.getLog_id()), my_username, my_first, my_last);
                             return true;
                         } else {
                             // Hide the keyboard
@@ -295,6 +345,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             recyclerCommentView.setAdapter(adapter);
         }
 
+        /**
+         * Async Task for Commenting on a Log and Adding the Comment to the Database
+         */
         class CommentTask extends AsyncTask<String, Void, Comment> {
 
             @Override
@@ -344,14 +397,44 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
                 }
             }
         }
+
+        /**
+         * Async Task for Deleting a Log from the RecyclerView and Database
+         */
+        class DeleteLogTask extends AsyncTask<Integer, Void, Boolean> {
+
+            @Override
+            protected Boolean doInBackground(Integer... params) {
+                try {
+
+                    Integer log_id = params[0];
+
+                    return APIClient.logDeleteRequest(log_id);
+
+                } catch (Throwable e) {
+                    android.util.Log.e(LOG_TAG, "Log Delete Failed.");
+                    android.util.Log.e(LOG_TAG, e.getMessage());
+                    return false;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Boolean response) {
+                super.onPostExecute(response);
+
+                if (response) {
+                    recyclerAdapter.removeAt(getAdapterPosition());
+                }
+            }
+        }
     }
 
     public static class ProgressHolder extends LogHolder {
 
         private ProgressBar progressBar;
 
-        public ProgressHolder(View v) {
-            super(v);
+        public ProgressHolder(View v, RecyclerAdapter recyclerAdapter) {
+            super(v, recyclerAdapter);
             progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         }
     }
