@@ -148,9 +148,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
         try {
             String log = JSONConverter.fromLog(logs.get(position));
 
-            // Pass the log dialog the current logs information
+            // Pass the log dialog the current logs information and its index
             Bundle args = new Bundle();
             args.putString("logString", log);
+            args.putInt("logIndex", position);
 
             LogDialogFragment logDialog = new LogDialogFragment();
             logDialog.setTargetFragment(fragment, REQUEST_CODE);
@@ -228,6 +229,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             this.log = logObject;
             logview_un.setText(log.getUsername());
             username = logview_un.getText().toString();
+
+            edit_fab.setVisibility(View.GONE);
+            delete_fab.setVisibility(View.GONE);
 
             // Get the users preferences (username, first, last)
             SharedPreferences prefs = v.getContext().getSharedPreferences(

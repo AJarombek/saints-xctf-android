@@ -1,5 +1,7 @@
 package com.example.andy.saints_xctf_android;
 
+import android.util.Log;
+
 import java.security.SecureRandom;
 
 /**
@@ -12,6 +14,12 @@ public class ControllerUtils {
 
     static final String CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
+    /**
+     * Convert from other distance metrics to miles
+     * @param distance -
+     * @param metric -
+     * @return the mileage
+     */
     public static Double convertToMiles(Double distance, String metric) {
         switch (metric) {
             case "miles":
@@ -25,20 +33,35 @@ public class ControllerUtils {
         }
     }
 
+    /**
+     * Calculate the average time it takes to complete each mile
+     * @param distance in miles
+     * @param minutes -
+     * @param seconds -
+     * @return the average mile pace
+     */
     public static String milePace(Double distance, String minutes, String seconds) {
-        if (minutes.equals(""))
+        if (minutes.equals("")) {
             if (seconds.equals(""))
-                return "0:00";
+                return "00:00:00";
             minutes = "0";
+        }
 
         if (seconds.equals(""))
             seconds = "0";
-
+        
+        Log.i("CU", "Minutes: " + minutes);
+        Log.i("CU", "Seconds: " + seconds);
         int s = (Integer.valueOf(minutes) * 60) + Integer.valueOf(seconds);
         long secondPace = Math.round(s / distance);
-        return String.valueOf(secondPace/60) + ":" + String.valueOf(secondPace%60);
+        return "00:" + String.valueOf(secondPace/60) + ":" + String.valueOf(secondPace%60);
     }
 
+    /**
+     * Generate a pseudo-random code of variable length
+     * @param length how long the code should be
+     * @return the code
+     */
     public static String generateCode(int length) {
         SecureRandom secureRandom = new SecureRandom();
         StringBuilder sb = new StringBuilder();

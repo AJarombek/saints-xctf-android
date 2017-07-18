@@ -46,8 +46,10 @@ public class LogDialogFragment extends DialogFragment {
 
     public static final String PREFS_NAME = "SaintsxctfUserPrefs";
     private static final String LOG_TAG = LogDialogFragment.class.getName();
-    public static final int REQUEST_CODE = 0;
+    public static final int REQUEST_CODE_NEW_LOG = 0;
+    public static final int REQUEST_CODE_UPDATED_LOG = 1;
     public static final String NEW_LOG_KEY = "new_log";
+    public static final String UPDATED_LOG_INDEX = "updated_log_index";
 
     private static final String[] COLOR_DESCRIPTION = {MainActivity.DESCRIPT_TERRIBLE,
             MainActivity.DESCRIPT_VERYBAD, MainActivity.DESCRIPT_BAD, MainActivity.DESCRIPT_PRETTYBAD,
@@ -80,6 +82,8 @@ public class LogDialogFragment extends DialogFragment {
     private View progress;
     private LinearLayout log_forms;
     private boolean isNew;
+    private String log_id;
+    private int log_array_index;
 
     /**
      * Create and Run an AlertDialog for Log Submitting
@@ -180,13 +184,18 @@ public class LogDialogFragment extends DialogFragment {
         });
 
         // If the log already exists, populate the fields with the existing values
-        if (getArguments().containsKey("logString")) {
+        Bundle args = getArguments();
+        if (args != null && args.containsKey("logString")) {
             isNew = false;
+            android.util.Log.i(LOG_TAG, "Existing Log");
 
             try {
                 Log log = JSONConverter.toLog(getArguments().getString("logString"));
+                log_array_index = getArguments().getInt("logIndex");
 
-                android.util.Log.i(LOG_TAG, log.toString());
+                android.util.Log.i(LOG_TAG, "Editing Existing Log");
+
+                log_id = String.valueOf(log.getLog_id());
 
                 log_run_name.setText(log.getName());
                 log_location.setText(log.getLocation());
@@ -205,8 +214,21 @@ public class LogDialogFragment extends DialogFragment {
                                 Integer.parseInt(time.substring(3, 5));
                 int seconds = Integer.parseInt(time.substring(6, 8));
 
-                log_time_minutes.setText(String.valueOf(minutes));
-                log_time_seconds.setText(String.valueOf(seconds));
+                if (minutes != 0) {
+                    if (minutes < 10) {
+                        log_time_minutes.setText("0" + String.valueOf(minutes));
+                    } else {
+                        log_time_minutes.setText(String.valueOf(minutes));
+                    }
+                }
+
+                if (seconds != 0) {
+                    if (seconds < 10) {
+                        log_time_seconds.setText("0" + String.valueOf(seconds));
+                    } else {
+                        log_time_seconds.setText(String.valueOf(seconds));
+                    }
+                }
 
                 log_feel.setProgress(log.getFeel() - 1);
                 log_description.setText(log.getDescription());
@@ -216,10 +238,9 @@ public class LogDialogFragment extends DialogFragment {
                 int month = Integer.parseInt(dateString.substring(5,7));
                 int day = Integer.parseInt(dateString.substring(8,10));
 
-                Calendar calendar = GregorianCalendar.getInstance();
                 calendar.set(year,month-1,day);
 
-                SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy");
+                SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy");
                 df.setCalendar(calendar);
                 String date = df.format(calendar.getTime());
                 log_date.setText(date);
@@ -230,6 +251,7 @@ public class LogDialogFragment extends DialogFragment {
             }
         } else {
             isNew = true;
+            android.util.Log.i(LOG_TAG, "New Log");
         }
 
         return builder.create(); // return dialog
@@ -288,7 +310,7 @@ public class LogDialogFragment extends DialogFragment {
                         LogTask logTask = new LogTask();
                         logTask.execute(username,first,last,name,location,type,distance,
                                 metric,time,minutes,seconds,
-                                String.valueOf(feel),description,date);
+                                String.valueOf(feel),description,date,log_id);
                     }
                 }
             });
@@ -375,6 +397,9 @@ public class LogDialogFragment extends DialogFragment {
         return false;
     }
 
+    /**
+     * LogTask is an asynchronous job for creating new logs and updating existing logs
+     */
     class LogTask extends AsyncTask<String, Void, Object> {
 
         @Override
@@ -392,7 +417,8 @@ public class LogDialogFragment extends DialogFragment {
 
             double distance = Double.parseDouble(params[6]);
             log.setDistance(distance);
-            log.setMiles(ControllerUtils.convertToMiles(distance, params[7]));
+            double miles = ControllerUtils.convertToMiles(distance, params[7]);
+            log.setMiles(miles);
             log.setMetric(params[7]);
 
             String time = params[8];
@@ -400,10 +426,13 @@ public class LogDialogFragment extends DialogFragment {
                 time = "00:00:00";
 
             log.setTime(time);
-            log.setPace(ControllerUtils.milePace(distance, params[9], params[10]));
+            log.setPace(ControllerUtils.milePace(miles, params[9], params[10]));
             log.setFeel(Integer.parseInt(params[11]));
             log.setDescription(params[12]);
             log.setDate(params[13]);
+
+            if (params[14] != null)
+                log.setLog_id(Integer.parseInt(params[14]));
 
             // Convert the new log to JSON
             String logJSON;
@@ -416,9 +445,15 @@ public class LogDialogFragment extends DialogFragment {
             }
 
             try {
-                // add log to the database
                 android.util.Log.d(LOG_TAG, logJSON);
-                log = APIClient.logPostRequest(logJSON);
+
+                // add log to the database or update log in database
+                if (params[14] == null) {
+                    log = APIClient.logPostRequest(logJSON);
+                } else {
+                    android.util.Log.i(LOG_TAG, "Updating Log #" + log_id);
+                    log = APIClient.logPutRequest(Integer.parseInt(params[14]), logJSON);
+                }
 
                 if (log == null) return "no_internet";
 
@@ -465,7 +500,13 @@ public class LogDialogFragment extends DialogFragment {
                     android.util.Log.d(LOG_TAG, t.getMessage());
                 }
 
-                sendResult(logJSON, REQUEST_CODE);
+                // Send an intent to the recycler adapter saying that the log has been created/updated
+                if (isNew) {
+                    sendNewResult(logJSON, REQUEST_CODE_NEW_LOG);
+                } else {
+                    sendUpdateResult(logJSON, log_array_index, REQUEST_CODE_UPDATED_LOG);
+                }
+
                 d.dismiss();
             }
             progress.setVisibility(View.GONE);
@@ -475,9 +516,30 @@ public class LogDialogFragment extends DialogFragment {
         }
     }
 
-    private void sendResult(String logJSON, int REQUEST_CODE) {
+    /**
+     * Send an intent of the newly created log
+     * @param logJSON the JSON String for the log
+     * @param REQUEST_CODE code for the recycler adapter
+     */
+    private void sendNewResult(String logJSON, int REQUEST_CODE) {
+        android.util.Log.i(LOG_TAG, "Sending New Log Intent");
         Intent intent = new Intent();
         intent.putExtra(NEW_LOG_KEY, logJSON);
+        getTargetFragment().onActivityResult(
+                getTargetRequestCode(), REQUEST_CODE, intent);
+    }
+
+    /**
+     * Send an intent of the updated log
+     * @param logJSON the JSON string for the log
+     * @param index the index of the log in the recycler adapter
+     * @param REQUEST_CODE code for the recycler adapter
+     */
+    private void sendUpdateResult(String logJSON, int index, int REQUEST_CODE) {
+        android.util.Log.i(LOG_TAG, "Sending Update Log Intent");
+        Intent intent = new Intent();
+        intent.putExtra(NEW_LOG_KEY, logJSON);
+        intent.putExtra(UPDATED_LOG_INDEX, index);
         getTargetFragment().onActivityResult(
                 getTargetRequestCode(), REQUEST_CODE, intent);
     }

@@ -144,22 +144,39 @@ public class MainFragment extends Fragment {
         }
     }
 
+    /**
+     * Handle intents passed to this fragment
+     * @param requestCode -
+     * @param resultCode -
+     * @param data information passed with the intent
+     */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Make sure fragment codes match up
-        if (requestCode == LogDialogFragment.REQUEST_CODE) {
-            String newlog = data.getStringExtra(
-                    LogDialogFragment.NEW_LOG_KEY);
 
-            com.example.andy.api_model.Log log = null;
-            try {
-                log = JSONConverter.toLog(newlog);
-            } catch (IOException e) {
-                Log.e(TAG, "Log object JSON conversion failed.");
-                Log.e(TAG, e.getMessage());
-            }
+        Log.i(TAG, String.valueOf(requestCode));
+
+        String newlog = data.getStringExtra(LogDialogFragment.NEW_LOG_KEY);
+        Log.i(TAG, String.valueOf(newlog));
+
+        com.example.andy.api_model.Log log = null;
+        try {
+            log = JSONConverter.toLog(newlog);
+        } catch (IOException e) {
+            Log.e(TAG, "Log object JSON conversion failed.");
+            Log.e(TAG, e.getMessage());
+        }
+
+        // Make sure fragment codes match up to either a new log or an updated log
+        if (resultCode == LogDialogFragment.REQUEST_CODE_NEW_LOG) {
 
             logs.add(0,log);
             adapter.notifyItemInserted(0);
+
+        } else if (resultCode == LogDialogFragment.REQUEST_CODE_UPDATED_LOG) {
+
+            int index = data.getIntExtra(LogDialogFragment.UPDATED_LOG_INDEX, 0);
+            Log.i(TAG, String.valueOf(index));
+            logs.set(index, log);
+            adapter.notifyItemRangeChanged(index, index + 1);
         }
     }
 
