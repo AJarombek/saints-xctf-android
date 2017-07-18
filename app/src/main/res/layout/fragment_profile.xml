@@ -223,6 +223,16 @@
                 android:layout_width="match_parent"
                 android:text="@string/statistics_tab"/>
 
+            <android.support.design.widget.TabItem
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Monthly"/>
+
+            <android.support.design.widget.TabItem
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Weekly"/>
+
         </android.support.design.widget.TabLayout>
 
         <!-- View pager to swipe views -->

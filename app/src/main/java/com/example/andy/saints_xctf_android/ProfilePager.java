@@ -72,6 +72,22 @@ public class ProfilePager extends FragmentStatePagerAdapter {
                 StatisticsTab statisticsTab = new StatisticsTab();
                 statisticsTab.setArguments(data);
                 return statisticsTab;
+            case 2:
+                if (user != null) {
+                    data.putString("username", String.valueOf(user.getUsername()));
+                }
+
+                MonthlyViewTab monthlyViewTab = new MonthlyViewTab();
+                monthlyViewTab.setArguments(data);
+                return monthlyViewTab;
+            case 3:
+                if (user != null) {
+                    data.putString("username", String.valueOf(user.getUsername()));
+                }
+
+                MonthlyViewTab mViewTab = new MonthlyViewTab();
+                mViewTab.setArguments(data);
+                return mViewTab;
             default:
                 return null;
         }

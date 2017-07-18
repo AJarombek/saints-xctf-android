@@ -235,6 +235,7 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+        Log.i(TAG, String.valueOf(tab.getPosition()));
         viewPager.setCurrentItem(tab.getPosition());
     }
 
