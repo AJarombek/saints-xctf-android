@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/leaderboard_tab"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="7"
+        android:rowCount="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Leaderboard Filters:"
+            android:textSize="18sp"
+            android:layout_column="1"
+            android:layout_row="0"
+            android:gravity="center_vertical">
+        </TextView>
+
+        <Button
+            android:id="@+id/filter_run"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:text="Run"
+            android:layout_column="2"
+            android:layout_row="0"
+            android:background="@color/stlawuRed"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            android:gravity="center_vertical"/>
+
+        <Button
+            android:id="@+id/filter_bike"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:text="Bike"
+            android:layout_column="3"
+            android:layout_row="0"
+            android:background="@color/lightGrey"
+            android:textAlignment="center"
+            android:gravity="center_vertical"/>
+
+        <Button
+            android:id="@+id/filter_swim"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:text="Swim"
+            android:layout_column="4"
+            android:layout_row="0"
+            android:background="@color/lightGrey"
+            android:textAlignment="center"
+            android:gravity="center_vertical"/>
+
+        <Button
+            android:id="@+id/filter_other"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:text="Other"
+            android:layout_column="5"
+            android:layout_row="0"
+            android:background="@color/lightGrey"
+            android:textAlignment="center"
+            android:gravity="center_vertical"/>
+
+    </GridLayout>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:columnCount="1"
+        android:rowCount="10">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="3"
+            android:rowCount="1"
+            android:layout_row="0">
+
+            <TextView
+                android:layout_width="175dp"
+                android:layout_height="40dp"
+                android:text="First Last: 10000.00 miles"
+                android:textSize="14sp"
+                android:layout_column="1"
+                android:layout_row="0"
+                android:gravity="center_vertical">
+            </TextView>
+
+        </GridLayout>
+    </GridLayout>
+</LinearLayout>

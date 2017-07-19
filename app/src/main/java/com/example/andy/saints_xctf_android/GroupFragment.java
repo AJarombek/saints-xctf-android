@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.example.andy.api_model.APIClient;
 import com.example.andy.api_model.Group;
 import com.example.andy.api_model.GroupMember;
+import com.example.andy.api_model.JSONConverter;
 
 import java.util.List;
 
@@ -191,6 +192,13 @@ public class GroupFragment extends Fragment implements TabLayout.OnTabSelectedLi
                 } else if (response instanceof Group) {
                     group = (Group) response;
 
+                    String groupString = "";
+                    try {
+                        groupString = JSONConverter.fromGroup(group);
+                    } catch (Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+
                     populateGroupInfo(group);
 
                     tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
@@ -198,7 +206,7 @@ public class GroupFragment extends Fragment implements TabLayout.OnTabSelectedLi
 
                     viewPager = (ViewPager) v.findViewById(R.id.pager);
                     GroupPager adapter = new GroupPager(getChildFragmentManager(),
-                            tabLayout.getTabCount(), group);
+                            tabLayout.getTabCount(), group, groupString);
                     viewPager.setAdapter(adapter);
                     tabLayout.setOnTabSelectedListener(GroupFragment.this);
                 }

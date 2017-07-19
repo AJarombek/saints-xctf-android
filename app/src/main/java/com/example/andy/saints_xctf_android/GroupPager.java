@@ -20,17 +20,21 @@ public class GroupPager extends FragmentStatePagerAdapter {
 
     private int tabCount;
     private Group group;
+    private String groupString;
 
-    public GroupPager(FragmentManager fm, int tabCount, Group group) {
+    public GroupPager(FragmentManager fm, int tabCount, Group group, String groupString) {
         super(fm);
         this.tabCount = tabCount;
         this.group = group;
+        this.groupString = groupString;
     }
 
     @Override
     public Fragment getItem(int position) {
         // Returning the current tabs
         Bundle data = new Bundle();
+        data.putString("group", groupString);
+
         switch (position) {
             case 0:
                 data.putString("groupname", String.valueOf(group.getGroup_name()));
