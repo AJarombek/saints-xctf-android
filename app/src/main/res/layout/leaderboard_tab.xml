@@ -76,30 +76,13 @@
 
     </GridLayout>
 
-    <GridLayout
+    <!-- RecyclerView of Leaderboard Items -->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerLeaderboardView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:columnCount="1"
-        android:rowCount="10">
+        android:layout_height="match_parent"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:scrollbars="vertical"/>
 
-        <GridLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="3"
-            android:rowCount="1"
-            android:layout_row="0">
-
-            <TextView
-                android:layout_width="175dp"
-                android:layout_height="40dp"
-                android:text="First Last: 10000.00 miles"
-                android:textSize="14sp"
-                android:layout_column="1"
-                android:layout_row="0"
-                android:gravity="center_vertical">
-            </TextView>
-
-        </GridLayout>
-    </GridLayout>
 </LinearLayout>
