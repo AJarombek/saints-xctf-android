@@ -76,8 +76,8 @@ public class GroupFragment extends Fragment implements TabLayout.OnTabSelectedLi
         group_description_view.setVisibility(View.GONE);
         group_description.setVisibility(View.GONE);
 
-        LoadGroupTask loadUserTask = new LoadGroupTask();
-        loadUserTask.execute(groupname);
+        LoadGroupTask loadGroupTask = new LoadGroupTask();
+        loadGroupTask.execute(groupname);
 
         return v;
     }
@@ -197,7 +197,7 @@ public class GroupFragment extends Fragment implements TabLayout.OnTabSelectedLi
                     tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
                     viewPager = (ViewPager) v.findViewById(R.id.pager);
-                    ProfilePager adapter = new ProfilePager(getChildFragmentManager(),
+                    GroupPager adapter = new GroupPager(getChildFragmentManager(),
                             tabLayout.getTabCount(), group);
                     viewPager.setAdapter(adapter);
                     tabLayout.setOnTabSelectedListener(GroupFragment.this);

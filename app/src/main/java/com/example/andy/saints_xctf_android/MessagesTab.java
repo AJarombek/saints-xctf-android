@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  * @author Andrew Jarombek
- * @since 7/17/2017 -
+ * @since 7/18/2017 -
  */
-public class MonthlyViewTab extends Fragment {
+public class MessagesTab extends Fragment {
 
     private View v;
 

@@ -131,7 +131,22 @@
             <android.support.design.widget.TabItem
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="@string/statistics_tab"/>
+                android:text="Leaderboards"/>
+
+            <android.support.design.widget.TabItem
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Messages"/>
+
+            <android.support.design.widget.TabItem
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Members"/>
+
+            <android.support.design.widget.TabItem
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Admin"/>
 
         </android.support.design.widget.TabLayout>
 

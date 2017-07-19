@@ -20,18 +20,11 @@ public class ProfilePager extends FragmentStatePagerAdapter {
 
     private int tabCount;
     private User user;
-    private Group group;
 
     public ProfilePager(FragmentManager fm, int tabCount, User user) {
         super(fm);
         this.tabCount = tabCount;
         this.user = user;
-    }
-
-    public ProfilePager(FragmentManager fm, int tabCount, Group group) {
-        super(fm);
-        this.tabCount = tabCount;
-        this.group = group;
     }
 
     @Override
@@ -40,19 +33,13 @@ public class ProfilePager extends FragmentStatePagerAdapter {
         Bundle data = new Bundle();
         switch (position) {
             case 0:
-                if (user != null)
-                    data.putString("username", String.valueOf(user.getUsername()));
-                else
-                    data.putString("groupname", String.valueOf(group.getGroup_name()));
+                data.putString("username", String.valueOf(user.getUsername()));
                 LogsTab logsTab = new LogsTab();
                 logsTab.setArguments(data);
                 return logsTab;
             case 1:
                 Map<String,Double> statistics;
-                if (user != null)
-                    statistics = user.getStatistics();
-                else
-                    statistics = group.getStatistics();
+                statistics = user.getStatistics();
 
                 data.putString("workout_career", String.valueOf(statistics.get("miles")));
                 data.putString("workout_year", String.valueOf(statistics.get("milespastyear")));
@@ -73,21 +60,18 @@ public class ProfilePager extends FragmentStatePagerAdapter {
                 statisticsTab.setArguments(data);
                 return statisticsTab;
             case 2:
-                if (user != null) {
-                    data.putString("username", String.valueOf(user.getUsername()));
-                }
+                data.putString("username", String.valueOf(user.getUsername()));
+
 
                 MonthlyViewTab monthlyViewTab = new MonthlyViewTab();
                 monthlyViewTab.setArguments(data);
                 return monthlyViewTab;
             case 3:
-                if (user != null) {
-                    data.putString("username", String.valueOf(user.getUsername()));
-                }
+                data.putString("username", String.valueOf(user.getUsername()));
 
-                MonthlyViewTab mViewTab = new MonthlyViewTab();
-                mViewTab.setArguments(data);
-                return mViewTab;
+                WeeklyViewTab weeklyViewTab = new WeeklyViewTab();
+                weeklyViewTab.setArguments(data);
+                return weeklyViewTab;
             default:
                 return null;
         }

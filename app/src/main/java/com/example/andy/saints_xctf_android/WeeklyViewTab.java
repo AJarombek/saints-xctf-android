@@ -11,7 +11,7 @@ import android.view.ViewGroup;
  * @author Andrew Jarombek
  * @since 7/17/2017 -
  */
-public class MonthlyViewTab extends Fragment {
+public class WeeklyViewTab extends Fragment {
 
     private View v;
 
@@ -30,3 +30,4 @@ public class MonthlyViewTab extends Fragment {
         return view;
     }
 }
+
