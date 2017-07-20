@@ -16,6 +16,7 @@ public class LeaderboardItem {
     private Double milesbiked;
     private Double milesswam;
     private Double milesother;
+    private Double filteredmiles;
 
     @Override
     public String toString() {
@@ -86,6 +87,14 @@ public class LeaderboardItem {
 
     public void setMilesother(Double milesother) {
         this.milesother = milesother;
+    }
+
+    public Double getFilteredmiles() {
+        return filteredmiles;
+    }
+
+    public void setFilteredmiles(Double filteredmiles) {
+        this.filteredmiles = filteredmiles;
     }
 }
 

@@ -1,5 +1,6 @@
 package com.example.andy.api_model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public class Group {
     private String week_start;
     private List<GroupMember> members;
     private Map<String, Double> statistics;
-    private Map<String, List<LeaderboardItem>> leaderboards;
+    private Map<String, ArrayList<LeaderboardItem>> leaderboards;
 
     @Override
     public String toString() {
@@ -86,11 +87,11 @@ public class Group {
         this.statistics = statistics;
     }
 
-    public Map<String, List<LeaderboardItem>> getLeaderboards() {
+    public Map<String, ArrayList<LeaderboardItem>> getLeaderboards() {
         return leaderboards;
     }
 
-    public void setLeaderboards(Map<String, List<LeaderboardItem>> leaderboards) {
+    public void setLeaderboards(Map<String, ArrayList<LeaderboardItem>> leaderboards) {
         this.leaderboards = leaderboards;
     }
 

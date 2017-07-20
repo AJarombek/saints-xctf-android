@@ -18,6 +18,9 @@ import com.example.andy.api_model.LeaderboardItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -39,7 +42,7 @@ public class LeaderboardTab extends Fragment {
     private LinearLayoutManager linearLayoutManager;
     private LeaderboardRecyclerAdapter adapter;
     private ArrayList<LeaderboardItem> leaderboardItems;
-    private Map<String, List<LeaderboardItem>> leaderboards;
+    private Map<String, ArrayList<LeaderboardItem>> leaderboards;
 
     private boolean run, bike, swim, other;
 
@@ -73,12 +76,14 @@ public class LeaderboardTab extends Fragment {
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         filter_time.setAdapter(typeAdapter);
 
-        leaderboardItems = new ArrayList<>();
-
+        run = true;
         leaderboards = group.getLeaderboards();
+        leaderboardItems = leaderboards.get(LEADERBOARD_TIME_FILTERS[0]);
+
+        sortLeaderboard(run, bike, swim, other);
 
         // Set up the recycler view and layout manager
-        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerProfileView);
+        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerLeaderboardView);
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new LeaderboardRecyclerAdapter(leaderboardItems);
@@ -94,45 +99,175 @@ public class LeaderboardTab extends Fragment {
         filter_time.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                leaderboardItems = leaderboards.get(LEADERBOARD_TIME_FILTERS[position]);
+                sortLeaderboard(run, bike, swim, other);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
         filter_run.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                run = !run;
+                sortLeaderboard(run, bike, swim, other);
+                adapter.notifyDataSetChanged();
             }
         });
 
         filter_bike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                bike = !bike;
+                sortLeaderboard(run, bike, swim, other);
+                adapter.notifyDataSetChanged();
             }
         });
 
         filter_swim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                swim = !swim;
+                sortLeaderboard(run, bike, swim, other);
+                adapter.notifyDataSetChanged();
             }
         });
 
         filter_other.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                other = !other;
+                sortLeaderboard(run, bike, swim, other);
+                adapter.notifyDataSetChanged();
             }
         });
     }
 
-    private void sortLeaderboard() {
+    /**
+     * Sort the array of leaderboard items based on the filters added
+     * @param run -
+     * @param bike -
+     * @param swim -
+     * @param other -
+     */
+    private void sortLeaderboard(boolean run, boolean bike, boolean swim, boolean other) {
+        if (run) {
+            if (bike) {
+                if (swim) {
+                    if (other) {
+                        // [Run, Bike, Swim, Other]
+                        for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                            leaderboardItem.setFilteredmiles(leaderboardItem.getMiles());
+                        }
 
+                    } else {
+                        // [Run, Bike, Swim]
+                        for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                            leaderboardItem.setFilteredmiles(leaderboardItem.getMilesrun() +
+                                    leaderboardItem.getMilesbiked() + leaderboardItem.getMilesswam());
+                        }
+                    }
+                } else {
+                    if (other) {
+                        // [Run, Bike, Other]
+                        for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                            leaderboardItem.setFilteredmiles(leaderboardItem.getMilesrun() +
+                                    leaderboardItem.getMilesbiked() + leaderboardItem.getMilesother());
+                        }
+                    }
+                }
+
+                // [Run, Bike]
+                for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                    leaderboardItem.setFilteredmiles(leaderboardItem.getMilesrun() +
+                            leaderboardItem.getMilesbiked());
+                }
+
+            } else if (swim) {
+                if (other) {
+                    // [Run, Swim, Other]
+                    for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                        leaderboardItem.setFilteredmiles(leaderboardItem.getMilesrun() +
+                                leaderboardItem.getMilesswam() + leaderboardItem.getMilesother());
+                    }
+
+                } else {
+                    // [Run, Swim]
+                    for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                        leaderboardItem.setFilteredmiles(leaderboardItem.getMilesrun() +
+                                leaderboardItem.getMilesswam());
+                    }
+                }
+            } else if (other) {
+                // [Run, Other]
+                for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                    leaderboardItem.setFilteredmiles(leaderboardItem.getMilesrun() +
+                            leaderboardItem.getMilesother());
+                }
+            }
+
+            // [Run]
+            for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                leaderboardItem.setFilteredmiles(leaderboardItem.getMilesrun());
+            }
+
+        } else if (bike) {
+            if (swim) {
+                if (other) {
+                    // [Bike, Swim, Other]
+                    for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                        leaderboardItem.setFilteredmiles(leaderboardItem.getMilesbiked() +
+                                leaderboardItem.getMilesswam() + leaderboardItem.getMilesother());
+                    }
+
+                } else {
+                    // [Bike, Swim]
+                    for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                        leaderboardItem.setFilteredmiles(leaderboardItem.getMilesbiked() +
+                                leaderboardItem.getMilesswam());
+                    }
+                }
+            } else if (other) {
+                // [Bike, Other]
+                for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                    leaderboardItem.setFilteredmiles(leaderboardItem.getMilesbiked() +
+                            leaderboardItem.getMilesother());
+                }
+            }
+
+            // [Bike]
+            for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                leaderboardItem.setFilteredmiles(leaderboardItem.getMilesbiked());
+            }
+
+        } else if (swim) {
+            if (other) {
+                // [Swim, Other]
+                for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                    leaderboardItem.setFilteredmiles(leaderboardItem.getMilesswam() +
+                            leaderboardItem.getMilesother());
+                }
+            }
+            // [Swim]
+            for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                leaderboardItem.setFilteredmiles(leaderboardItem.getMilesswam());
+            }
+
+        } else if (other) {
+            // [Other]
+            for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                leaderboardItem.setFilteredmiles(leaderboardItem.getMilesother());
+            }
+        }
+
+        // Sort the leaderboards based on the filtered miles
+        Collections.sort(leaderboardItems, new Comparator<LeaderboardItem>() {
+            @Override
+            public int compare(LeaderboardItem lhs, LeaderboardItem rhs) {
+                return lhs.getFilteredmiles() > rhs.getFilteredmiles() ? -1 :
+                        (lhs.getFilteredmiles() < rhs.getFilteredmiles() ) ? 1 : 0;
+            }
+        });
     }
 }

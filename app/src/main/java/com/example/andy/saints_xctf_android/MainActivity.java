@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String MILES_PAST_WEEK = "milespastweek";
     public static final String MILES_PAST_MONTH = "milespastmonth";
     public static final String MILES_PAST_YEAR = "milespastyear";
-    public static final String MILES_ALL_TIME = "milesalltime";
+    public static final String MILES_ALL_TIME = "miles";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

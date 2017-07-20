@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.example.andy.api_model.Comment;
 import com.example.andy.api_model.LeaderboardItem;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.TimeZone;
@@ -68,9 +70,12 @@ public class LeaderboardRecyclerAdapter extends RecyclerView.Adapter<Leaderboard
         public void bindLeaderboardItem(LeaderboardItem leaderboardItem, int position) {
             this.leaderboardItem = leaderboardItem;
 
-            leaderboard_rank.setText(position + ")");
+            leaderboard_rank.setText((position + 1) + ")");
             leaderboard_name.setText(leaderboardItem.getFirst() + " " + leaderboardItem.getLast());
-            leaderboard_mileage.setText(String.valueOf(leaderboardItem.getMiles()));
+            double miles = BigDecimal.valueOf(leaderboardItem.getFilteredmiles())
+                    .setScale(1, RoundingMode.HALF_UP).doubleValue();
+
+            leaderboard_mileage.setText(String.valueOf(miles));
         }
     }
 }
