@@ -35,6 +35,13 @@
         <item>other</item>
     </string-array>
 
+    <string-array name="leaderboard_filters">
+        <item>Miles All Time</item>
+        <item>Miles Past Year</item>
+        <item>Miles Past Month</item>
+        <item>Miles Past Week</item>
+    </string-array>
+
     <string-array name="log_metric_array">
         <item>miles</item>
         <item>kilometers</item>

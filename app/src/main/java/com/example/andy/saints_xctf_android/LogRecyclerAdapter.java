@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -40,9 +39,9 @@ import java.util.GregorianCalendar;
  * @since 1/21/2017 -
  */
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHolder> {
+public class LogRecyclerAdapter extends RecyclerView.Adapter<LogRecyclerAdapter.LogHolder> {
 
-    private static final String LOG_TAG = RecyclerAdapter.class.getName();
+    private static final String LOG_TAG = LogRecyclerAdapter.class.getName();
     public static final String PREFS_NAME = "SaintsxctfUserPrefs";
     public static final int REQUEST_CODE = 0;
 
@@ -54,8 +53,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
     private boolean loading;
     private OnLoadMoreListener onLoadMoreListener;
 
-    public RecyclerAdapter(Context context, Fragment fragment, ArrayList<Log> logs,
-                           RecyclerView recyclerView) {
+    public LogRecyclerAdapter(Context context, Fragment fragment, ArrayList<Log> logs,
+                              RecyclerView recyclerView) {
         this.logs = logs;
         this.context = context;
         this.fragment = fragment;
@@ -131,7 +130,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
     }
 
     /**
-     * Remove a single log from the recyclerAdapter
+     * Remove a single log from the logRecyclerAdapter
      * @param position the index of the log to be removed
      */
     public void removeAt(int position) {
@@ -141,7 +140,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
     }
 
     /**
-     * Edit a single log in the recyclerAdapter
+     * Edit a single log in the logRecyclerAdapter
      * @param position the index of the log that needs to be edited
      */
     public void edit(int position) {
@@ -170,15 +169,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
     }
 
     /**
-     * Inner Class to Hold each Individual Log and its Corresponding logic in the RecyclerAdapter
+     * Inner Class to Hold each Individual Log and its Corresponding logic in the LogRecyclerAdapter
      */
     public static class LogHolder extends RecyclerView.ViewHolder {
 
-        private RecyclerAdapter recyclerAdapter;
+        private LogRecyclerAdapter logRecyclerAdapter;
         private View v;
         private RecyclerView recyclerCommentView;
         private LinearLayoutManager linearLayoutManager;
-        private RecyclerCommentAdapter adapter;
+        private CommentRecyclerAdapter adapter;
 
         private LinearLayout logview;
         private FloatingActionButton edit_fab;
@@ -205,11 +204,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
                 MainActivity.COLOR_FAIRLYGOOD, MainActivity.COLOR_GOOD,
                 MainActivity.COLOR_GREAT, MainActivity.COLOR_FANTASTIC};
 
-        public LogHolder(View v, RecyclerAdapter recyclerAdapter) {
+        public LogHolder(View v, LogRecyclerAdapter logRecyclerAdapter) {
             super(v);
 
             this.v = v;
-            this.recyclerAdapter = recyclerAdapter;
+            this.logRecyclerAdapter = logRecyclerAdapter;
             logview = (LinearLayout) v.findViewById(R.id.logview);
             edit_fab = (FloatingActionButton) v.findViewById(R.id.edit_fab);
             delete_fab = (FloatingActionButton) v.findViewById(R.id.delete_fab);
@@ -263,7 +262,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
             edit_fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    recyclerAdapter.edit(getAdapterPosition());
+                    logRecyclerAdapter.edit(getAdapterPosition());
                 }
             });
 
@@ -281,7 +280,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
                 @Override
                 public void onClick(View v) {
                     android.util.Log.d(LOG_TAG, username);
-                    ((MainActivity) recyclerAdapter.context).viewProfile(username);
+                    ((MainActivity) logRecyclerAdapter.context).viewProfile(username);
                 }
             });
 
@@ -382,7 +381,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
 
             comments = log.getComments();
             Collections.reverse(comments);
-            adapter = new RecyclerCommentAdapter(comments);
+            adapter = new CommentRecyclerAdapter(comments);
             recyclerCommentView.setAdapter(adapter);
         }
 
@@ -464,7 +463,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
                 super.onPostExecute(response);
 
                 if (response) {
-                    recyclerAdapter.removeAt(getAdapterPosition());
+                    logRecyclerAdapter.removeAt(getAdapterPosition());
                 }
             }
         }
@@ -474,8 +473,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.LogHol
 
         private ProgressBar progressBar;
 
-        public ProgressHolder(View v, RecyclerAdapter recyclerAdapter) {
-            super(v, recyclerAdapter);
+        public ProgressHolder(View v, LogRecyclerAdapter logRecyclerAdapter) {
+            super(v, logRecyclerAdapter);
             progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         }
     }

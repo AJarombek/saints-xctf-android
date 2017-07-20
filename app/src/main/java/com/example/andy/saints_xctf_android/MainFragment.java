@@ -37,7 +37,7 @@ public class MainFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
-    private RecyclerAdapter adapter;
+    private LogRecyclerAdapter adapter;
     private ArrayList<com.example.andy.api_model.Log> logs;
     private String username,first,last;
     private LoadLogTask loadLogTask;
@@ -72,14 +72,14 @@ public class MainFragment extends Fragment {
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new RecyclerAdapter(getContext(), this, logs, recyclerView);
+        adapter = new LogRecyclerAdapter(getContext(), this, logs, recyclerView);
         recyclerView.setAdapter(adapter);
 
         // Initiate the progress bar
         logs.add(null);
         adapter.notifyItemInserted(logs.size() - 1);
 
-        adapter.setOnLoadMoreListener(new RecyclerAdapter.OnLoadMoreListener() {
+        adapter.setOnLoadMoreListener(new LogRecyclerAdapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 int itemsLoaded = adapter.getItemCount();

@@ -20,23 +20,23 @@ import java.util.TimeZone;
  * @since 1/21/2017 -
  */
 
-public class RecyclerCommentAdapter extends RecyclerView.Adapter<RecyclerCommentAdapter.CommentHolder> {
+public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecyclerAdapter.CommentHolder> {
 
     private ArrayList<Comment> comments;
 
-    public RecyclerCommentAdapter(ArrayList<Comment> comments) {
+    public CommentRecyclerAdapter(ArrayList<Comment> comments) {
         this.comments = comments;
     }
 
     @Override
-    public RecyclerCommentAdapter.CommentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CommentRecyclerAdapter.CommentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View inflatedView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recyclerview_comments_item_row, parent, false);
         return new CommentHolder(inflatedView);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerCommentAdapter.CommentHolder holder, int position) {
+    public void onBindViewHolder(CommentRecyclerAdapter.CommentHolder holder, int position) {
         Comment itemcomment = comments.get(position);
         holder.bindComment(itemcomment);
     }

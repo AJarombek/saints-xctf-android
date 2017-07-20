@@ -3,14 +3,12 @@ package com.example.andy.saints_xctf_android;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.andy.api_model.APIClient;
 import com.example.andy.api_model.Log;
@@ -30,7 +28,7 @@ public class LogsTab extends Fragment {
     private View v;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
-    private RecyclerAdapter adapter;
+    private LogRecyclerAdapter adapter;
     private ArrayList<com.example.andy.api_model.Log> logs;
     private String username, groupname;
     private boolean isProfile;
@@ -59,14 +57,14 @@ public class LogsTab extends Fragment {
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerProfileView);
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new RecyclerAdapter(getContext(), getParentFragment(), logs, recyclerView);
+        adapter = new LogRecyclerAdapter(getContext(), getParentFragment(), logs, recyclerView);
         recyclerView.setAdapter(adapter);
 
         // Initiate the progress bar
         logs.add(null);
         adapter.notifyItemInserted(logs.size() - 1);
 
-        adapter.setOnLoadMoreListener(new RecyclerAdapter.OnLoadMoreListener() {
+        adapter.setOnLoadMoreListener(new LogRecyclerAdapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 int itemsLoaded = adapter.getItemCount();
