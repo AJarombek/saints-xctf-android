@@ -1,9 +1,11 @@
 package com.example.andy.saints_xctf_android;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +20,8 @@ import com.example.andy.api_model.LeaderboardItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,8 +31,12 @@ import java.util.Map;
  */
 public class LeaderboardTab extends Fragment {
 
+    private static final String LOG_TAG = LeaderboardTab.class.getName();
+
     private static final String[] LEADERBOARD_TIME_FILTERS = {MainActivity.MILES_ALL_TIME,
             MainActivity.MILES_PAST_YEAR, MainActivity.MILES_PAST_MONTH, MainActivity.MILES_PAST_WEEK};
+    private static final String SELECTED_COLOR = "#990000";
+    private static final String DESELECTED_COLOR = "#EEEEEE";
 
     private View v;
     private Group group;
@@ -76,6 +80,7 @@ public class LeaderboardTab extends Fragment {
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         filter_time.setAdapter(typeAdapter);
 
+        // Initialize the leaderboard data and filters
         run = true;
         leaderboards = group.getLeaderboards();
         leaderboardItems = leaderboards.get(LEADERBOARD_TIME_FILTERS[0]);
@@ -96,11 +101,16 @@ public class LeaderboardTab extends Fragment {
     public void onStart() {
         super.onStart();
 
+        // All the filters for the leaderboard
+
         filter_time.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.i(LOG_TAG, "Leaderboard Filter - " + LEADERBOARD_TIME_FILTERS[position]);
                 leaderboardItems = leaderboards.get(LEADERBOARD_TIME_FILTERS[position]);
                 sortLeaderboard(run, bike, swim, other);
+                adapter = new LeaderboardRecyclerAdapter(leaderboardItems);
+                recyclerView.setAdapter(adapter);
             }
 
             @Override
@@ -110,6 +120,14 @@ public class LeaderboardTab extends Fragment {
         filter_run.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (run) {
+                    filter_run.setTextColor(Color.BLACK);
+                    filter_run.setBackgroundColor(Color.parseColor(DESELECTED_COLOR));
+                } else {
+                    filter_run.setTextColor(Color.WHITE);
+                    filter_run.setBackgroundColor(Color.parseColor(SELECTED_COLOR));
+                }
+
                 run = !run;
                 sortLeaderboard(run, bike, swim, other);
                 adapter.notifyDataSetChanged();
@@ -119,6 +137,14 @@ public class LeaderboardTab extends Fragment {
         filter_bike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (bike) {
+                    filter_bike.setTextColor(Color.BLACK);
+                    filter_bike.setBackgroundColor(Color.parseColor(DESELECTED_COLOR));
+                } else {
+                    filter_bike.setTextColor(Color.WHITE);
+                    filter_bike.setBackgroundColor(Color.parseColor(SELECTED_COLOR));
+                }
+
                 bike = !bike;
                 sortLeaderboard(run, bike, swim, other);
                 adapter.notifyDataSetChanged();
@@ -128,6 +154,14 @@ public class LeaderboardTab extends Fragment {
         filter_swim.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (swim) {
+                    filter_swim.setTextColor(Color.BLACK);
+                    filter_swim.setBackgroundColor(Color.parseColor(DESELECTED_COLOR));
+                } else {
+                    filter_swim.setTextColor(Color.WHITE);
+                    filter_swim.setBackgroundColor(Color.parseColor(SELECTED_COLOR));
+                }
+
                 swim = !swim;
                 sortLeaderboard(run, bike, swim, other);
                 adapter.notifyDataSetChanged();
@@ -137,6 +171,14 @@ public class LeaderboardTab extends Fragment {
         filter_other.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (other) {
+                    filter_other.setTextColor(Color.BLACK);
+                    filter_other.setBackgroundColor(Color.parseColor(DESELECTED_COLOR));
+                } else {
+                    filter_other.setTextColor(Color.WHITE);
+                    filter_other.setBackgroundColor(Color.parseColor(SELECTED_COLOR));
+                }
+
                 other = !other;
                 sortLeaderboard(run, bike, swim, other);
                 adapter.notifyDataSetChanged();
@@ -175,13 +217,13 @@ public class LeaderboardTab extends Fragment {
                             leaderboardItem.setFilteredmiles(leaderboardItem.getMilesrun() +
                                     leaderboardItem.getMilesbiked() + leaderboardItem.getMilesother());
                         }
+                    } else {
+                        // [Run, Bike]
+                        for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                            leaderboardItem.setFilteredmiles(leaderboardItem.getMilesrun() +
+                                    leaderboardItem.getMilesbiked());
+                        }
                     }
-                }
-
-                // [Run, Bike]
-                for (LeaderboardItem leaderboardItem : leaderboardItems) {
-                    leaderboardItem.setFilteredmiles(leaderboardItem.getMilesrun() +
-                            leaderboardItem.getMilesbiked());
                 }
 
             } else if (swim) {
@@ -205,11 +247,11 @@ public class LeaderboardTab extends Fragment {
                     leaderboardItem.setFilteredmiles(leaderboardItem.getMilesrun() +
                             leaderboardItem.getMilesother());
                 }
-            }
-
-            // [Run]
-            for (LeaderboardItem leaderboardItem : leaderboardItems) {
-                leaderboardItem.setFilteredmiles(leaderboardItem.getMilesrun());
+            } else {
+                // [Run]
+                for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                    leaderboardItem.setFilteredmiles(leaderboardItem.getMilesrun());
+                }
             }
 
         } else if (bike) {
@@ -234,11 +276,11 @@ public class LeaderboardTab extends Fragment {
                     leaderboardItem.setFilteredmiles(leaderboardItem.getMilesbiked() +
                             leaderboardItem.getMilesother());
                 }
-            }
-
-            // [Bike]
-            for (LeaderboardItem leaderboardItem : leaderboardItems) {
-                leaderboardItem.setFilteredmiles(leaderboardItem.getMilesbiked());
+            } else {
+                // [Bike]
+                for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                    leaderboardItem.setFilteredmiles(leaderboardItem.getMilesbiked());
+                }
             }
 
         } else if (swim) {
@@ -248,16 +290,21 @@ public class LeaderboardTab extends Fragment {
                     leaderboardItem.setFilteredmiles(leaderboardItem.getMilesswam() +
                             leaderboardItem.getMilesother());
                 }
-            }
-            // [Swim]
-            for (LeaderboardItem leaderboardItem : leaderboardItems) {
-                leaderboardItem.setFilteredmiles(leaderboardItem.getMilesswam());
+            } else {
+                // [Swim]
+                for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                    leaderboardItem.setFilteredmiles(leaderboardItem.getMilesswam());
+                }
             }
 
         } else if (other) {
             // [Other]
             for (LeaderboardItem leaderboardItem : leaderboardItems) {
                 leaderboardItem.setFilteredmiles(leaderboardItem.getMilesother());
+            }
+        } else {
+            for (LeaderboardItem leaderboardItem : leaderboardItems) {
+                leaderboardItem.setFilteredmiles(0.0);
             }
         }
 
