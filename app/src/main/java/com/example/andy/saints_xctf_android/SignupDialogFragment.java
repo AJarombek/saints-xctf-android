@@ -15,9 +15,9 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
+import com.example.andy.api_model.User;
 import com.example.andy.api_model.APIClient;
 import com.example.andy.api_model.JSONConverter;
-import com.example.andy.api_model.User;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

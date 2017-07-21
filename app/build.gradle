@@ -39,3 +39,6 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
     compile 'org.mindrot:jbcrypt:0.4-atlassian-1'
 }
+repositories {
+    mavenCentral()
+}

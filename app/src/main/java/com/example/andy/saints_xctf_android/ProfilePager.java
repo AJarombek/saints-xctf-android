@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.example.andy.api_model.Group;
 import com.example.andy.api_model.User;
 
 import java.util.Map;
