@@ -18,7 +18,7 @@ public class Group {
     private String grouppic_name;
     private String description;
     private String week_start;
-    private List<GroupMember> members;
+    private ArrayList<GroupMember> members;
     private Map<String, Double> statistics;
     private Map<String, ArrayList<LeaderboardItem>> leaderboards;
 
@@ -71,11 +71,11 @@ public class Group {
         this.description = description;
     }
 
-    public List<GroupMember> getMembers() {
+    public ArrayList<GroupMember> getMembers() {
         return members;
     }
 
-    public void setMembers(List<GroupMember> members) {
+    public void setMembers(ArrayList<GroupMember> members) {
         this.members = members;
     }
 
