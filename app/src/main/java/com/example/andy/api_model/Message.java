@@ -26,7 +26,7 @@ public class Message {
     public String toString() {
         return "Message: [ message_id: " + message_id + ", username: " + username +
                 ", first: " + first + ", last: " + last + ", group_name: " + group_name +
-                ", time: " + time.toString() + ", content: " + content + "]";
+                ", time: " + time + ", content: " + content + "]";
     }
 
     public String getContent() {
