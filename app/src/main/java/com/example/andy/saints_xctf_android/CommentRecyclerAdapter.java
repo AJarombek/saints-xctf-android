@@ -31,7 +31,7 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
     @Override
     public CommentRecyclerAdapter.CommentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View inflatedView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recyclerview_comments_item_row, parent, false);
+                .inflate(R.layout.recyclerview_comments_item, parent, false);
         return new CommentHolder(inflatedView);
     }
 
@@ -69,7 +69,7 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
 
             commentview_username.setText(comment.getFirst() + " " + comment.getLast());
 
-            SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy HH:mm a");
+            SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
             df.setTimeZone(TimeZone.getTimeZone("UTC"));
             String date = df.format(comment.getTime());
             commentview_date.setText(date);

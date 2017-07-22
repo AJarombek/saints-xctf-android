@@ -89,7 +89,7 @@ public class LogRecyclerAdapter extends RecyclerView.Adapter<LogRecyclerAdapter.
         View layoutView;
         if (viewType == 1) {
             layoutView = LayoutInflater.from(parent.getContext()).
-                    inflate(R.layout.recyclerview_item_row, parent, false);
+                    inflate(R.layout.recyclerview_log_item_row, parent, false);
             logHolder = new LogHolder(layoutView, this);
         } else {
             layoutView = LayoutInflater.from(parent.getContext()).

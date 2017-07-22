@@ -8,14 +8,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.andy.api_model.Comment;
 import com.example.andy.api_model.LeaderboardItem;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.TimeZone;
 
 /**
  * Adapter for the RecycleView (which shows leaderboard items)
@@ -34,7 +31,7 @@ public class LeaderboardRecyclerAdapter extends RecyclerView.Adapter<Leaderboard
     @Override
     public LeaderboardRecyclerAdapter.LeaderboardItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View inflatedView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.recyclerview_leaderboard_item_row, parent, false);
+                .inflate(R.layout.recyclerview_leaderboard_item, parent, false);
         return new LeaderboardItemHolder(inflatedView);
     }
 
