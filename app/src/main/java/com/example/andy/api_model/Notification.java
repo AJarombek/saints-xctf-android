@@ -1,5 +1,7 @@
 package com.example.andy.api_model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 /**
@@ -12,6 +14,8 @@ public class Notification {
 
     private String notification_id;
     private String username;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time;
     private String link;
     private String description;

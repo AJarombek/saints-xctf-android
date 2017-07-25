@@ -19,6 +19,7 @@ import com.example.andy.api_model.Group;
 import com.example.andy.api_model.GroupMember;
 import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.Mail;
+import com.example.andy.api_model.Notification;
 import com.example.andy.api_model.User;
 
 import java.io.IOException;
@@ -131,6 +132,18 @@ public class AdminTab extends Fragment {
                 flairTask.execute(username, flair);
             }
         });
+
+        notification_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String notification = "A Message From " + group.getGroup_title() + ": " +
+                        notification_input.getText().toString();
+
+                NotificationTask notificationTask = new NotificationTask();
+                notificationTask.execute(notification);
+            }
+        });
     }
 
     class EmailTask extends AsyncTask<String, Void, String> {
@@ -206,9 +219,9 @@ public class AdminTab extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
-            User user = null;
+            User user;
             try {
-                user = APIClient.userGetRequest(params[0]);
+                user = APIClient.userPostRequest(params[0]);
 
                 // If null is returned, there is no internet connection
                 if (user == null) {
@@ -254,6 +267,60 @@ public class AdminTab extends Fragment {
             Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
             flair_submit.setEnabled(true);
             flair_input.setText("");
+        }
+    }
+
+    class NotificationTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+                Notification notification = new Notification();
+                notification.setDescription(params[0]);
+                notification.setLink("https://www.saintsxctf.com/group.php?name=" + group.getGroup_name());
+                notification.setViewed("N");
+
+                for (GroupMember member : group.getMembers()) {
+                    notification.setUsername(member.getUsername());
+
+                    // Convert the notification object to JSON
+                    String notificationString;
+                    try {
+                        notificationString = JSONConverter.fromNotification(notification);
+                    } catch (Throwable throwable) {
+                        throwable.printStackTrace();
+                        return "Server Error";
+                    }
+
+                    APIClient.notificationPostRequest(notificationString);
+                }
+
+                return "Notifications Sent";
+
+            } catch (IOException e) {
+                android.util.Log.e(LOG_TAG, "Notifications Failed to Send.");
+                android.util.Log.e(LOG_TAG, e.getMessage());
+                return "Server Error";
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            notification_submit.setEnabled(false);
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            super.onPostExecute(response);
+
+            if (response.equals("Server Error")) {
+                notification_input.requestFocus();
+            }
+
+            Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
+            notification_submit.setEnabled(true);
+            notification_input.setText("");
         }
     }
 }
