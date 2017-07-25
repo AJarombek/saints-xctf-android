@@ -41,6 +41,7 @@ public class User {
     private String fpw_code;
     private String fpw_delete_code;
     private String fpw_password;
+    private String give_flair;
 
     @Override
     public String toString() {
@@ -251,5 +252,13 @@ public class User {
 
     public void setFpw_password(String fpw_password) {
         this.fpw_password = fpw_password;
+    }
+
+    public String getGive_flair() {
+        return give_flair;
+    }
+
+    public void setGive_flair(String give_flair) {
+        this.give_flair = give_flair;
     }
 }

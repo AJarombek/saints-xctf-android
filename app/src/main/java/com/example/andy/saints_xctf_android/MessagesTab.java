@@ -145,9 +145,10 @@ public class MessagesTab extends Fragment {
                     adapter.notifyItemInserted(messages.size() - 1);
                 }
             } else {
-                // The user has no logs
-                messages.remove(messages.size() - 1);
-                adapter.notifyItemRemoved(messages.size());
+                if (messages.size() > 0) {
+                    messages.remove(messages.size() - 1);
+                    adapter.notifyItemRemoved(messages.size());
+                }
             }
         }
     }

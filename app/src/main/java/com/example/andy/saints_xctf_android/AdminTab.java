@@ -23,6 +23,7 @@ import com.example.andy.api_model.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -116,6 +117,20 @@ public class AdminTab extends Fragment {
                 }
             }
         });
+
+        flair_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String username = group_users_dropdown.getSelectedItem().toString();
+                username = member_map.get(username);
+
+                String flair = flair_input.getText().toString();
+
+                FlairTask flairTask = new FlairTask();
+                flairTask.execute(username, flair);
+            }
+        });
     }
 
     class EmailTask extends AsyncTask<String, Void, String> {
@@ -176,10 +191,69 @@ public class AdminTab extends Fragment {
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
 
+            if (response.equals("Email Failed")) {
+                email_request_input.requestFocus();
+            }
+
             // display error/success toast
             Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
             email_request_send.setEnabled(true);
             email_request_input.setText("");
+        }
+    }
+
+    class FlairTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            User user = null;
+            try {
+                user = APIClient.userGetRequest(params[0]);
+
+                // If null is returned, there is no internet connection
+                if (user == null) {
+                    return "No Internet";
+                }
+
+                // Add the one new flair item
+                user.setGive_flair(params[1]);
+
+                // Convert the user object to JSON
+                String userString;
+                try {
+                    userString = JSONConverter.fromUser(user);
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                    return "Server Error";
+                }
+
+                APIClient.userPutRequest(user.getUsername(), userString);
+                return "Flair Successfully Given";
+
+            } catch (IOException e) {
+                android.util.Log.e(LOG_TAG, "Add Flair failed.");
+                android.util.Log.e(LOG_TAG, e.getMessage());
+                return "Server Error";
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            flair_submit.setEnabled(false);
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            super.onPostExecute(response);
+
+            if (response.equals("Server Error") || response.equals("No Internet")) {
+                email_request_input.requestFocus();
+            }
+
+            Toast.makeText(getContext(), response, Toast.LENGTH_SHORT).show();
+            flair_submit.setEnabled(true);
+            flair_input.setText("");
         }
     }
 }
