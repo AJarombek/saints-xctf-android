@@ -209,7 +209,7 @@ public class ForgotPasswordDialogFragment extends DialogFragment {
                 user = APIClient.userGetRequest(params[0]);
 
                 if (user == null) {
-                    return "no_internet";
+                    return "invalid_email";
                 } else {
                     // Send an email to the user with forgot password code
                     String code = ControllerUtils.generateCode(8);
