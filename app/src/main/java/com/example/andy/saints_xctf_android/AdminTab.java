@@ -194,7 +194,7 @@ public class AdminTab extends Fragment {
                 // Build the Mail Object
                 Mail mail = new Mail();
                 mail.setEmailAddress(params[0]);
-                mail.setSubject("Saintsxctf.com Forgot Password");
+                mail.setSubject("SaintsXCTF.com Invite");
                 mail.setBody("<html>" +
                         "<head>" +
                         "<title>HTML email</title>" +

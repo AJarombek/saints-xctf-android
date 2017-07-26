@@ -209,6 +209,14 @@ public class GroupFragment extends Fragment implements TabLayout.OnTabSelectedLi
                             tabLayout.getTabCount(), group, groupString);
                     viewPager.setAdapter(adapter);
                     tabLayout.setOnTabSelectedListener(GroupFragment.this);
+
+                    // Changes the selected tab on viewpager swipe
+                    viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+                        @Override
+                        public void onPageSelected(int position) {
+                            tabLayout.getTabAt(position).select();
+                        }
+                    });
                 }
             }
         }

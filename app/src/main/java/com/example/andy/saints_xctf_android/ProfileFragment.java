@@ -125,6 +125,14 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
             viewPager.setAdapter(adapter);
             tabLayout.setOnTabSelectedListener(this);
 
+            // Changes the selected tab on viewpager swipe
+            viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+                @Override
+                public void onPageSelected(int position) {
+                    tabLayout.getTabAt(position).select();
+                }
+            });
+
         } else {
             // This is someone else's profile page
             edit_profile_button.setVisibility(View.GONE);
@@ -294,6 +302,14 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
                             tabLayout.getTabCount(), user);
                     viewPager.setAdapter(adapter);
                     tabLayout.setOnTabSelectedListener(ProfileFragment.this);
+
+                    // Changes the selected tab on viewpager swipe
+                    viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+                        @Override
+                        public void onPageSelected(int position) {
+                            tabLayout.getTabAt(position).select();
+                        }
+                    });
                 }
             }
         }
