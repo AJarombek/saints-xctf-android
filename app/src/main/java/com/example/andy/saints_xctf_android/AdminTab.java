@@ -3,6 +3,8 @@ package com.example.andy.saints_xctf_android;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +43,10 @@ public class AdminTab extends Fragment {
 
     private View v;
     private Group group;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager linearLayoutManager;
+    private AddUserRecyclerAdapter adapter;
+    private ArrayList<GroupMember> members;
     private Spinner group_users_dropdown;
     private EditText email_request_input, flair_input, notification_input;
     private Button email_request_send, flair_submit, notification_submit;
@@ -87,6 +93,15 @@ public class AdminTab extends Fragment {
 
         typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         group_users_dropdown.setAdapter(typeAdapter);
+
+        members = new ArrayList<>();
+
+        // Set up the recycler view and layout manager
+        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerAddUsersView);
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        adapter = new AddUserRecyclerAdapter(members);
+        recyclerView.setAdapter(adapter);
 
         return view;
     }
