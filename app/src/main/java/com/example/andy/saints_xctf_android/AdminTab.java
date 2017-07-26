@@ -96,11 +96,20 @@ public class AdminTab extends Fragment {
 
         members = new ArrayList<>();
 
+        ArrayList<GroupMember> allMembers = group.getMembers();
+
+        // Get only the members with a pending status to add to the adduser recycler adapter
+        for (GroupMember member : allMembers) {
+            if (member.getStatus().equals("pending")) {
+                members.add(member);
+            }
+        }
+
         // Set up the recycler view and layout manager
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerAddUsersView);
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new AddUserRecyclerAdapter(members);
+        adapter = new AddUserRecyclerAdapter(members, group, this);
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -159,6 +168,15 @@ public class AdminTab extends Fragment {
                 notificationTask.execute(notification);
             }
         });
+    }
+
+    /**
+     * Remove an item from the AddUser array after it has been accepted or rejected
+     * @param position the index in the array to be removed
+     */
+    public void removeAddUser(int position) {
+        members.remove(position);
+        adapter.notifyDataSetChanged();
     }
 
     class EmailTask extends AsyncTask<String, Void, String> {
@@ -329,7 +347,7 @@ public class AdminTab extends Fragment {
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
 
-            if (response.equals("Server Error")) {
+            if (response.equals("Notifications Sent")) {
                 notification_input.requestFocus();
             }
 
