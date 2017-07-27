@@ -1,0 +1,39 @@
+<GridLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:rowCount="2"
+    android:columnCount="1"
+    android:orientation="horizontal"
+    android:background="@drawable/monthly_day_border">
+
+    <TextView
+        android:id="@+id/calday"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="0dp"
+        android:paddingEnd="2dp"
+        android:paddingBottom="5dp"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:gravity="end"
+        android:text="0"/>
+
+    <LinearLayout
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:minHeight="40dp"
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/calmiles"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:text="100.25\nMiles"
+            android:maxLength="12"/>
+    </LinearLayout>
+</GridLayout>
