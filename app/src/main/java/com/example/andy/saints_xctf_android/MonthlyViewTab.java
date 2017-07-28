@@ -1,8 +1,11 @@
 package com.example.andy.saints_xctf_android;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,10 @@ import android.widget.ProgressBar;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.example.andy.api_model.JSONConverter;
+import com.example.andy.api_model.User;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -20,7 +27,11 @@ import java.util.ArrayList;
  */
 public class MonthlyViewTab extends Fragment {
 
+    private static final String TAG = MonthlyViewTab.class.getName();
+    public static final String PREFS_NAME = "SaintsxctfUserPrefs";
+
     private View v;
+    private boolean startsSunday;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,6 +40,7 @@ public class MonthlyViewTab extends Fragment {
         View view = inflater.inflate(R.layout.monthly_view_tab, container, false);
         v = view;
 
+        // Loop through each row in the calendar and populate the table row
         for (int i = 1; i <= 6; i++) {
 
             TableRow tableRow = (TableRow) v.findViewById(CalendarArrays.CALENDAR_ROW_IDS[i-1]);
@@ -36,6 +48,7 @@ public class MonthlyViewTab extends Fragment {
             ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.temp_progress);
             progressBar.setVisibility(View.GONE);
 
+            // Create a table cell for each day and programmatically give it unique ids
             for (int j = 1; j <= 8; j++) {
                 int index = (i * j) - 1;
 
@@ -51,7 +64,29 @@ public class MonthlyViewTab extends Fragment {
             }
         }
 
-        // monthly_view = (WebView) v.findViewById(R.id.monthly_web_view);
+        SharedPreferences prefs = getContext().getSharedPreferences(
+                PREFS_NAME, Context.MODE_PRIVATE);
+        String userJSON = prefs.getString("user", "");
+
+        User user;
+        try {
+            user = JSONConverter.toUser(userJSON);
+
+            String week_start = user.getWeek_start();
+
+            startsSunday = week_start.equals("sunday");
+
+            if (startsSunday) {
+                for (int i = 0; i < 7; i++) {
+                    TextView weekday = (TextView) v.findViewById(CalendarArrays.CALENDAR_WEEKDAY_IDS[i]);
+                    weekday.setText(CalendarArrays.CALENDAR_WEEKDAYS_SUNDAY_START[i]);
+                }
+            }
+
+        } catch (IOException e) {
+            Log.e(TAG, "User object JSON conversion failed.");
+            Log.e(TAG, e.getMessage());
+        }
 
         return view;
     }

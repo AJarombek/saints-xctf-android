@@ -11,6 +11,12 @@ public class CalendarArrays {
     public static final int[] CALENDAR_ROW_IDS = {R.id.table_row_0, R.id.table_row_1, R.id.table_row_2,
             R.id.table_row_3, R.id.table_row_4, R.id.table_row_5};
 
+    public static final int[] CALENDAR_WEEKDAY_IDS = {R.id.cal_weekday_0, R.id.cal_weekday_1, R.id.cal_weekday_2,
+            R.id.cal_weekday_3, R.id.cal_weekday_4, R.id.cal_weekday_5, R.id.cal_weekday_6};
+
+    public static final String[] CALENDAR_WEEKDAYS_SUNDAY_START = {"Sunday", "Monday", "Tuesday", "Wednesday",
+            "Thursday", "Friday", "Saturday"};
+
     public static final int[] CALENDAR_CELL_IDS = {R.id.cal_0_0, R.id.cal_0_1, R.id.cal_0_2,
             R.id.cal_0_3, R.id.cal_0_4, R.id.cal_0_5, R.id.cal_0_6, R.id.cal_0_7, R.id.cal_1_0,
             R.id.cal_1_1, R.id.cal_1_2, R.id.cal_1_3, R.id.cal_1_4, R.id.cal_1_5, R.id.cal_1_6,
