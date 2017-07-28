@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.andy.api_model.APIClient;
+import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.RangeView;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarDataSet;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -83,23 +85,8 @@ public class WeeklyViewTab extends Fragment {
         protected Object doInBackground(String... dates) {
             RangeView rangeView;
 
-            // Convert the new message to JSON
-            String messageJSON;
             try {
-                messageJSON = JSONConverter.fromMessage(messages[0]);
-            } catch (Throwable t) {
-                android.util.Log.d(LOG_TAG, "Failed to Convert from Message to JSON.");
-                android.util.Log.d(LOG_TAG, t.getMessage());
-                return "internal_error";
-            }
-
-            try {
-                android.util.Log.d(LOG_TAG, messageJSON);
-
-                // add log to the database or update log in database
-                message = APIClient.messagePostRequest(messageJSON);
-
-                if (message == null) return "no_internet";
+                APIClient.rangeviewGetRequest("", "", "", "");
 
             } catch (IOException e) {
                 android.util.Log.d(LOG_TAG, "The message failed to be uploaded.");
@@ -107,7 +94,7 @@ public class WeeklyViewTab extends Fragment {
                 return "internal_error";
             }
 
-            return message;
+            return "";
         }
 
         @Override

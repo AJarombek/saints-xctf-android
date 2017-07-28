@@ -3,6 +3,7 @@ package com.example.andy.saints_xctf_android;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,12 +15,18 @@ import android.widget.ProgressBar;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.example.andy.api_model.APIClient;
 import com.example.andy.api_model.JSONConverter;
+import com.example.andy.api_model.RangeView;
 import com.example.andy.api_model.User;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeConstants;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,12 +35,12 @@ import java.util.Calendar;
  */
 public class MonthlyViewTab extends Fragment {
 
-    private static final String TAG = MonthlyViewTab.class.getName();
+    private static final String LOG_TAG = MonthlyViewTab.class.getName();
     public static final String PREFS_NAME = "SaintsxctfUserPrefs";
 
     private View v;
     private boolean startsSunday;
-    private Calendar start_date, end_date;
+    private DateTime start_date, end_date;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,7 +77,7 @@ public class MonthlyViewTab extends Fragment {
                 PREFS_NAME, Context.MODE_PRIVATE);
         String userJSON = prefs.getString("user", "");
 
-        User user;
+        User user = new User();
         try {
             user = JSONConverter.toUser(userJSON);
 
@@ -78,24 +85,35 @@ public class MonthlyViewTab extends Fragment {
             startsSunday = week_start.equals("sunday");
 
         } catch (IOException e) {
-            Log.e(TAG, "User object JSON conversion failed.");
-            Log.e(TAG, e.getMessage());
+            Log.e(LOG_TAG, "User object JSON conversion failed.");
+            Log.e(LOG_TAG, e.getMessage());
         }
 
-        start_date = Calendar.getInstance();
+        // First set start date as the first day of the month
+        start_date = new DateTime().dayOfMonth().withMinimumValue();
 
         // First get the first day of the month, then first sunday/monday of that week
-        start_date.set(Calendar.DAY_OF_MONTH, 1);
+        start_date.withDayOfMonth(1);
 
-        if (startsSunday)
-            start_date.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
-        else
-            start_date.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
+        if (startsSunday) {
+            start_date.withDayOfWeek(DateTimeConstants.SUNDAY);
+        } else {
+            start_date.withDayOfWeek(DateTimeConstants.MONDAY);
+        }
 
-        end_date = Calendar.getInstance();
+        String start_date_string = start_date.toString("yyyy-MM-dd");
 
-        // Then get the last day of the month, then last saturday/sunday of that week
-        end_date.set(Calendar.DAY_OF_MONTH, end_date.getActualMaximum(Calendar.DAY_OF_MONTH));
+        // First set end date as the last day of the month
+        end_date = new DateTime().dayOfMonth().withMaximumValue();
+
+        // Then get last saturday/sunday of that week
+        if (startsSunday) {
+            end_date.withDayOfWeek(DateTimeConstants.SATURDAY);
+        } else {
+            end_date.withDayOfWeek(DateTimeConstants.SUNDAY);
+        }
+
+        String end_date_string = end_date.toString("yyyy-MM-dd");
 
         if (startsSunday) {
             for (int i = 0; i < 7; i++) {
@@ -104,6 +122,41 @@ public class MonthlyViewTab extends Fragment {
             }
         }
 
+        MonthlyRangeViewTask monthlyRangeViewTask = new MonthlyRangeViewTask();
+        monthlyRangeViewTask.execute("user", user.getUsername(), start_date_string, end_date_string);
+
         return view;
+    }
+
+    /**
+     * MonthlyRangeViewTask is an asynchronous job for getting a range view and populating the monthly calendar
+     */
+    class MonthlyRangeViewTask extends AsyncTask<String, Void, Object> {
+
+        @Override
+        protected Object doInBackground(String... params) {
+            List<RangeView> rangeViews;
+            try {
+                rangeViews = APIClient.rangeviewGetRequest(params[0], params[1], params[2], params[3]);
+
+                return rangeViews;
+
+            } catch (IOException e) {
+                android.util.Log.d(LOG_TAG, "The rangeview failed to be loaded.");
+                android.util.Log.d(LOG_TAG, e.getMessage());
+                return "internal_error";
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+
+        @Override
+        protected void onPostExecute(Object response) {
+            super.onPostExecute(response);
+        }
     }
 }
