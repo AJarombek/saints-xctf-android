@@ -38,6 +38,7 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.8.5'
     compile 'org.mindrot:jbcrypt:0.4-atlassian-1'
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
 }
 repositories {
     mavenCentral()

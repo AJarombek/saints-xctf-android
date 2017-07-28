@@ -19,6 +19,7 @@ import com.example.andy.api_model.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +33,7 @@ public class MonthlyViewTab extends Fragment {
 
     private View v;
     private boolean startsSunday;
+    private Calendar start_date, end_date;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,19 +75,33 @@ public class MonthlyViewTab extends Fragment {
             user = JSONConverter.toUser(userJSON);
 
             String week_start = user.getWeek_start();
-
             startsSunday = week_start.equals("sunday");
-
-            if (startsSunday) {
-                for (int i = 0; i < 7; i++) {
-                    TextView weekday = (TextView) v.findViewById(CalendarArrays.CALENDAR_WEEKDAY_IDS[i]);
-                    weekday.setText(CalendarArrays.CALENDAR_WEEKDAYS_SUNDAY_START[i]);
-                }
-            }
 
         } catch (IOException e) {
             Log.e(TAG, "User object JSON conversion failed.");
             Log.e(TAG, e.getMessage());
+        }
+
+        start_date = Calendar.getInstance();
+
+        // First get the first day of the month, then first sunday/monday of that week
+        start_date.set(Calendar.DAY_OF_MONTH, 1);
+
+        if (startsSunday)
+            start_date.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
+        else
+            start_date.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
+
+        end_date = Calendar.getInstance();
+
+        // Then get the last day of the month, then last saturday/sunday of that week
+        end_date.set(Calendar.DAY_OF_MONTH, end_date.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+        if (startsSunday) {
+            for (int i = 0; i < 7; i++) {
+                TextView weekday = (TextView) v.findViewById(CalendarArrays.CALENDAR_WEEKDAY_IDS[i]);
+                weekday.setText(CalendarArrays.CALENDAR_WEEKDAYS_SUNDAY_START[i]);
+            }
         }
 
         return view;
