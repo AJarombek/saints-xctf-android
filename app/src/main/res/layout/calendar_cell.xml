@@ -18,7 +18,7 @@
         android:textStyle="bold"
         android:textSize="12sp"
         android:gravity="end"
-        android:text="0"/>
+        android:text=""/>
 
     <LinearLayout
         android:layout_width="40dp"
@@ -33,7 +33,7 @@
             android:textStyle="bold"
             android:textSize="12sp"
             android:gravity="center"
-            android:text="100.25\nMiles"
+            android:text=""
             android:maxLength="12"/>
     </LinearLayout>
 </GridLayout>

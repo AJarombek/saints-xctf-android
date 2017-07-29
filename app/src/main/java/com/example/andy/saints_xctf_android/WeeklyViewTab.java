@@ -64,15 +64,6 @@ public class WeeklyViewTab extends Fragment {
         end_date.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
         end_date.add(Calendar.DATE, 7);
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        df.setTimeZone(TimeZone.getTimeZone("UTC"));
-        String start_date_string = df.format(start_date);
-        String end_date_string = df.format(end_date);
-        // weeklychart_dataset = new BarDataSet(entries, "WeeklyChart");
-
-        WeeklyRangeViewTask weeklyRangeViewTask = new WeeklyRangeViewTask();
-        weeklyRangeViewTask.execute(start_date_string, end_date_string);
-
         return view;
     }
 

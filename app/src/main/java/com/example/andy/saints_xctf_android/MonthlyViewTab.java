@@ -40,7 +40,7 @@ public class MonthlyViewTab extends Fragment {
 
     private View v;
     private boolean startsSunday;
-    private DateTime start_date, end_date;
+    private DateTime start_date, end_date, month_date;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,7 +59,7 @@ public class MonthlyViewTab extends Fragment {
 
             // Create a table cell for each day and programmatically give it unique ids
             for (int j = 1; j <= 8; j++) {
-                int index = (i * j) - 1;
+                int index = (((i - 1) * 8) + j) - 1;
 
                 GridLayout calendarCell = (GridLayout) inflater.inflate(R.layout.calendar_cell, null);
                 TextView calday = (TextView) calendarCell.findViewById(R.id.calday);
@@ -89,16 +89,20 @@ public class MonthlyViewTab extends Fragment {
             Log.e(LOG_TAG, e.getMessage());
         }
 
+        // Value that will always hold the first day of the shown month
+        month_date = new DateTime().dayOfMonth().withMinimumValue();
+
         // First set start date as the first day of the month
         start_date = new DateTime().dayOfMonth().withMinimumValue();
 
         // First get the first day of the month, then first sunday/monday of that week
         start_date.withDayOfMonth(1);
 
+        // Then get first sunday/monday of that week
         if (startsSunday) {
-            start_date.withDayOfWeek(DateTimeConstants.SUNDAY);
+            start_date = start_date.withDayOfWeek(DateTimeConstants.SUNDAY);
         } else {
-            start_date.withDayOfWeek(DateTimeConstants.MONDAY);
+            start_date = start_date.withDayOfWeek(DateTimeConstants.MONDAY);
         }
 
         String start_date_string = start_date.toString("yyyy-MM-dd");
@@ -108,9 +112,9 @@ public class MonthlyViewTab extends Fragment {
 
         // Then get last saturday/sunday of that week
         if (startsSunday) {
-            end_date.withDayOfWeek(DateTimeConstants.SATURDAY);
+            end_date = end_date.withDayOfWeek(DateTimeConstants.SATURDAY);
         } else {
-            end_date.withDayOfWeek(DateTimeConstants.SUNDAY);
+            end_date = end_date.withDayOfWeek(DateTimeConstants.SUNDAY);
         }
 
         String end_date_string = end_date.toString("yyyy-MM-dd");
@@ -122,6 +126,8 @@ public class MonthlyViewTab extends Fragment {
             }
         }
 
+        Log.i(LOG_TAG, "Monthly View From: " + start_date_string + " to " + end_date_string);
+
         MonthlyRangeViewTask monthlyRangeViewTask = new MonthlyRangeViewTask();
         monthlyRangeViewTask.execute("user", user.getUsername(), start_date_string, end_date_string);
 
@@ -131,10 +137,10 @@ public class MonthlyViewTab extends Fragment {
     /**
      * MonthlyRangeViewTask is an asynchronous job for getting a range view and populating the monthly calendar
      */
-    class MonthlyRangeViewTask extends AsyncTask<String, Void, Object> {
+    class MonthlyRangeViewTask extends AsyncTask<String, Void, List<RangeView>> {
 
         @Override
-        protected Object doInBackground(String... params) {
+        protected List<RangeView> doInBackground(String... params) {
             List<RangeView> rangeViews;
             try {
                 rangeViews = APIClient.rangeviewGetRequest(params[0], params[1], params[2], params[3]);
@@ -144,7 +150,7 @@ public class MonthlyViewTab extends Fragment {
             } catch (IOException e) {
                 android.util.Log.d(LOG_TAG, "The rangeview failed to be loaded.");
                 android.util.Log.d(LOG_TAG, e.getMessage());
-                return "internal_error";
+                return new ArrayList<RangeView>();
             }
         }
 
@@ -155,8 +161,29 @@ public class MonthlyViewTab extends Fragment {
 
 
         @Override
-        protected void onPostExecute(Object response) {
-            super.onPostExecute(response);
+        protected void onPostExecute(List<RangeView> rangeView) {
+            super.onPostExecute(rangeView);
+
+            if (rangeView == null) {
+                rangeView = new ArrayList<>();
+            }
+
+            DateTime start = new DateTime(start_date);
+            DateTime end = new DateTime(end_date);
+
+            TextView month_view = (TextView) v.findViewById(R.id.cal_month);
+            month_view.setText(month_date.toString("MMMM YYYY"));
+
+            for (int i = 0; i < 48; i++) {
+                int day = start.getDayOfMonth();
+
+                if (i % 8 != 7) {
+                    Log.i(LOG_TAG, String.valueOf(CalendarArrays.CALENDAR_DAY_IDS[i]));
+                    TextView day_view = (TextView) v.findViewById(CalendarArrays.CALENDAR_DAY_IDS[i]);
+                    day_view.setText(String.valueOf(day));
+                    start = start.plusDays(1);
+                }
+            }
         }
     }
 }
