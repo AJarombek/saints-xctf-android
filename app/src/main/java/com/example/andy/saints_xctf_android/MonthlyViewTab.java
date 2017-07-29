@@ -105,7 +105,7 @@ public class MonthlyViewTab extends Fragment {
 
         // Then get first sunday/monday of that week
         if (startsSunday) {
-            start_date = start_date.withDayOfWeek(DateTimeConstants.SUNDAY);
+            start_date = start_date.withDayOfWeek(DateTimeConstants.SUNDAY).minusDays(7);
         } else {
             start_date = start_date.withDayOfWeek(DateTimeConstants.MONDAY);
         }
@@ -193,6 +193,8 @@ public class MonthlyViewTab extends Fragment {
                 TextView miles_view = (TextView) v.findViewById(CalendarArrays.CALENDAR_MILES_IDS[i]);
                 miles_view.setText("");
 
+                GradientDrawable bgShape = (GradientDrawable)cell_view.getBackground();
+
                 if (i % 8 != 7) {
                     TextView day_view = (TextView) v.findViewById(CalendarArrays.CALENDAR_DAY_IDS[i]);
                     day_view.setText(String.valueOf(day));
@@ -210,16 +212,22 @@ public class MonthlyViewTab extends Fragment {
                         miles_view.setText(String.format("%.2f",miles) + "\nmiles");
 
                         // Set the background color according to the log feel
-                        GradientDrawable bgShape = (GradientDrawable)cell_view.getBackground();
                         int color = Color.parseColor(CalendarArrays.COLOR_VALUE[rangeView.get(0).getFeel()-1]);
                         bgShape.setColor(color);
 
                         rangeView.remove(0);
                     } else {
-                        // Set the background color according to the log feel
-                        GradientDrawable bgShape = (GradientDrawable)cell_view.getBackground();
-                        int color = Color.parseColor(CalendarArrays.COLOR_VALUE[10]);
-                        bgShape.setColor(color);
+
+                        // Set the background color according to if the cell is the current month
+                        if ((i < 8 && day > 10) || (i > 30 && day < 10)) {
+                            // Previous or Next Month
+                            int color = Color.parseColor(CalendarArrays.COLOR_VALUE[11]);
+                            bgShape.setColor(color);
+                        } else {
+                            // Current Month
+                            int color = Color.parseColor(CalendarArrays.COLOR_VALUE[10]);
+                            bgShape.setColor(color);
+                        }
                     }
 
                     start = start.plusDays(1);
@@ -227,8 +235,7 @@ public class MonthlyViewTab extends Fragment {
                     miles_view.setText(String.format("%.2f",weekly_miles) + "\nmiles");
                     weekly_miles = 0.0;
 
-                    // Set the background color according to the log feel
-                    GradientDrawable bgShape = (GradientDrawable)cell_view.getBackground();
+                    // Set the background color to the default background
                     int color = Color.parseColor(CalendarArrays.COLOR_VALUE[10]);
                     bgShape.setColor(color);
                 }

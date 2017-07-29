@@ -52,5 +52,6 @@ public class CalendarArrays {
             MainActivity.COLOR_VERYBAD, MainActivity.COLOR_BAD, MainActivity.COLOR_PRETTYBAD,
             MainActivity.COLOR_MEDIOCRE, MainActivity.COLOR_AVERAGE,
             MainActivity.COLOR_FAIRLYGOOD, MainActivity.COLOR_GOOD,
-            MainActivity.COLOR_GREAT, MainActivity.COLOR_FANTASTIC, MainActivity.COLOR_DEFAULT};
+            MainActivity.COLOR_GREAT, MainActivity.COLOR_FANTASTIC, MainActivity.COLOR_DEFAULT,
+            MainActivity.COLOR_DEFAULT_2};
 }
