@@ -12,7 +12,6 @@ import java.util.Map;
  * POJO representing a user from the REST API
  * @author Andrew Jarombek
  * @since 11/8/2016
- * @version 0.1 BETA RELEASE
  */
 
 public class User {

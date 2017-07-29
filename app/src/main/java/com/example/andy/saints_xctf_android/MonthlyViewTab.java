@@ -1,18 +1,15 @@
 package com.example.andy.saints_xctf_android;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ProgressBar;
 import android.widget.TableRow;
@@ -27,12 +24,8 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,7 +41,9 @@ public class MonthlyViewTab extends Fragment {
 
     private View v;
     private boolean startsSunday;
-    private DateTime start_date, end_date, month_date;
+    private Button previous_month, next_month;
+    private CalendarData calendarData;
+    private String username;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,6 +51,9 @@ public class MonthlyViewTab extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.monthly_view_tab, container, false);
         v = view;
+
+        previous_month = (Button) v.findViewById(R.id.previous_month);
+        next_month = (Button) v.findViewById(R.id.next_month);
 
         // Loop through each row in the calendar and populate the table row
         for (int i = 1; i <= 6; i++) {
@@ -83,7 +81,7 @@ public class MonthlyViewTab extends Fragment {
 
         Bundle bundle = getArguments();
         String userJSON = bundle.getString("user", "");
-        String username = bundle.getString("username", "");
+        username = bundle.getString("username", "");
 
         User user;
         try {
@@ -97,44 +95,12 @@ public class MonthlyViewTab extends Fragment {
             Log.e(LOG_TAG, e.getMessage());
         }
 
+        calendarData = new CalendarData();
+
         // Value that will always hold the first day of the shown month
-        month_date = new DateTime().dayOfMonth().withMinimumValue();
+        DateTime month_date = new DateTime().dayOfMonth().withMinimumValue();
 
-        // First set start date as the first day of the month
-        start_date = new DateTime().dayOfMonth().withMinimumValue();
-
-        // Then get first sunday/monday of that week
-        if (startsSunday) {
-            start_date = start_date.withDayOfWeek(DateTimeConstants.SUNDAY).minusDays(7);
-        } else {
-            start_date = start_date.withDayOfWeek(DateTimeConstants.MONDAY);
-        }
-
-        String start_date_string = start_date.toString("yyyy-MM-dd");
-
-        // First set end date as the last day of the month
-        end_date = new DateTime().dayOfMonth().withMaximumValue();
-
-        // Then get last saturday/sunday of that week
-        if (startsSunday) {
-            end_date = end_date.withDayOfWeek(DateTimeConstants.SATURDAY);
-        } else {
-            end_date = end_date.withDayOfWeek(DateTimeConstants.SUNDAY);
-        }
-
-        String end_date_string = end_date.toString("yyyy-MM-dd");
-
-        if (startsSunday) {
-            for (int i = 0; i < 7; i++) {
-                TextView weekday = (TextView) v.findViewById(CalendarArrays.CALENDAR_WEEKDAY_IDS[i]);
-                weekday.setText(CalendarArrays.CALENDAR_WEEKDAYS_SUNDAY_START[i]);
-            }
-        }
-
-        Log.i(LOG_TAG, "Monthly View From: " + start_date_string + " to " + end_date_string);
-
-        MonthlyRangeViewTask monthlyRangeViewTask = new MonthlyRangeViewTask();
-        monthlyRangeViewTask.execute("user", username, "r", start_date_string, end_date_string);
+        initCalendar(month_date);
 
         return view;
     }
@@ -177,31 +143,102 @@ public class MonthlyViewTab extends Fragment {
                 rangeView = new ArrayList<>();
             }
 
-            DateTime start = new DateTime(start_date);
-            DateTime end = new DateTime(end_date);
+            buildCalendar(calendarData.getStart_date(), calendarData.getEnd_date(),
+                    calendarData.getMonth_date(), rangeView);
+        }
+    }
 
-            TextView month_view = (TextView) v.findViewById(R.id.cal_month);
-            month_view.setText(month_date.toString("MMMM YYYY"));
+    private void initCalendar(DateTime month_date) {
+        calendarData.setMonth_date(month_date);
 
-            double weekly_miles = 0.0;
+        // First set start date as the first day of the month
+        DateTime start_date = new DateTime(month_date);
+        start_date = start_date.dayOfMonth().withMinimumValue();
 
-            for (int i = 0; i < 48; i++) {
-                int day = start.getDayOfMonth();
+        // Then get first sunday/monday of that week
+        if (startsSunday) {
+            start_date = start_date.withDayOfWeek(DateTimeConstants.SUNDAY).minusDays(7);
+        } else {
+            start_date = start_date.withDayOfWeek(DateTimeConstants.MONDAY);
+        }
 
-                GridLayout cell_view = (GridLayout) v.findViewById(CalendarArrays.CALENDAR_CELL_IDS[i]);
+        calendarData.setStart_date(start_date);
+        String start_date_string = start_date.toString("yyyy-MM-dd");
 
-                TextView miles_view = (TextView) v.findViewById(CalendarArrays.CALENDAR_MILES_IDS[i]);
-                miles_view.setText("");
+        // First set end date as the last day of the month
+        DateTime end_date = new DateTime(month_date);
+        end_date = end_date.dayOfMonth().withMaximumValue();
 
-                GradientDrawable bgShape = (GradientDrawable)cell_view.getBackground();
+        // Then get last saturday/sunday of that week
+        if (startsSunday) {
+            end_date = end_date.withDayOfWeek(DateTimeConstants.SATURDAY);
+        } else {
+            end_date = end_date.withDayOfWeek(DateTimeConstants.SUNDAY);
+        }
 
-                if (i % 8 != 7) {
-                    TextView day_view = (TextView) v.findViewById(CalendarArrays.CALENDAR_DAY_IDS[i]);
+        // Stop the calendar early if the entire row is in the next month
+        if (end_date.getDayOfMonth() >= 7 && end_date.getDayOfMonth() < 20) {
+            end_date = end_date.minusDays(7);
+        }
+        calendarData.setEnd_date(end_date);
+        String end_date_string = end_date.toString("yyyy-MM-dd");
+
+        // Change the weekday textviews based on what day starts the week
+        if (startsSunday) {
+            for (int i = 0; i < 7; i++) {
+                TextView weekday = (TextView) v.findViewById(CalendarArrays.CALENDAR_WEEKDAY_IDS[i]);
+                weekday.setText(CalendarArrays.CALENDAR_WEEKDAYS_SUNDAY_START[i]);
+            }
+        }
+
+        Log.i(LOG_TAG, "Monthly View From: " + start_date_string + " to " + end_date_string);
+
+        MonthlyRangeViewTask monthlyRangeViewTask = new MonthlyRangeViewTask();
+        monthlyRangeViewTask.execute("user", username, "r", start_date_string, end_date_string);
+    }
+
+    private void buildCalendar(DateTime start_date, DateTime end_date, DateTime month_date, List<RangeView> rangeView) {
+
+        boolean done = false;
+
+        DateTime start = new DateTime(start_date);
+        DateTime end = new DateTime(end_date);
+
+        TextView month_view = (TextView) v.findViewById(R.id.cal_month);
+        month_view.setText(month_date.toString("MMMM YYYY"));
+
+        double weekly_miles = 0.0;
+
+        for (int i = 0; i < 48; i++) {
+
+            int day = start.getDayOfMonth();
+
+            // If the final row exists entirely in the next month, stop populating the calendar
+            if (i == 40 && day < 10) {
+                done = true;
+            }
+
+            GridLayout cell_view = (GridLayout) v.findViewById(CalendarArrays.CALENDAR_CELL_IDS[i]);
+
+            TextView miles_view = (TextView) v.findViewById(CalendarArrays.CALENDAR_MILES_IDS[i]);
+            miles_view.setText("");
+
+            GradientDrawable bgShape = (GradientDrawable)cell_view.getBackground();
+
+            if (i % 8 != 7) {
+                TextView day_view = (TextView) v.findViewById(CalendarArrays.CALENDAR_DAY_IDS[i]);
+
+                if (done) {
+                    day_view.setText("");
+
+                    int color = Color.parseColor(CalendarArrays.COLOR_VALUE[10]);
+                    bgShape.setColor(color);
+                } else {
+
                     day_view.setText(String.valueOf(day));
 
                     DateTime startminus1 = start.minusDays(1);
                     String currentDate = startminus1.toString("yyyy-MM-dd");
-                    Log.i(LOG_TAG, currentDate);
 
                     if (rangeView.size() > 0 && new DateTime(rangeView.get(0).getDate())
                             .toString("yyyy-MM-dd").equals(currentDate)) {
@@ -209,10 +246,10 @@ public class MonthlyViewTab extends Fragment {
                         double miles = rangeView.get(0).getMiles();
                         weekly_miles += miles;
 
-                        miles_view.setText(String.format("%.2f",miles) + "\nmiles");
+                        miles_view.setText(String.format("%.2f", miles) + "\nmiles");
 
                         // Set the background color according to the log feel
-                        int color = Color.parseColor(CalendarArrays.COLOR_VALUE[rangeView.get(0).getFeel()-1]);
+                        int color = Color.parseColor(CalendarArrays.COLOR_VALUE[rangeView.get(0).getFeel() - 1]);
                         bgShape.setColor(color);
 
                         rangeView.remove(0);
@@ -229,17 +266,39 @@ public class MonthlyViewTab extends Fragment {
                             bgShape.setColor(color);
                         }
                     }
-
                     start = start.plusDays(1);
-                } else {
-                    miles_view.setText(String.format("%.2f",weekly_miles) + "\nmiles");
-                    weekly_miles = 0.0;
-
-                    // Set the background color to the default background
-                    int color = Color.parseColor(CalendarArrays.COLOR_VALUE[10]);
-                    bgShape.setColor(color);
                 }
+            } else {
+                if (!done)
+                    miles_view.setText(String.format("%.2f",weekly_miles) + "\nmiles");
+
+                weekly_miles = 0.0;
+
+                // Set the background color to the default background
+                int color = Color.parseColor(CalendarArrays.COLOR_VALUE[10]);
+                bgShape.setColor(color);
             }
         }
+
+        // Start the initCalendar() for the next month
+        next_month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DateTime month_date = calendarData.getMonth_date();
+                month_date = month_date.plusMonths(1);
+                initCalendar(month_date);
+            }
+        });
+
+        // Start the initCalendar() for the previous month
+        previous_month.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DateTime month_date = calendarData.getMonth_date();
+                Log.i(LOG_TAG, month_date.toString("yyyy-MM-dd"));
+                month_date = month_date.minusMonths(1);
+                initCalendar(month_date);
+            }
+        });
     }
 }
