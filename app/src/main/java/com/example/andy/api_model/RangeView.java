@@ -12,7 +12,7 @@ import java.util.Date;
 
 public class RangeView {
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date date;
     private double miles;
     private int feel;

@@ -47,4 +47,10 @@ public class CalendarArrays {
             R.id.calmiles_4_1, R.id.calmiles_4_2, R.id.calmiles_4_3, R.id.calmiles_4_4, R.id.calmiles_4_5,
             R.id.calmiles_4_6, R.id.calmiles_4_7, R.id.calmiles_5_0, R.id.calmiles_5_1, R.id.calmiles_5_2,
             R.id.calmiles_5_3, R.id.calmiles_5_4, R.id.calmiles_5_5, R.id.calmiles_5_6, R.id.calmiles_5_7 };
+
+    public static final String[] COLOR_VALUE = {MainActivity.COLOR_TERRIBLE,
+            MainActivity.COLOR_VERYBAD, MainActivity.COLOR_BAD, MainActivity.COLOR_PRETTYBAD,
+            MainActivity.COLOR_MEDIOCRE, MainActivity.COLOR_AVERAGE,
+            MainActivity.COLOR_FAIRLYGOOD, MainActivity.COLOR_GOOD,
+            MainActivity.COLOR_GREAT, MainActivity.COLOR_FANTASTIC, MainActivity.COLOR_DEFAULT};
 }

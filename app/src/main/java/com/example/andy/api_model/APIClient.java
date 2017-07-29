@@ -122,11 +122,12 @@ public class APIClient {
             throws IOException {
         String paramtype = params[0];
         String sortparam = params[1];
-        String start = params[2];
-        String end = params[3];
+        String filter = params[2];
+        String start = params[3];
+        String end = params[4];
 
         String response = getRequest("https://www.saintsxctf.com/api/api.php/rangeview/" + paramtype +
-                "/" + sortparam + "/" + start + "/" + end);
+                "/" + sortparam + "/" + filter + "/" + start + "/" + end);
         if (response.equals("false")) return null;
         return JSONConverter.toRangeViewList(response);
     }

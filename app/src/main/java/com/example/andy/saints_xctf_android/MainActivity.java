@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String COLOR_GOOD = "#99d699";
     public static final String COLOR_GREAT = "#99c199";
     public static final String COLOR_FANTASTIC = "#a3a3ff";
+    public static final String COLOR_DEFAULT = "#eeeeee";
     public static final String DESCRIPT_TERRIBLE = "Terrible";
     public static final String DESCRIPT_VERYBAD = "Very Bad";
     public static final String DESCRIPT_BAD = "Bad";

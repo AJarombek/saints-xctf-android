@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.User;
 
 import java.util.Map;
@@ -60,6 +61,11 @@ public class ProfilePager extends FragmentStatePagerAdapter {
                 return statisticsTab;
             case 2:
                 data.putString("username", String.valueOf(user.getUsername()));
+                try {
+                    data.putString("user", JSONConverter.fromUser(user));
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
 
 
                 MonthlyViewTab monthlyViewTab = new MonthlyViewTab();
