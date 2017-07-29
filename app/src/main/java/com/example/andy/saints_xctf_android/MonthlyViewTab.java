@@ -38,12 +38,17 @@ public class MonthlyViewTab extends Fragment {
     private static final String LOG_TAG = MonthlyViewTab.class.getName();
     public static final String PREFS_NAME = "SaintsxctfUserPrefs";
     private static final DecimalFormat decimalFormat = new DecimalFormat(".##");
+    private static final String SELECTED_COLOR = "#990000";
+    private static final String DESELECTED_COLOR = "#EEEEEE";
 
     private View v;
     private boolean startsSunday;
     private Button previous_month, next_month;
+    private Button filter_run, filter_bike, filter_swim, filter_other;
     private CalendarData calendarData;
     private String username;
+    private boolean run, bike, swim, other;
+    private String filter = "r";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,6 +59,10 @@ public class MonthlyViewTab extends Fragment {
 
         previous_month = (Button) v.findViewById(R.id.previous_month);
         next_month = (Button) v.findViewById(R.id.next_month);
+        filter_run = (Button) v.findViewById(R.id.filter_run);
+        filter_bike = (Button) v.findViewById(R.id.filter_bike);
+        filter_swim = (Button) v.findViewById(R.id.filter_swim);
+        filter_other = (Button) v.findViewById(R.id.filter_other);
 
         // Loop through each row in the calendar and populate the table row
         for (int i = 1; i <= 6; i++) {
@@ -95,7 +104,84 @@ public class MonthlyViewTab extends Fragment {
             Log.e(LOG_TAG, e.getMessage());
         }
 
+        // Used to keep track of calendar state
         calendarData = new CalendarData();
+
+        run = true;
+
+        // Filter the calendar by activity types
+
+        filter_run.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (run) {
+                    filter_run.setTextColor(Color.BLACK);
+                    filter_run.setBackgroundColor(Color.parseColor(DESELECTED_COLOR));
+                } else {
+                    filter_run.setTextColor(Color.WHITE);
+                    filter_run.setBackgroundColor(Color.parseColor(SELECTED_COLOR));
+                }
+
+                run = !run;
+                filter = getFilter(run, bike, swim, other);
+                Log.i(LOG_TAG, filter);
+                initCalendar(calendarData.getMonth_date());
+            }
+        });
+
+        filter_bike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bike) {
+                    filter_bike.setTextColor(Color.BLACK);
+                    filter_bike.setBackgroundColor(Color.parseColor(DESELECTED_COLOR));
+                } else {
+                    filter_bike.setTextColor(Color.WHITE);
+                    filter_bike.setBackgroundColor(Color.parseColor(SELECTED_COLOR));
+                }
+
+                bike = !bike;
+                filter = getFilter(run, bike, swim, other);
+                Log.i(LOG_TAG, filter);
+                initCalendar(calendarData.getMonth_date());
+            }
+        });
+
+        filter_swim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (swim) {
+                    filter_swim.setTextColor(Color.BLACK);
+                    filter_swim.setBackgroundColor(Color.parseColor(DESELECTED_COLOR));
+                } else {
+                    filter_swim.setTextColor(Color.WHITE);
+                    filter_swim.setBackgroundColor(Color.parseColor(SELECTED_COLOR));
+                }
+
+                swim = !swim;
+                filter = getFilter(run, bike, swim, other);
+                Log.i(LOG_TAG, filter);
+                initCalendar(calendarData.getMonth_date());
+            }
+        });
+
+        filter_other.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (other) {
+                    filter_other.setTextColor(Color.BLACK);
+                    filter_other.setBackgroundColor(Color.parseColor(DESELECTED_COLOR));
+                } else {
+                    filter_other.setTextColor(Color.WHITE);
+                    filter_other.setBackgroundColor(Color.parseColor(SELECTED_COLOR));
+                }
+
+                other = !other;
+                filter = getFilter(run, bike, swim, other);
+                Log.i(LOG_TAG, filter);
+                initCalendar(calendarData.getMonth_date());
+            }
+        });
 
         // Value that will always hold the first day of the shown month
         DateTime month_date = new DateTime().dayOfMonth().withMinimumValue();
@@ -148,6 +234,11 @@ public class MonthlyViewTab extends Fragment {
         }
     }
 
+    /**
+     * Initialize the calendar creation process by setting the start and end dates plus
+     * making the API call to get the rangeview data
+     * @param month_date the first day of the calendar month to be displayed
+     */
     private void initCalendar(DateTime month_date) {
         calendarData.setMonth_date(month_date);
 
@@ -194,9 +285,16 @@ public class MonthlyViewTab extends Fragment {
         Log.i(LOG_TAG, "Monthly View From: " + start_date_string + " to " + end_date_string);
 
         MonthlyRangeViewTask monthlyRangeViewTask = new MonthlyRangeViewTask();
-        monthlyRangeViewTask.execute("user", username, "r", start_date_string, end_date_string);
+        monthlyRangeViewTask.execute("user", username, filter, start_date_string, end_date_string);
     }
 
+    /**
+     * Build the calendar with the rangeview data retrieved
+     * @param start_date the first day on the calendar
+     * @param end_date the last day on the calendar
+     * @param month_date the first day of the month being displayed on the calendar
+     * @param rangeView the rangeview of log data from the start_date to end_date
+     */
     private void buildCalendar(DateTime start_date, DateTime end_date, DateTime month_date, List<RangeView> rangeView) {
 
         boolean done = false;
@@ -300,5 +398,22 @@ public class MonthlyViewTab extends Fragment {
                 initCalendar(month_date);
             }
         });
+    }
+
+    /**
+     * Get the filter string to be used for the range view API request
+     * @param run is the run filter selected
+     * @param bike is the bike filter selected
+     * @param swim is the swim filter selected
+     * @param other is the other filter selected
+     * @return the filter string
+     */
+    private String getFilter(boolean run, boolean bike, boolean swim, boolean other) {
+        String run_fil = run ? "r" : "";
+        String bike_fil = bike ? "b" : "";
+        String swim_fil = swim ? "s" : "";
+        String other_fil = other ? "o" : "";
+
+        return run_fil + bike_fil + swim_fil + other_fil;
     }
 }
