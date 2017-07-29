@@ -1,5 +1,6 @@
 package com.example.andy.saints_xctf_android;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,7 +15,11 @@ import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.RangeView;
 import com.example.andy.api_model.User;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
@@ -171,6 +176,7 @@ public class WeeklyViewTab extends Fragment {
 
         DateTime start = new DateTime(start_date);
 
+        // Set two arrays containing the start and end of each week
         for (int i = 0; i < 9; i++) {
             start = start.plusDays(7);
 
@@ -179,12 +185,14 @@ public class WeeklyViewTab extends Fragment {
             weeklyEndDate[i] = weekStartEnd;
         }
 
+        // Go through the range views and find which week the rangeview belongs to
         for (RangeView rangeViewItem : rangeView) {
             DateTime date = new DateTime(rangeViewItem.getDate());
 
             for (int i = 0; i < 10; i++) {
                 if (!date.isBefore(weeklyStartDate[i]) && !date.isAfter(weeklyEndDate[i])) {
 
+                    // Update the weekly mileage, feel, and item counter
                     weeklyMileage[i] = weeklyMileage[i] + rangeViewItem.getMiles();
                     weeklyFeel[i] = weeklyFeel[i] + rangeViewItem.getFeel();
                     weeklyItems[i] = weeklyItems[i] + 1;
@@ -193,12 +201,54 @@ public class WeeklyViewTab extends Fragment {
             }
         }
 
+        // Log out all the data structures created
         Log.i(LOG_TAG, Arrays.toString(weeklyStartDate));
         Log.i(LOG_TAG, Arrays.toString(weeklyEndDate));
 
         Log.i(LOG_TAG, Arrays.toString(weeklyMileage));
         Log.i(LOG_TAG, Arrays.toString(weeklyFeel));
         Log.i(LOG_TAG, Arrays.toString(weeklyItems));
+
+        // Create a list of barentries containing the mileage for each week
+        ArrayList<BarEntry> entries = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            entries.add(new BarEntry(i, (float) weeklyMileage[i]));
+        }
+
+        // Put these entries into a data set
+        BarDataSet barDataSet = new BarDataSet(entries, "");
+
+        List<Integer> colors = new ArrayList<>();
+
+        // Create a list of colors for the bar chart
+        // the color correlates to the average feel for the week
+        for (int i = 0; i < 10; i++) {
+            int feel = weeklyFeel[i] / weeklyItems[i];
+            colors.add(Color.parseColor(CalendarArrays.COLOR_VALUE[feel - 1]));
+        }
+
+        // Set the colors to the data set
+        barDataSet.setColors(colors);
+
+        // Create labels for the chart which have the dates for the start of each week
+        ArrayList<String> labels = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            labels.add(i, weeklyStartDate[i].toString("MMM. dd"));
+        }
+
+        BarData barData = new BarData(barDataSet);
+
+        // Set the labels and data to the bar chart
+        weeklychart.setData(barData);
+        weeklychart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
+        Description description = new Description();
+        description.setText("");
+
+        weeklychart.setDescription(description);
+        weeklychart.getLegend().setEnabled(false);
+        weeklychart.invalidate();
     }
 }
 
