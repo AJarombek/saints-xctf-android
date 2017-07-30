@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import com.example.andy.api_model.APIClient;
 import com.example.andy.api_model.GroupInfo;
 import com.example.andy.api_model.JSONConverter;
+import com.example.andy.api_model.Notification;
 import com.example.andy.api_model.User;
 
 import java.io.ByteArrayOutputStream;
@@ -73,6 +75,7 @@ public class EditProfileFragment extends Fragment {
     private Button edit_profile_wmenstf;
     private Button edit_profile_alumni;
     private boolean mensxc, wmensxc, menstf, wmenstf, alumni, editpicture;
+    private GroupInfo mensxc_member, wmensxc_member, menstf_member, wmenstf_member, alumni_member;
 
     private TextView edit_profile_error_message;
     private Button edit_profile_cancel;
@@ -180,18 +183,15 @@ public class EditProfileFragment extends Fragment {
                                 getContext(), R.color.lightGrey));
                         edit_profile_wmenstf.setTextColor(ContextCompat.getColor(
                                 getContext(), R.color.black));
-
-                        // Enable Alumni
-                        edit_profile_alumni.setClickable(true);
-                        edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
-                                getContext(), R.color.lightGrey));
-                        edit_profile_alumni.setTextColor(ContextCompat.getColor(
-                                getContext(), R.color.black));
                     }
                 } else {
                     mensxc = true;
-                    edit_profile_mensxc.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.stlawuRed));
+                    if (mensxc_member != null && mensxc_member.getStatus().equals("accepted")) {
+                        edit_profile_mensxc.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.stlawuRed));
+                    } else {
+                        edit_profile_mensxc.setBackgroundColor(Color.GRAY);
+                    }
                     edit_profile_mensxc.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.white));
 
@@ -207,13 +207,6 @@ public class EditProfileFragment extends Fragment {
                     edit_profile_wmenstf.setBackgroundColor(ContextCompat.getColor(
                             getContext(), R.color.white));
                     edit_profile_wmenstf.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.lighterGrey));
-
-                    // Disable Alumni
-                    edit_profile_alumni.setClickable(false);
-                    edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.white));
-                    edit_profile_alumni.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.lighterGrey));
                 }
             }
@@ -243,18 +236,15 @@ public class EditProfileFragment extends Fragment {
                                 getContext(), R.color.lightGrey));
                         edit_profile_wmenstf.setTextColor(ContextCompat.getColor(
                                 getContext(), R.color.black));
-
-                        // Enable Alumni
-                        edit_profile_alumni.setClickable(true);
-                        edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
-                                getContext(), R.color.lightGrey));
-                        edit_profile_alumni.setTextColor(ContextCompat.getColor(
-                                getContext(), R.color.black));
                     }
                 } else {
                     menstf = true;
-                    edit_profile_menstf.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.stlawuRed));
+                    if (menstf_member != null && menstf_member.getStatus().equals("accepted")) {
+                        edit_profile_menstf.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.stlawuRed));
+                    } else {
+                        edit_profile_menstf.setBackgroundColor(Color.GRAY);
+                    }
                     edit_profile_menstf.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.white));
 
@@ -270,13 +260,6 @@ public class EditProfileFragment extends Fragment {
                     edit_profile_wmenstf.setBackgroundColor(ContextCompat.getColor(
                             getContext(), R.color.white));
                     edit_profile_wmenstf.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.lighterGrey));
-
-                    // Disable Alumni
-                    edit_profile_alumni.setClickable(false);
-                    edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.white));
-                    edit_profile_alumni.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.lighterGrey));
                 }
             }
@@ -306,18 +289,15 @@ public class EditProfileFragment extends Fragment {
                                 getContext(), R.color.lightGrey));
                         edit_profile_menstf.setTextColor(ContextCompat.getColor(
                                 getContext(), R.color.black));
-
-                        // Enable Alumni
-                        edit_profile_alumni.setClickable(true);
-                        edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
-                                getContext(), R.color.lightGrey));
-                        edit_profile_alumni.setTextColor(ContextCompat.getColor(
-                                getContext(), R.color.black));
                     }
                 } else {
                     wmensxc = true;
-                    edit_profile_wmensxc.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.stlawuRed));
+                    if (wmensxc_member != null && wmensxc_member.getStatus().equals("accepted")) {
+                        edit_profile_wmensxc.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.stlawuRed));
+                    } else {
+                        edit_profile_wmensxc.setBackgroundColor(Color.GRAY);
+                    }
                     edit_profile_wmensxc.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.white));
 
@@ -333,13 +313,6 @@ public class EditProfileFragment extends Fragment {
                     edit_profile_menstf.setBackgroundColor(ContextCompat.getColor(
                             getContext(), R.color.white));
                     edit_profile_menstf.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.lighterGrey));
-
-                    // Disable Alumni
-                    edit_profile_alumni.setClickable(false);
-                    edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.white));
-                    edit_profile_alumni.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.lighterGrey));
                 }
             }
@@ -369,18 +342,15 @@ public class EditProfileFragment extends Fragment {
                                 getContext(), R.color.lightGrey));
                         edit_profile_menstf.setTextColor(ContextCompat.getColor(
                                 getContext(), R.color.black));
-
-                        // Enable Alumni
-                        edit_profile_alumni.setClickable(true);
-                        edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
-                                getContext(), R.color.lightGrey));
-                        edit_profile_alumni.setTextColor(ContextCompat.getColor(
-                                getContext(), R.color.black));
                     }
                 } else {
                     wmenstf = true;
-                    edit_profile_wmenstf.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.stlawuRed));
+                    if (wmenstf_member != null && wmenstf_member.getStatus().equals("accepted")) {
+                        edit_profile_wmenstf.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.stlawuRed));
+                    } else {
+                        edit_profile_wmenstf.setBackgroundColor(Color.GRAY);
+                    }
                     edit_profile_wmenstf.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.white));
 
@@ -396,13 +366,6 @@ public class EditProfileFragment extends Fragment {
                     edit_profile_menstf.setBackgroundColor(ContextCompat.getColor(
                             getContext(), R.color.white));
                     edit_profile_menstf.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.lighterGrey));
-
-                    // Disable Alumni
-                    edit_profile_alumni.setClickable(false);
-                    edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.white));
-                    edit_profile_alumni.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.lighterGrey));
                 }
             }
@@ -417,76 +380,23 @@ public class EditProfileFragment extends Fragment {
                             getContext(), R.color.lightGrey));
                     edit_profile_alumni.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.black));
-
-                    // Enable Men's XC
-                    edit_profile_mensxc.setClickable(true);
-                    edit_profile_mensxc.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.lightGrey));
-                    edit_profile_mensxc.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.black));
-
-                    // Enable Men's TF
-                    edit_profile_menstf.setClickable(true);
-                    edit_profile_menstf.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.lightGrey));
-                    edit_profile_menstf.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.black));
-
-                    // Enable Women's XC
-                    edit_profile_wmensxc.setClickable(true);
-                    edit_profile_wmensxc.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.lightGrey));
-                    edit_profile_wmensxc.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.black));
-
-                    // Enable Women's TF
-                    edit_profile_wmenstf.setClickable(true);
-                    edit_profile_wmenstf.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.lightGrey));
-                    edit_profile_wmenstf.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.black));
                 } else {
                     alumni = true;
-                    edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.stlawuRed));
+                    if (alumni_member != null && alumni_member.getStatus().equals("accepted")) {
+                        edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
+                                getContext(), R.color.stlawuRed));
+                    } else {
+                        edit_profile_alumni.setBackgroundColor(Color.GRAY);
+                    }
                     edit_profile_alumni.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.white));
-
-                    // Disable Men's XC
-                    edit_profile_mensxc.setClickable(false);
-                    edit_profile_mensxc.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.white));
-                    edit_profile_mensxc.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.lighterGrey));
-
-                    // Disable Men's TF
-                    edit_profile_menstf.setClickable(false);
-                    edit_profile_menstf.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.white));
-                    edit_profile_menstf.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.lighterGrey));
-
-                    // Disable Women's XC
-                    edit_profile_wmensxc.setClickable(false);
-                    edit_profile_wmensxc.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.white));
-                    edit_profile_wmensxc.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.lighterGrey));
-
-                    // Disable Women's TF
-                    edit_profile_wmenstf.setClickable(false);
-                    edit_profile_wmenstf.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.white));
-                    edit_profile_wmenstf.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.lighterGrey));
                 }
             }
         });
 
         List<GroupInfo> groups = user.getGroups();
         for (GroupInfo entry : groups) {
-            String group = entry.getGroup_name();
-            clickGroup(group);
+            clickGroup(entry);
         }
 
         // Load a picture from google pictures
@@ -616,30 +526,120 @@ public class EditProfileFragment extends Fragment {
             GroupInfo mensxc_info = new GroupInfo();
             mensxc_info.setGroup_name("mensxc");
             mensxc_info.setGroup_title("Men's Cross Country");
+
+            if (mensxc_member != null) {
+                mensxc_info.setStatus(mensxc_member.getStatus());
+                mensxc_info.setUser(mensxc_member.getUser());
+            } else {
+                mensxc_info.setStatus("pending");
+                mensxc_info.setUser("user");
+
+                Notification n = new Notification();
+                n.setLink("https://www.saintsxctf.com/group.php?name=mensxc");
+                n.setDescription(user.getFirst() + " " + user.getLast() +
+                        " Has Requested to Join Men's Cross Country");
+                n.setViewed("N");
+
+                NotifyGroupJoinTask notifyGroupJoinTask = new NotifyGroupJoinTask();
+                notifyGroupJoinTask.execute("mensxc", n);
+            }
+
             groups.add(mensxc_info);
         }
         if (wmensxc) {
             GroupInfo wmensxc_info = new GroupInfo();
             wmensxc_info.setGroup_name("wmensxc");
             wmensxc_info.setGroup_title("Women's Cross Country");
+
+            if (wmensxc_member != null) {
+                wmensxc_info.setStatus(wmensxc_member.getStatus());
+                wmensxc_info.setUser(wmensxc_member.getUser());
+            } else {
+                wmensxc_info.setStatus("pending");
+                wmensxc_info.setUser("user");
+
+                Notification n = new Notification();
+                n.setLink("https://www.saintsxctf.com/group.php?name=wmensxc");
+                n.setDescription(user.getFirst() + " " + user.getLast() +
+                        " Has Requested to Join Women's Cross Country");
+                n.setViewed("N");
+
+                NotifyGroupJoinTask notifyGroupJoinTask = new NotifyGroupJoinTask();
+                notifyGroupJoinTask.execute("wmensxc", n);
+            }
+
             groups.add(wmensxc_info);
         }
         if (menstf) {
             GroupInfo menstf_info = new GroupInfo();
             menstf_info.setGroup_name("menstf");
             menstf_info.setGroup_title("Men's Track & Field");
+
+            if (menstf_member != null) {
+                menstf_info.setStatus(menstf_member.getStatus());
+                menstf_info.setUser(menstf_member.getUser());
+            } else {
+                menstf_info.setStatus("pending");
+                menstf_info.setUser("user");
+
+                Notification n = new Notification();
+                n.setLink("https://www.saintsxctf.com/group.php?name=menstf");
+                n.setDescription(user.getFirst() + " " + user.getLast() +
+                        " Has Requested to Join Men's Track & Field");
+                n.setViewed("N");
+
+                NotifyGroupJoinTask notifyGroupJoinTask = new NotifyGroupJoinTask();
+                notifyGroupJoinTask.execute("menstf", n);
+            }
+
             groups.add(menstf_info);
         }
         if (wmenstf) {
             GroupInfo wmenstf_info = new GroupInfo();
             wmenstf_info.setGroup_name("wmenstf");
             wmenstf_info.setGroup_title("Women's Track & Field");
+
+            if (wmenstf_member != null) {
+                wmenstf_info.setStatus(wmenstf_member.getStatus());
+                wmenstf_info.setUser(wmenstf_member.getUser());
+            } else {
+                wmenstf_info.setStatus("pending");
+                wmenstf_info.setUser("user");
+
+                Notification n = new Notification();
+                n.setLink("https://www.saintsxctf.com/group.php?name=wmenstf");
+                n.setDescription(user.getFirst() + " " + user.getLast() +
+                        " Has Requested to Join Women's Track & Field");
+                n.setViewed("N");
+
+                NotifyGroupJoinTask notifyGroupJoinTask = new NotifyGroupJoinTask();
+                notifyGroupJoinTask.execute("wmenstf", n);
+            }
+
             groups.add(wmenstf_info);
         }
         if (alumni) {
             GroupInfo alumni_info = new GroupInfo();
             alumni_info.setGroup_name("alumni");
             alumni_info.setGroup_title("Alumni");
+
+            if (alumni_member != null) {
+                alumni_info.setStatus(alumni_member.getStatus());
+                alumni_info.setUser(alumni_member.getUser());
+            } else {
+                alumni_info.setStatus("pending");
+                alumni_info.setUser("user");
+
+                Notification n = new Notification();
+                n.setLink("https://www.saintsxctf.com/group.php?name=alumni");
+                n.setDescription(user.getFirst() + " " + user.getLast() +
+                        " Has Requested to Join Alumni");
+                n.setViewed("N");
+
+                NotifyGroupJoinTask notifyGroupJoinTask = new NotifyGroupJoinTask();
+                notifyGroupJoinTask.execute("alumni", n);
+            }
+
             groups.add(alumni_info);
         }
         user.setGroups(groups);
@@ -698,22 +698,27 @@ public class EditProfileFragment extends Fragment {
         }
     }
 
-    private void clickGroup(String group) {
-        switch (group) {
+    private void clickGroup(GroupInfo group) {
+        switch (group.getGroup_name()) {
             case "mensxc":
                 edit_profile_mensxc.performClick();
+                mensxc_member = group;
                 break;
             case "wmensxc":
                 edit_profile_wmensxc.performClick();
+                wmensxc_member = group;
                 break;
             case "menstf":
                 edit_profile_menstf.performClick();
+                menstf_member = group;
                 break;
             case "wmenstf":
                 edit_profile_wmenstf.performClick();
+                wmenstf_member = group;
                 break;
             case "alumni":
                 edit_profile_alumni.performClick();
+                alumni_member = group;
                 break;
         }
     }
