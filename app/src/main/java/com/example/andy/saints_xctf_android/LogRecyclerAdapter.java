@@ -3,6 +3,7 @@ package com.example.andy.saints_xctf_android;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +11,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +38,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Adapter for the RecycleView (which shows workout logs)
@@ -372,7 +380,44 @@ public class LogRecyclerAdapter extends RecyclerView.Adapter<LogRecyclerAdapter.
                 logview_time.setText(time + " " + pace);
             }
 
-            logview_description.setText(log.getDescription());
+            // Search the description of the log for tagged users and create spannable parts
+            // of the description which are clickable
+            String description = log.getDescription();
+
+            if (description != null) {
+                SpannableString ss = new SpannableString(description);
+
+                Pattern pattern = Pattern.compile(USER_TAG_REGEX);
+                Matcher matcher = pattern.matcher(description);
+
+                while (matcher.find()) {
+                    final String match = matcher.group();
+
+                    ClickableSpan clickableSpan = new ClickableSpan() {
+                        @Override
+                        public void onClick(View widget) {
+                            ((MainActivity) logRecyclerAdapter.context).viewProfile(match.substring(1));
+                        }
+
+                        @Override
+                        public void updateDrawState(TextPaint ds) {
+                            super.updateDrawState(ds);
+                            ds.setColor(Color.DKGRAY);
+                            ds.setTypeface(Typeface.DEFAULT_BOLD);
+                            ds.setUnderlineText(false);
+                        }
+                    };
+
+                    ss.setSpan(clickableSpan, matcher.start(), matcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+
+                logview_description.setText(ss);
+                logview_description.setMovementMethod(LinkMovementMethod.getInstance());
+                logview_description.setHighlightColor(Color.TRANSPARENT);
+
+            } else {
+                logview_description.setText("");
+            }
 
             // Add the comment recycler view
             // Set up the recycler view and layout manager

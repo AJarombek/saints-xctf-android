@@ -62,6 +62,7 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
     private LinearLayout profile_info_view;
     private ProgressBar profile_info_progress;
     private Bundle savedInstanceState;
+    private boolean myprofile;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,6 +102,7 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
 
         User user = new User();
         if (username.equals(viewer)) {
+            myprofile = true;
             // This is the users profile page
             String userJSON = prefs.getString("user", "");
 
@@ -243,6 +245,12 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
                 ((MainActivity) getActivity()).viewMainPage();
                 return true;
             case R.id.action_profile:
+                if (!myprofile) {
+                    SharedPreferences prefs = getContext().getSharedPreferences(
+                            PREFS_NAME, Context.MODE_PRIVATE);
+                    String username = prefs.getString("username", "");
+                    ((MainActivity) getActivity()).viewProfile(username);
+                }
                 return true;
             case R.id.action_group:
                 GroupDialogFragment groupDialog = new GroupDialogFragment();

@@ -4,7 +4,6 @@ package com.example.andy.saints_xctf_android;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -93,6 +92,8 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
             String date = df.format(comment.getTime());
             commentview_date.setText(date);
 
+            // Search the content of the comment for tagged users and create spannable parts
+            // of the comment which are clickable
             String content = comment.getContent();
             SpannableString ss = new SpannableString(content);
 
