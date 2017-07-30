@@ -1,6 +1,7 @@
 package com.example.andy.saints_xctf_android;
 
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +23,12 @@ import java.util.TimeZone;
 
 public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecyclerAdapter.CommentHolder> {
 
+    private static final String LOG_TAG = CommentRecyclerAdapter.class.getName();
+    private Context context;
     private ArrayList<Comment> comments;
 
-    public CommentRecyclerAdapter(ArrayList<Comment> comments) {
+    public CommentRecyclerAdapter(Context context, ArrayList<Comment> comments) {
+        this.context = context;
         this.comments = comments;
     }
 
@@ -32,7 +36,7 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
     public CommentRecyclerAdapter.CommentHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View inflatedView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recyclerview_comments_item, parent, false);
-        return new CommentHolder(inflatedView);
+        return new CommentHolder(this, inflatedView);
     }
 
     @Override
@@ -49,14 +53,17 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
     public static class CommentHolder extends RecyclerView.ViewHolder {
 
         private View v;
+        private CommentRecyclerAdapter commentRecyclerAdapter;
         private Comment comment;
         private LinearLayout commentview;
         private TextView commentview_username;
         private TextView commentview_date;
         private TextView commentview_content;
+        private String commenter_username;
 
-        public CommentHolder(View v) {
+        public CommentHolder(CommentRecyclerAdapter commentRecyclerAdapter, View v) {
             super(v);
+            this.commentRecyclerAdapter = commentRecyclerAdapter;
             commentview = (LinearLayout) v.findViewById(R.id.commentview);
             commentview_username = (TextView) v.findViewById(R.id.commentview_username);
             commentview_date = (TextView) v.findViewById(R.id.commentview_date);
@@ -75,6 +82,17 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
             commentview_date.setText(date);
 
             commentview_content.setText(comment.getContent());
+
+            commenter_username = comment.getUsername();
+
+            // Go to the commenters profile when you click on their name
+            commentview_username.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    android.util.Log.d(LOG_TAG, commenter_username);
+                    ((MainActivity) commentRecyclerAdapter.context).viewProfile(commenter_username);
+                }
+            });
         }
     }
 }

@@ -381,7 +381,7 @@ public class LogRecyclerAdapter extends RecyclerView.Adapter<LogRecyclerAdapter.
 
             comments = log.getComments();
             Collections.reverse(comments);
-            adapter = new CommentRecyclerAdapter(comments);
+            adapter = new CommentRecyclerAdapter(logRecyclerAdapter.context, comments);
             recyclerCommentView.setAdapter(adapter);
         }
 
