@@ -3,6 +3,7 @@ package com.example.andy.saints_xctf_android;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,8 +15,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.andy.api_model.APIClient;
+import com.example.andy.api_model.Group;
 import com.example.andy.api_model.GroupInfo;
+import com.example.andy.api_model.GroupMember;
 import com.example.andy.api_model.JSONConverter;
+import com.example.andy.api_model.Notification;
 import com.example.andy.api_model.User;
 
 import java.io.IOException;
@@ -96,18 +100,10 @@ public class PickGroupFragment extends Fragment {
                                 getContext(), R.color.lightGrey));
                         pick_group_wmenstf.setTextColor(ContextCompat.getColor(
                                 getContext(), R.color.black));
-
-                        // Enable Alumni
-                        pick_group_alumni.setClickable(true);
-                        pick_group_alumni.setBackgroundColor(ContextCompat.getColor(
-                                getContext(), R.color.lightGrey));
-                        pick_group_alumni.setTextColor(ContextCompat.getColor(
-                                getContext(), R.color.black));
                     }
                 } else {
                     mensxc = true;
-                    pick_group_mensxc.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.stlawuRed));
+                    pick_group_mensxc.setBackgroundColor(Color.GRAY);
                     pick_group_mensxc.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.white));
 
@@ -123,13 +119,6 @@ public class PickGroupFragment extends Fragment {
                     pick_group_wmenstf.setBackgroundColor(ContextCompat.getColor(
                             getContext(), R.color.white));
                     pick_group_wmenstf.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.lighterGrey));
-
-                    // Disable Alumni
-                    pick_group_alumni.setClickable(false);
-                    pick_group_alumni.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.white));
-                    pick_group_alumni.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.lighterGrey));
                 }
             }
@@ -159,18 +148,10 @@ public class PickGroupFragment extends Fragment {
                                 getContext(), R.color.lightGrey));
                         pick_group_wmenstf.setTextColor(ContextCompat.getColor(
                                 getContext(), R.color.black));
-
-                        // Enable Alumni
-                        pick_group_alumni.setClickable(true);
-                        pick_group_alumni.setBackgroundColor(ContextCompat.getColor(
-                                getContext(), R.color.lightGrey));
-                        pick_group_alumni.setTextColor(ContextCompat.getColor(
-                                getContext(), R.color.black));
                     }
                 } else {
                     menstf = true;
-                    pick_group_menstf.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.stlawuRed));
+                    pick_group_menstf.setBackgroundColor(Color.GRAY);
                     pick_group_menstf.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.white));
 
@@ -186,13 +167,6 @@ public class PickGroupFragment extends Fragment {
                     pick_group_wmenstf.setBackgroundColor(ContextCompat.getColor(
                             getContext(), R.color.white));
                     pick_group_wmenstf.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.lighterGrey));
-
-                    // Disable Alumni
-                    pick_group_alumni.setClickable(false);
-                    pick_group_alumni.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.white));
-                    pick_group_alumni.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.lighterGrey));
                 }
             }
@@ -222,18 +196,10 @@ public class PickGroupFragment extends Fragment {
                                 getContext(), R.color.lightGrey));
                         pick_group_menstf.setTextColor(ContextCompat.getColor(
                                 getContext(), R.color.black));
-
-                        // Enable Alumni
-                        pick_group_alumni.setClickable(true);
-                        pick_group_alumni.setBackgroundColor(ContextCompat.getColor(
-                                getContext(), R.color.lightGrey));
-                        pick_group_alumni.setTextColor(ContextCompat.getColor(
-                                getContext(), R.color.black));
                     }
                 } else {
                     wmensxc = true;
-                    pick_group_wmensxc.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.stlawuRed));
+                    pick_group_wmensxc.setBackgroundColor(Color.GRAY);
                     pick_group_wmensxc.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.white));
 
@@ -249,13 +215,6 @@ public class PickGroupFragment extends Fragment {
                     pick_group_menstf.setBackgroundColor(ContextCompat.getColor(
                             getContext(), R.color.white));
                     pick_group_menstf.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.lighterGrey));
-
-                    // Disable Alumni
-                    pick_group_alumni.setClickable(false);
-                    pick_group_alumni.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.white));
-                    pick_group_alumni.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.lighterGrey));
                 }
             }
@@ -285,18 +244,10 @@ public class PickGroupFragment extends Fragment {
                                 getContext(), R.color.lightGrey));
                         pick_group_menstf.setTextColor(ContextCompat.getColor(
                                 getContext(), R.color.black));
-
-                        // Enable Alumni
-                        pick_group_alumni.setClickable(true);
-                        pick_group_alumni.setBackgroundColor(ContextCompat.getColor(
-                                getContext(), R.color.lightGrey));
-                        pick_group_alumni.setTextColor(ContextCompat.getColor(
-                                getContext(), R.color.black));
                     }
                 } else {
                     wmenstf = true;
-                    pick_group_wmenstf.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.stlawuRed));
+                    pick_group_wmenstf.setBackgroundColor(Color.GRAY);
                     pick_group_wmenstf.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.white));
 
@@ -312,13 +263,6 @@ public class PickGroupFragment extends Fragment {
                     pick_group_menstf.setBackgroundColor(ContextCompat.getColor(
                             getContext(), R.color.white));
                     pick_group_menstf.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.lighterGrey));
-
-                    // Disable Alumni
-                    pick_group_alumni.setClickable(false);
-                    pick_group_alumni.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.white));
-                    pick_group_alumni.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.lighterGrey));
                 }
             }
@@ -333,68 +277,11 @@ public class PickGroupFragment extends Fragment {
                             getContext(), R.color.lightGrey));
                     pick_group_alumni.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.black));
-
-                    // Enable Men's XC
-                    pick_group_mensxc.setClickable(true);
-                    pick_group_mensxc.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.lightGrey));
-                    pick_group_mensxc.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.black));
-
-                    // Enable Men's TF
-                    pick_group_menstf.setClickable(true);
-                    pick_group_menstf.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.lightGrey));
-                    pick_group_menstf.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.black));
-
-                    // Enable Women's XC
-                    pick_group_wmensxc.setClickable(true);
-                    pick_group_wmensxc.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.lightGrey));
-                    pick_group_wmensxc.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.black));
-
-                    // Enable Women's TF
-                    pick_group_wmenstf.setClickable(true);
-                    pick_group_wmenstf.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.lightGrey));
-                    pick_group_wmenstf.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.black));
                 } else {
                     alumni = true;
-                    pick_group_alumni.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.stlawuRed));
+                    pick_group_alumni.setBackgroundColor(Color.GRAY);
                     pick_group_alumni.setTextColor(ContextCompat.getColor(
                             getContext(), R.color.white));
-
-                    // Disable Men's XC
-                    pick_group_mensxc.setClickable(false);
-                    pick_group_mensxc.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.white));
-                    pick_group_mensxc.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.lighterGrey));
-
-                    // Disable Men's TF
-                    pick_group_menstf.setClickable(false);
-                    pick_group_menstf.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.white));
-                    pick_group_menstf.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.lighterGrey));
-
-                    // Disable Women's XC
-                    pick_group_wmensxc.setClickable(false);
-                    pick_group_wmensxc.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.white));
-                    pick_group_wmensxc.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.lighterGrey));
-
-                    // Disable Women's TF
-                    pick_group_wmenstf.setClickable(false);
-                    pick_group_wmenstf.setBackgroundColor(ContextCompat.getColor(
-                            getContext(), R.color.white));
-                    pick_group_wmenstf.setTextColor(ContextCompat.getColor(
-                            getContext(), R.color.lighterGrey));
                 }
             }
         });
@@ -407,31 +294,86 @@ public class PickGroupFragment extends Fragment {
                     GroupInfo mensxc_info = new GroupInfo();
                     mensxc_info.setGroup_name("mensxc");
                     mensxc_info.setGroup_title("Men's Cross Country");
+                    mensxc_info.setStatus("pending");
+                    mensxc_info.setUser("user");
                     groups.add(mensxc_info);
+
+                    Notification n = new Notification();
+                    n.setLink("https://www.saintsxctf.com/group.php?name=mensxc");
+                    n.setDescription(user.getFirst() + " " + user.getLast() +
+                            " Has Requested to Join Men's Cross Country");
+                    n.setViewed("N");
+
+                    NotifyGroupJoinTask notifyGroupJoinTask = new NotifyGroupJoinTask();
+                    notifyGroupJoinTask.execute("mensxc", n);
                 }
                 if (wmensxc) {
                     GroupInfo wmensxc_info = new GroupInfo();
                     wmensxc_info.setGroup_name("wmensxc");
                     wmensxc_info.setGroup_title("Women's Cross Country");
+                    wmensxc_info.setStatus("pending");
+                    wmensxc_info.setUser("user");
                     groups.add(wmensxc_info);
+
+                    Notification n = new Notification();
+                    n.setLink("https://www.saintsxctf.com/group.php?name=wmensxc");
+                    n.setDescription(user.getFirst() + " " + user.getLast() +
+                            " Has Requested to Join Women's Cross Country");
+                    n.setViewed("N");
+
+                    NotifyGroupJoinTask notifyGroupJoinTask = new NotifyGroupJoinTask();
+                    notifyGroupJoinTask.execute("wmensxc", n);
                 }
                 if (menstf) {
                     GroupInfo menstf_info = new GroupInfo();
                     menstf_info.setGroup_name("menstf");
                     menstf_info.setGroup_title("Men's Track & Field");
+                    menstf_info.setStatus("pending");
+                    menstf_info.setUser("user");
                     groups.add(menstf_info);
+
+                    Notification n = new Notification();
+                    n.setLink("https://www.saintsxctf.com/group.php?name=menstf");
+                    n.setDescription(user.getFirst() + " " + user.getLast() +
+                            " Has Requested to Join Men's Track & Field");
+                    n.setViewed("N");
+
+                    NotifyGroupJoinTask notifyGroupJoinTask = new NotifyGroupJoinTask();
+                    notifyGroupJoinTask.execute("menstf", n);
                 }
                 if (wmenstf) {
                     GroupInfo wmenstf_info = new GroupInfo();
                     wmenstf_info.setGroup_name("wmenstf");
                     wmenstf_info.setGroup_title("Women's Track & Field");
+                    wmenstf_info.setStatus("pending");
+                    wmenstf_info.setUser("user");
                     groups.add(wmenstf_info);
+
+                    Notification n = new Notification();
+                    n.setLink("https://www.saintsxctf.com/group.php?name=wmenstf");
+                    n.setDescription(user.getFirst() + " " + user.getLast() +
+                            " Has Requested to Join Women's Track & Field");
+                    n.setViewed("N");
+
+                    NotifyGroupJoinTask notifyGroupJoinTask = new NotifyGroupJoinTask();
+                    notifyGroupJoinTask.execute("wmenstf", n);
                 }
                 if (alumni) {
                     GroupInfo alumni_info = new GroupInfo();
                     alumni_info.setGroup_name("alumni");
                     alumni_info.setGroup_title("Alumni");
+                    alumni_info.setStatus("pending");
+                    alumni_info.setUser("user");
                     groups.add(alumni_info);
+
+                    Notification n = new Notification();
+                    n.setLink("https://www.saintsxctf.com/group.php?name=alumni");
+                    n.setDescription(user.getFirst() + " " + user.getLast() +
+                            " Has Requested to Join Alumni");
+                    n.setViewed("N");
+
+                    NotifyGroupJoinTask notifyGroupJoinTask = new NotifyGroupJoinTask();
+                    notifyGroupJoinTask.execute("alumni", n);
                 }
                 user.setGroups(groups);
 
@@ -491,6 +433,56 @@ public class PickGroupFragment extends Fragment {
             editor.apply();
 
             ((MainActivity) getActivity()).viewMainPage();
+        }
+    }
+
+    /**
+     * NotifyGroupJoinTask is an asynchronous job for sending notifications to group admins
+     * saying that the user has requested to join their group
+     */
+    class NotifyGroupJoinTask extends AsyncTask<Object, Void, Object> {
+
+        /**
+         * @param params [0] -> groupname, [1] -> notification
+         * @return an ArrayList of RangeView items
+         */
+        @Override
+        protected Object doInBackground(Object... params) {
+            Group group;
+            try {
+                group = APIClient.groupGetRequest((String) params[0]);
+
+                if (group == null) {
+                    return null;
+                } else {
+                    Notification notification = (Notification) params[1];
+
+                    // Send the notification to every admin in the group
+                    for (GroupMember groupMember : group.getMembers()) {
+                        if (groupMember.getUser().equals("admin")) {
+
+                            notification.setUsername(groupMember.getUsername());
+
+                            String notificationJSON = JSONConverter.fromNotification(notification);
+
+                            APIClient.notificationPostRequest(notificationJSON);
+                        }
+                    }
+                }
+
+                return null;
+
+            } catch (Throwable e) {
+                Log.e(TAG, "Pick Group Send Notification Failed.");
+                Log.e(TAG, e.getMessage());
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Object object) {
+            super.onPostExecute(object);
         }
     }
 }
