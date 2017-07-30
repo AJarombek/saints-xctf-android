@@ -61,6 +61,7 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
     private LinearLayout profile_picture_view;
     private LinearLayout profile_info_view;
     private ProgressBar profile_info_progress;
+    private Bundle savedInstanceState;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,6 +70,8 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         v = view;
         setHasOptionsMenu(true);
+
+        this.savedInstanceState = savedInstanceState;
 
         profile_picture_view = (LinearLayout) v.findViewById(R.id.profile_picture_view);
         profile_info_view = (LinearLayout) v.findViewById(R.id.profile_info_view);
@@ -125,6 +128,13 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
             viewPager.setAdapter(adapter);
             tabLayout.setOnTabSelectedListener(this);
 
+            // Select the tab from the last saved state
+            if (savedInstanceState != null) {
+                int position = savedInstanceState.getInt("tab_selected");
+                Log.i(TAG, String.valueOf(position));
+                tabLayout.getTabAt(position).select();
+            }
+
             // Changes the selected tab on viewpager swipe
             viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
                 @Override
@@ -145,6 +155,14 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
         }
 
         return view;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (tabLayout != null) {
+            outState.putInt("tab_selected", tabLayout.getSelectedTabPosition());
+        }
     }
 
     private void populateProfileInfo(User user) {
@@ -310,6 +328,13 @@ public class ProfileFragment extends Fragment implements TabLayout.OnTabSelected
                             tabLayout.getTabAt(position).select();
                         }
                     });
+
+                    // Select the tab from the last saved state
+                    if (savedInstanceState != null) {
+                        int position = savedInstanceState.getInt("tab_selected");
+                        Log.i(TAG, String.valueOf(position));
+                        tabLayout.getTabAt(position).select();
+                    }
                 }
             }
         }

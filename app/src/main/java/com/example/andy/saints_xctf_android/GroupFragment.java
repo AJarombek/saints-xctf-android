@@ -48,6 +48,7 @@ public class GroupFragment extends Fragment implements TabLayout.OnTabSelectedLi
     private TextView group_description;
     private View group_info_progress;
     private View group_picture_progress;
+    private Bundle savedInstanceState;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +56,8 @@ public class GroupFragment extends Fragment implements TabLayout.OnTabSelectedLi
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_group, container, false);
         setHasOptionsMenu(true);
+
+        this.savedInstanceState = savedInstanceState;
 
         group_picture = (ImageView) v.findViewById(R.id.group_picture);
         group_name = (TextView) v.findViewById(R.id.group_name);
@@ -81,6 +84,14 @@ public class GroupFragment extends Fragment implements TabLayout.OnTabSelectedLi
         loadGroupTask.execute(groupname);
 
         return v;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (tabLayout != null) {
+            outState.putInt("tab_selected", tabLayout.getSelectedTabPosition());
+        }
     }
 
     private void populateGroupInfo(Group group) {
@@ -217,6 +228,13 @@ public class GroupFragment extends Fragment implements TabLayout.OnTabSelectedLi
                             tabLayout.getTabAt(position).select();
                         }
                     });
+
+                    // Select the tab from the last saved state
+                    if (savedInstanceState != null) {
+                        int position = savedInstanceState.getInt("tab_selected");
+                        Log.i(LOG_TAG, String.valueOf(position));
+                        tabLayout.getTabAt(position).select();
+                    }
                 }
             }
         }
