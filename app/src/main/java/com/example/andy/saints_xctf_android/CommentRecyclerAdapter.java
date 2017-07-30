@@ -2,7 +2,15 @@ package com.example.andy.saints_xctf_android;
 
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +22,8 @@ import com.example.andy.api_model.Comment;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Adapter for the RecycleView (which shows workout logs)
@@ -24,6 +34,8 @@ import java.util.TimeZone;
 public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecyclerAdapter.CommentHolder> {
 
     private static final String LOG_TAG = CommentRecyclerAdapter.class.getName();
+    private static final String USER_TAG_REGEX = "@[a-zA-Z0-9]+";
+
     private Context context;
     private ArrayList<Comment> comments;
 
@@ -50,7 +62,7 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
         return comments.size();
     }
 
-    public static class CommentHolder extends RecyclerView.ViewHolder {
+    public class CommentHolder extends RecyclerView.ViewHolder {
 
         private View v;
         private CommentRecyclerAdapter commentRecyclerAdapter;
@@ -81,7 +93,36 @@ public class CommentRecyclerAdapter extends RecyclerView.Adapter<CommentRecycler
             String date = df.format(comment.getTime());
             commentview_date.setText(date);
 
-            commentview_content.setText(comment.getContent());
+            String content = comment.getContent();
+            SpannableString ss = new SpannableString(content);
+
+            Pattern pattern = Pattern.compile(USER_TAG_REGEX);
+            Matcher matcher = pattern.matcher(content);
+
+            while (matcher.find()) {
+                final String match = matcher.group();
+
+                ClickableSpan clickableSpan = new ClickableSpan() {
+                    @Override
+                    public void onClick(View widget) {
+                        ((MainActivity) commentRecyclerAdapter.context).viewProfile(match.substring(1));
+                    }
+
+                    @Override
+                    public void updateDrawState(TextPaint ds) {
+                        super.updateDrawState(ds);
+                        ds.setColor(Color.DKGRAY);
+                        ds.setTypeface(Typeface.DEFAULT_BOLD);
+                        ds.setUnderlineText(false);
+                    }
+                };
+
+                ss.setSpan(clickableSpan, matcher.start(), matcher.end(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+
+            commentview_content.setText(ss);
+            commentview_content.setMovementMethod(LinkMovementMethod.getInstance());
+            commentview_content.setHighlightColor(Color.TRANSPARENT);
 
             commenter_username = comment.getUsername();
 

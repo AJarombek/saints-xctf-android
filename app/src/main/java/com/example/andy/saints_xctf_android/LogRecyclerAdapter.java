@@ -44,6 +44,7 @@ public class LogRecyclerAdapter extends RecyclerView.Adapter<LogRecyclerAdapter.
     private static final String LOG_TAG = LogRecyclerAdapter.class.getName();
     public static final String PREFS_NAME = "SaintsxctfUserPrefs";
     public static final int REQUEST_CODE = 0;
+    private static final String USER_TAG_REGEX = "@[a-zA-Z0-9]+";
 
     private ArrayList<Log> logs;
     private Context context;
