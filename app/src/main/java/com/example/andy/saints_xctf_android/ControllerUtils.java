@@ -71,4 +71,21 @@ public class ControllerUtils {
         }
         return sb.toString();
     }
+
+    /**
+     * Get the filter string to be used for the range view API request
+     * @param run is the run filter selected
+     * @param bike is the bike filter selected
+     * @param swim is the swim filter selected
+     * @param other is the other filter selected
+     * @return the filter string
+     */
+    public static String getFilter(boolean run, boolean bike, boolean swim, boolean other) {
+        String run_fil = run ? "r" : "";
+        String bike_fil = bike ? "b" : "";
+        String swim_fil = swim ? "s" : "";
+        String other_fil = other ? "o" : "";
+
+        return run_fil + bike_fil + swim_fil + other_fil;
+    }
 }

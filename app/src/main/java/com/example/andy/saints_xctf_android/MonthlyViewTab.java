@@ -123,7 +123,7 @@ public class MonthlyViewTab extends Fragment {
                 }
 
                 run = !run;
-                filter = getFilter(run, bike, swim, other);
+                filter = ControllerUtils.getFilter(run, bike, swim, other);
                 Log.i(LOG_TAG, filter);
                 initCalendar(calendarData.getMonth_date());
             }
@@ -141,7 +141,7 @@ public class MonthlyViewTab extends Fragment {
                 }
 
                 bike = !bike;
-                filter = getFilter(run, bike, swim, other);
+                filter = ControllerUtils.getFilter(run, bike, swim, other);
                 Log.i(LOG_TAG, filter);
                 initCalendar(calendarData.getMonth_date());
             }
@@ -159,7 +159,7 @@ public class MonthlyViewTab extends Fragment {
                 }
 
                 swim = !swim;
-                filter = getFilter(run, bike, swim, other);
+                filter = ControllerUtils.getFilter(run, bike, swim, other);
                 Log.i(LOG_TAG, filter);
                 initCalendar(calendarData.getMonth_date());
             }
@@ -177,7 +177,7 @@ public class MonthlyViewTab extends Fragment {
                 }
 
                 other = !other;
-                filter = getFilter(run, bike, swim, other);
+                filter = ControllerUtils.getFilter(run, bike, swim, other);
                 Log.i(LOG_TAG, filter);
                 initCalendar(calendarData.getMonth_date());
             }
@@ -398,22 +398,5 @@ public class MonthlyViewTab extends Fragment {
                 initCalendar(month_date);
             }
         });
-    }
-
-    /**
-     * Get the filter string to be used for the range view API request
-     * @param run is the run filter selected
-     * @param bike is the bike filter selected
-     * @param swim is the swim filter selected
-     * @param other is the other filter selected
-     * @return the filter string
-     */
-    private String getFilter(boolean run, boolean bike, boolean swim, boolean other) {
-        String run_fil = run ? "r" : "";
-        String bike_fil = bike ? "b" : "";
-        String swim_fil = swim ? "s" : "";
-        String other_fil = other ? "o" : "";
-
-        return run_fil + bike_fil + swim_fil + other_fil;
     }
 }

@@ -16,6 +16,7 @@ import com.example.andy.api_model.RangeView;
 import com.example.andy.api_model.User;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -42,8 +43,8 @@ public class WeeklyViewTab extends Fragment {
 
     private static final String LOG_TAG = WeeklyViewTab.class.getName();
 
-    private static final String MONDAY = "monday";
-    private static final String SUNDAY = "sunday";
+    private static final String SELECTED_COLOR = "#990000";
+    private static final String DESELECTED_COLOR = "#EEEEEE";
 
     private View v;
     private BarChart weeklychart;
@@ -55,6 +56,7 @@ public class WeeklyViewTab extends Fragment {
     private boolean run, bike, swim, other;
     private DateTime start_date, end_date;
     private String start_date_string, end_date_string;
+    private DateTime[] weeklyStartDate, weeklyEndDate;
     private String filter = "r";
 
     @Override
@@ -89,6 +91,80 @@ public class WeeklyViewTab extends Fragment {
         run = true;
 
         initWeeklyView();
+
+        // Filter the weekly view by activity types
+
+        filter_run.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (run) {
+                    filter_run.setTextColor(Color.BLACK);
+                    filter_run.setBackgroundColor(Color.parseColor(DESELECTED_COLOR));
+                } else {
+                    filter_run.setTextColor(Color.WHITE);
+                    filter_run.setBackgroundColor(Color.parseColor(SELECTED_COLOR));
+                }
+
+                run = !run;
+                filter = ControllerUtils.getFilter(run, bike, swim, other);
+                Log.i(LOG_TAG, filter);
+                populateWeeklyView(start_date_string, end_date_string);
+            }
+        });
+
+        filter_bike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bike) {
+                    filter_bike.setTextColor(Color.BLACK);
+                    filter_bike.setBackgroundColor(Color.parseColor(DESELECTED_COLOR));
+                } else {
+                    filter_bike.setTextColor(Color.WHITE);
+                    filter_bike.setBackgroundColor(Color.parseColor(SELECTED_COLOR));
+                }
+
+                bike = !bike;
+                filter = ControllerUtils.getFilter(run, bike, swim, other);
+                Log.i(LOG_TAG, filter);
+                populateWeeklyView(start_date_string, end_date_string);
+            }
+        });
+
+        filter_swim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (swim) {
+                    filter_swim.setTextColor(Color.BLACK);
+                    filter_swim.setBackgroundColor(Color.parseColor(DESELECTED_COLOR));
+                } else {
+                    filter_swim.setTextColor(Color.WHITE);
+                    filter_swim.setBackgroundColor(Color.parseColor(SELECTED_COLOR));
+                }
+
+                swim = !swim;
+                filter = ControllerUtils.getFilter(run, bike, swim, other);
+                Log.i(LOG_TAG, filter);
+                populateWeeklyView(start_date_string, end_date_string);
+            }
+        });
+
+        filter_other.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (other) {
+                    filter_other.setTextColor(Color.BLACK);
+                    filter_other.setBackgroundColor(Color.parseColor(DESELECTED_COLOR));
+                } else {
+                    filter_other.setTextColor(Color.WHITE);
+                    filter_other.setBackgroundColor(Color.parseColor(SELECTED_COLOR));
+                }
+
+                other = !other;
+                filter = ControllerUtils.getFilter(run, bike, swim, other);
+                Log.i(LOG_TAG, filter);
+                populateWeeklyView(start_date_string, end_date_string);
+            }
+        });
 
         return view;
     }
@@ -131,7 +207,7 @@ public class WeeklyViewTab extends Fragment {
                 rangeView = new ArrayList<>();
             }
 
-            buildWeeklyView(rangeView, new DateTime(start_date), new DateTime(end_date));
+            buildWeeklyView(rangeView);
         }
     }
 
@@ -152,24 +228,8 @@ public class WeeklyViewTab extends Fragment {
         start_date_string = start_date.toString("yyyy-MM-dd");
         end_date_string = end_date.toString("yyyy-MM-dd");
 
-        Log.i(LOG_TAG, "Weekly View From: " + start_date_string + " to " + end_date_string);
-
-        populateWeeklyView(start_date_string, end_date_string);
-    }
-
-    private void populateWeeklyView(String start_date_string, String end_date_string) {
-        WeeklyRangeViewTask weeklyRangeViewTask = new WeeklyRangeViewTask();
-        weeklyRangeViewTask.execute("user", username, filter, start_date_string, end_date_string);
-    }
-
-    private void buildWeeklyView(List<RangeView> rangeView, DateTime start_date, DateTime end_date) {
-
-        double[] weeklyMileage = new double[10];
-        int[] weeklyFeel = new int[10];
-        int[] weeklyItems = new int[10];
-
-        DateTime[] weeklyStartDate = new DateTime[10];
-        DateTime[] weeklyEndDate = new DateTime[10];
+        weeklyStartDate = new DateTime[10];
+        weeklyEndDate = new DateTime[10];
 
         weeklyStartDate[0] = new DateTime(start_date);
         weeklyEndDate[9] = new DateTime(end_date);
@@ -184,6 +244,22 @@ public class WeeklyViewTab extends Fragment {
             weeklyStartDate[i+1] = weekStartEnd;
             weeklyEndDate[i] = weekStartEnd;
         }
+
+        Log.i(LOG_TAG, "Weekly View From: " + start_date_string + " to " + end_date_string);
+
+        populateWeeklyView(start_date_string, end_date_string);
+    }
+
+    private void populateWeeklyView(String start_date_string, String end_date_string) {
+        WeeklyRangeViewTask weeklyRangeViewTask = new WeeklyRangeViewTask();
+        weeklyRangeViewTask.execute("user", username, filter, start_date_string, end_date_string);
+    }
+
+    private void buildWeeklyView(List<RangeView> rangeView) {
+
+        double[] weeklyMileage = new double[10];
+        int[] weeklyFeel = new int[10];
+        int[] weeklyItems = new int[10];
 
         // Go through the range views and find which week the rangeview belongs to
         for (RangeView rangeViewItem : rangeView) {
@@ -224,7 +300,11 @@ public class WeeklyViewTab extends Fragment {
         // Create a list of colors for the bar chart
         // the color correlates to the average feel for the week
         for (int i = 0; i < 10; i++) {
-            int feel = weeklyFeel[i] / weeklyItems[i];
+            int feel = 1;
+            if (weeklyItems[i] != 0) {
+                feel = weeklyFeel[i] / weeklyItems[i];
+            }
+
             colors.add(Color.parseColor(CalendarArrays.COLOR_VALUE[feel - 1]));
         }
 
@@ -240,6 +320,14 @@ public class WeeklyViewTab extends Fragment {
 
         BarData barData = new BarData(barDataSet);
 
+        // Set the minimum Y-Axis value as zero
+        YAxis yAxis = weeklychart.getAxisLeft();
+        yAxis.setAxisMinimum(0f);
+        yAxis.setDrawGridLines(true);
+
+        YAxis yAxisR = weeklychart.getAxisRight();
+        yAxisR.setDrawGridLines(false);
+
         // Set the labels and data to the bar chart
         weeklychart.setData(barData);
         weeklychart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
@@ -248,6 +336,7 @@ public class WeeklyViewTab extends Fragment {
 
         weeklychart.setDescription(description);
         weeklychart.getLegend().setEnabled(false);
+        weeklychart.setScaleEnabled(false);
         weeklychart.invalidate();
     }
 }
