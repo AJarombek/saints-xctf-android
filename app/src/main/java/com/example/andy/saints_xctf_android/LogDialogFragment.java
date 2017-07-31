@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.example.andy.api_model.APIClient;
 import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.Log;
+import com.example.andy.api_model.Notification;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -59,6 +60,7 @@ public class LogDialogFragment extends DialogFragment {
     private static final String DISTANCE_REGEX = "^[0-9]{0,3}(\\.[0-9]{1,2})?$";
     private static final String MINUTE_REGEX = "^[0-9]{1,5}$";
     private static final String SECOND_REGEX = "^[0-9]{1,2}$";
+    private static final String USER_TAG_REGEX = "@[a-zA-Z0-9]+";
 
     // Views in the fragment
     private TextView log_feel_view;
@@ -491,6 +493,28 @@ public class LogDialogFragment extends DialogFragment {
 
                 Log log = (Log) response;
                 android.util.Log.d(LOG_TAG, "The Log Object Received: " + log.toString());
+
+                // Send a notification to each user tagged in the log
+                Pattern pattern = Pattern.compile(USER_TAG_REGEX);
+                Matcher matcher = pattern.matcher(log.getDescription());
+
+                while (matcher.find()) {
+                    String tag = matcher.group().substring(1);
+
+                    // You can't get a notification if you tag yourself
+                    if (!tag.equals(log.getUsername())) {
+                        NotificationTask notificationTask = new NotificationTask();
+
+                        Notification notification = new Notification();
+                        notification.setUsername(tag);
+                        notification.setViewed("N");
+                        notification.setLink("https://www.saintsxctf.com/log.php?logno=" + log.getLog_id());
+                        notification.setDescription(log.getFirst() + " " + log.getLast() + " Mentioned You in a Log.");
+
+                        notificationTask.execute(notification);
+                    }
+
+                }
 
                 String logJSON = "";
                 try {

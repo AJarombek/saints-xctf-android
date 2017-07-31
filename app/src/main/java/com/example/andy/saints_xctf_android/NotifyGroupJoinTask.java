@@ -22,7 +22,7 @@ public class NotifyGroupJoinTask extends AsyncTask<Object, Void, Object> {
 
     /**
      * @param params [0] -> groupname, [1] -> notification
-     * @return an ArrayList of RangeView items
+     * @return null
      */
     @Override
     protected Object doInBackground(Object... params) {

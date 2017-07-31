@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ import com.example.andy.api_model.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -164,8 +162,8 @@ public class AdminTab extends Fragment {
                 String notification = "A Message From " + group.getGroup_title() + ": " +
                         notification_input.getText().toString();
 
-                NotificationTask notificationTask = new NotificationTask();
-                notificationTask.execute(notification);
+                AdminNotificationTask adminNotificationTask = new AdminNotificationTask();
+                adminNotificationTask.execute(notification);
             }
         });
     }
@@ -303,7 +301,7 @@ public class AdminTab extends Fragment {
         }
     }
 
-    class NotificationTask extends AsyncTask<String, Void, String> {
+    class AdminNotificationTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {

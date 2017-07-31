@@ -15,8 +15,10 @@ import android.widget.TextView;
 
 import com.example.andy.api_model.APIClient;
 import com.example.andy.api_model.Group;
+import com.example.andy.api_model.GroupMember;
 import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.Message;
+import com.example.andy.api_model.Notification;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -104,6 +106,24 @@ public class MessagesTab extends Fragment {
 
                 messageTask = new MessageTask();
                 messageTask.execute(message);
+
+                // Send a notification of the new message to all group members except for the
+                // current user
+
+                for (GroupMember groupMember : group.getMembers()) {
+                    if (!groupMember.getUsername().equals(username)) {
+                        NotificationTask notificationTask = new NotificationTask();
+
+                        Notification notification = new Notification();
+                        notification.setUsername(groupMember.getUsername());
+                        notification.setViewed("N");
+                        notification.setLink("https://www.saintsxctf.com/group.php?name=" + group.getGroup_name());
+                        notification.setDescription(first + " " + last + " Sent a Message in " + group.getGroup_title());
+
+                        notificationTask.execute(notification);
+                    }
+                }
+
             }
         });
     }

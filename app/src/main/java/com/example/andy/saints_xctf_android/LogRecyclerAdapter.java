@@ -30,6 +30,7 @@ import com.example.andy.api_model.APIClient;
 import com.example.andy.api_model.Comment;
 import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.Log;
+import com.example.andy.api_model.Notification;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -309,6 +310,42 @@ public class LogRecyclerAdapter extends RecyclerView.Adapter<LogRecyclerAdapter.
                             CommentTask commentTask = new CommentTask();
                             commentTask.execute(newcomment,
                                     String.valueOf(log.getLog_id()), my_username, my_first, my_last);
+
+                            // Send notifications for comments and tags in comments
+                            NotificationTask notificationTask = new NotificationTask();
+
+                            // Only send a comment notification if you comment on another persons log
+                            if (log.getUsername().equals(username)) {
+                                Notification n = new Notification();
+                                n.setUsername(username);
+                                n.setViewed("N");
+                                n.setLink("https://www.saintsxctf.com/log.php?logno=" + log.getLog_id());
+                                n.setDescription(my_first + " " + my_last + " Commented on Your Log.");
+
+                                notificationTask.execute(n);
+                            }
+
+                            Pattern pattern = Pattern.compile(USER_TAG_REGEX);
+                            Matcher matcher = pattern.matcher(newcomment);
+
+                            while (matcher.find()) {
+                                String tag = matcher.group().substring(1);
+
+                                NotificationTask notTask = new NotificationTask();
+
+                                // You can't get a notification if you tag yourself
+                                if (!tag.equals(my_username)) {
+
+                                    Notification notification = new Notification();
+                                    notification.setUsername(tag);
+                                    notification.setViewed("N");
+                                    notification.setLink("https://www.saintsxctf.com/log.php?logno=" + log.getLog_id());
+                                    notification.setDescription(my_first + " " + my_last + " Mentioned You in a Comment.");
+
+                                    notTask.execute(notification);
+                                }
+                            }
+
                             return true;
                         } else {
                             // Hide the keyboard
