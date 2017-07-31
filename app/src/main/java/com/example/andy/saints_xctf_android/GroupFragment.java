@@ -21,9 +21,13 @@ import android.widget.TextView;
 
 import com.example.andy.api_model.APIClient;
 import com.example.andy.api_model.Group;
+import com.example.andy.api_model.GroupInfo;
 import com.example.andy.api_model.GroupMember;
 import com.example.andy.api_model.JSONConverter;
+import com.example.andy.api_model.User;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -97,7 +101,15 @@ public class GroupFragment extends Fragment implements TabLayout.OnTabSelectedLi
     private void populateGroupInfo(Group group) {
         group_name.setText(group.getGroup_title());
 
-        List<GroupMember> members = group.getMembers();
+        List<GroupMember> members = new ArrayList<>();
+
+        // Only count accepted users as members
+        for (GroupMember member : group.getMembers()) {
+            if (member.getStatus().equals("accepted")) {
+                members.add(member);
+            }
+        }
+
         int memberCount = members.size();
         group_members.setText(String.valueOf(memberCount));
 

@@ -1,10 +1,13 @@
 package com.example.andy.saints_xctf_android;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 import com.example.andy.api_model.APIClient;
 import com.example.andy.api_model.ActivationCode;
 import com.example.andy.api_model.Group;
+import com.example.andy.api_model.GroupInfo;
 import com.example.andy.api_model.GroupMember;
 import com.example.andy.api_model.JSONConverter;
 import com.example.andy.api_model.Mail;
@@ -37,9 +41,11 @@ import java.util.regex.Pattern;
 public class AdminTab extends Fragment {
 
     private static final String LOG_TAG = AdminTab.class.getName();
+    public static final String PREFS_NAME = "SaintsxctfUserPrefs";
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
 
     private View v;
+    private boolean isAdmin;
     private Group group;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
@@ -54,17 +60,6 @@ public class AdminTab extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.admin_tab, container, false);
-        v = view;
-
-        group_users_dropdown = (Spinner) v.findViewById(R.id.group_users_dropdown);
-        email_request_input = (EditText) v.findViewById(R.id.email_request_input);
-        flair_input = (EditText) v.findViewById(R.id.flair_input);
-        notification_input = (EditText) v.findViewById(R.id.notification_input);
-        email_request_send = (Button) v.findViewById(R.id.email_request_send);
-        flair_submit = (Button) v.findViewById(R.id.flair_submit);
-        notification_submit = (Button) v.findViewById(R.id.notification_submit);
 
         Bundle bundle = getArguments();
         String groupString = bundle.getString("group", "");
@@ -75,40 +70,80 @@ public class AdminTab extends Fragment {
             e.printStackTrace();
         }
 
-        member_names = new ArrayList<>();
-        member_map = new HashMap<>();
-        ArrayList<GroupMember> groupMembers = group.getMembers();
+        // Find out if this user is an admin for this group and if they are accepted
+        SharedPreferences prefs = getContext().getSharedPreferences(
+                PREFS_NAME, Context.MODE_PRIVATE);
+        String userJSON = prefs.getString("user", "");
+        User user;
 
-        for (GroupMember member : groupMembers) {
-            String name = member.getFirst() + " " + member.getLast();
-            member_names.add(name);
-            member_map.put(name, member.getUsername());
-        }
-
-        // Populate the spinner with all the group members names
-        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(getContext(),
-                android.R.layout.simple_spinner_dropdown_item, member_names);
-
-        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        group_users_dropdown.setAdapter(typeAdapter);
-
-        members = new ArrayList<>();
-
-        ArrayList<GroupMember> allMembers = group.getMembers();
-
-        // Get only the members with a pending status to add to the adduser recycler adapter
-        for (GroupMember member : allMembers) {
-            if (member.getStatus().equals("pending")) {
-                members.add(member);
+        try {
+            user = JSONConverter.toUser(userJSON);
+            for (GroupInfo groupInfo : user.getGroups()) {
+                if (groupInfo.getGroup_name().equals(group.getGroup_name()) && groupInfo.getUser().equals("admin")) {
+                    isAdmin = true;
+                }
             }
+
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "User object JSON conversion failed.");
+            Log.e(LOG_TAG, e.getMessage());
         }
 
-        // Set up the recycler view and layout manager
-        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerAddUsersView);
-        linearLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new AddUserRecyclerAdapter(members, group, this);
-        recyclerView.setAdapter(adapter);
+        View view;
+
+        if (isAdmin) {
+
+            // Inflate the layout for this fragment
+            view = inflater.inflate(R.layout.admin_tab, container, false);
+            v = view;
+
+            group_users_dropdown = (Spinner) v.findViewById(R.id.group_users_dropdown);
+            email_request_input = (EditText) v.findViewById(R.id.email_request_input);
+            flair_input = (EditText) v.findViewById(R.id.flair_input);
+            notification_input = (EditText) v.findViewById(R.id.notification_input);
+            email_request_send = (Button) v.findViewById(R.id.email_request_send);
+            flair_submit = (Button) v.findViewById(R.id.flair_submit);
+            notification_submit = (Button) v.findViewById(R.id.notification_submit);
+
+            member_names = new ArrayList<>();
+            member_map = new HashMap<>();
+            ArrayList<GroupMember> groupMembers = group.getMembers();
+
+            for (GroupMember member : groupMembers) {
+                String name = member.getFirst() + " " + member.getLast();
+                member_names.add(name);
+                member_map.put(name, member.getUsername());
+            }
+
+            // Populate the spinner with all the group members names
+            ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(getContext(),
+                    android.R.layout.simple_spinner_dropdown_item, member_names);
+
+            typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            group_users_dropdown.setAdapter(typeAdapter);
+
+            members = new ArrayList<>();
+
+            ArrayList<GroupMember> allMembers = group.getMembers();
+
+            // Get only the members with a pending status to add to the adduser recycler adapter
+            for (GroupMember member : allMembers) {
+                if (member.getStatus().equals("pending")) {
+                    members.add(member);
+                }
+            }
+
+            // Set up the recycler view and layout manager
+            recyclerView = (RecyclerView) v.findViewById(R.id.recyclerAddUsersView);
+            linearLayoutManager = new LinearLayoutManager(getContext());
+            recyclerView.setLayoutManager(linearLayoutManager);
+            adapter = new AddUserRecyclerAdapter(members, group, this);
+            recyclerView.setAdapter(adapter);
+        } else {
+            // Inflate the layout for this fragment
+            view = inflater.inflate(R.layout.locked_page, container, false);
+            v = view;
+        }
 
         return view;
     }
@@ -117,55 +152,58 @@ public class AdminTab extends Fragment {
     public void onStart() {
         super.onStart();
 
-        email_request_send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if (isAdmin) {
 
-                String email = email_request_input.getText().toString();
+            email_request_send.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                Pattern pattern = Pattern.compile(EMAIL_REGEX);
-                Matcher matcher = pattern.matcher(email);
+                    String email = email_request_input.getText().toString();
 
-                // Validate the Email Input
-                if (email.length() == 0) {
-                    Toast.makeText(getContext(), "Must Enter Email", Toast.LENGTH_SHORT).show();
-                    email_request_input.requestFocus();
-                } else if (!matcher.matches()) {
-                    Toast.makeText(getContext(), "Invalid Email Entered", Toast.LENGTH_SHORT).show();
-                    email_request_input.requestFocus();
-                } else {
-                    // Valid Email
-                    EmailTask emailTask = new EmailTask();
-                    emailTask.execute(email);
+                    Pattern pattern = Pattern.compile(EMAIL_REGEX);
+                    Matcher matcher = pattern.matcher(email);
+
+                    // Validate the Email Input
+                    if (email.length() == 0) {
+                        Toast.makeText(getContext(), "Must Enter Email", Toast.LENGTH_SHORT).show();
+                        email_request_input.requestFocus();
+                    } else if (!matcher.matches()) {
+                        Toast.makeText(getContext(), "Invalid Email Entered", Toast.LENGTH_SHORT).show();
+                        email_request_input.requestFocus();
+                    } else {
+                        // Valid Email
+                        EmailTask emailTask = new EmailTask();
+                        emailTask.execute(email);
+                    }
                 }
-            }
-        });
+            });
 
-        flair_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            flair_submit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                String username = group_users_dropdown.getSelectedItem().toString();
-                username = member_map.get(username);
+                    String username = group_users_dropdown.getSelectedItem().toString();
+                    username = member_map.get(username);
 
-                String flair = flair_input.getText().toString();
+                    String flair = flair_input.getText().toString();
 
-                FlairTask flairTask = new FlairTask();
-                flairTask.execute(username, flair);
-            }
-        });
+                    FlairTask flairTask = new FlairTask();
+                    flairTask.execute(username, flair);
+                }
+            });
 
-        notification_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            notification_submit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                String notification = "A Message From " + group.getGroup_title() + ": " +
-                        notification_input.getText().toString();
+                    String notification = "A Message From " + group.getGroup_title() + ": " +
+                            notification_input.getText().toString();
 
-                AdminNotificationTask adminNotificationTask = new AdminNotificationTask();
-                adminNotificationTask.execute(notification);
-            }
-        });
+                    AdminNotificationTask adminNotificationTask = new AdminNotificationTask();
+                    adminNotificationTask.execute(notification);
+                }
+            });
+        }
     }
 
     /**

@@ -81,10 +81,13 @@ public class GroupDialogFragment extends DialogFragment {
                 android.util.Log.e(LOG_TAG, e.getMessage());
             }
 
+            // Only display groups the user has been accepted in to
             List<GroupInfo> groups = user.getGroups();
             List<String> group_names = new ArrayList<>();
             for (GroupInfo group : groups) {
-                group_names.add(group.getGroup_name());
+                if (group.getStatus().equals("accepted")) {
+                    group_names.add(group.getGroup_name());
+                }
             }
 
             if (!group_names.contains("mensxc")) {

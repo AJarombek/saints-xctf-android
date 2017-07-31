@@ -48,7 +48,14 @@ public class MembersTab extends Fragment {
         }
 
         // Initialize the members data
-        members = group.getMembers();
+        members = new ArrayList<>();
+
+        // Only display accepted members
+        for (GroupMember member : group.getMembers()) {
+            if (member.getStatus().equals("accepted")) {
+                members.add(member);
+            }
+        }
 
         // Set up the recycler view and layout manager
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerMembersView);
