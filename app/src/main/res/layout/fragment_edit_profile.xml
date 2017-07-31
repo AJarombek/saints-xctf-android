@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:columnCount="2"
-                android:rowCount="7">
+                android:rowCount="8">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -166,6 +166,32 @@
                     android:minWidth="250dp"
                     android:maxLength="255"
                     android:inputType="text"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Week Start: "
+                    android:layout_marginTop="5dp"
+                    android:textSize="18sp"
+                    android:layout_row="7"
+                    android:layout_column="0"/>
+
+                <RadioGroup android:id="@+id/weekstart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp">
+
+                    <RadioButton android:id="@+id/weekstart_sunday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sunday"/>
+
+                    <RadioButton android:id="@+id/weekstart_monday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Monday"/>
+                </RadioGroup>
 
             </GridLayout>
 

@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Base64;
@@ -23,6 +24,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.example.andy.api_model.APIClient;
@@ -64,6 +67,9 @@ public class EditProfileFragment extends Fragment {
     private EditText edit_profile_location;
     private EditText edit_profile_favorite_event;
     private EditText edit_profile_description;
+    private RadioGroup weekstart_group;
+    private RadioButton weekstart_sunday;
+    private RadioButton weekstart_monday;
 
     private ImageView edit_profile_picture;
     private Button edit_profile_picture_button;
@@ -81,7 +87,7 @@ public class EditProfileFragment extends Fragment {
     private Button edit_profile_cancel;
     private Button edit_profile_submit;
     private User user;
-    private String username, first, last, year, email, location, favorite_event, description;
+    private String username, first, last, year, email, location, favorite_event, description, weekstart;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,6 +115,10 @@ public class EditProfileFragment extends Fragment {
         edit_profile_location = (EditText) v.findViewById(R.id.edit_profile_location);
         edit_profile_favorite_event = (EditText) v.findViewById(R.id.edit_profile_favorite_event);
         edit_profile_description = (EditText) v.findViewById(R.id.edit_profile_description);
+
+        weekstart_group = (RadioGroup) v.findViewById(R.id.weekstart);
+        weekstart_sunday = (RadioButton) v.findViewById(R.id.weekstart_sunday);
+        weekstart_monday = (RadioButton) v.findViewById(R.id.weekstart_monday);
 
         edit_profile_picture = (ImageView) v.findViewById(R.id.edit_profile_picture);
         edit_profile_picture_button = (Button) v.findViewById(R.id.edit_profile_picture_button);
@@ -147,6 +157,28 @@ public class EditProfileFragment extends Fragment {
         String description = user.getDescription();
         if (description != null)
             edit_profile_description.setText(description);
+
+        weekstart_group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+
+                if (weekstart_sunday.isChecked()) {
+                    weekstart = "sunday";
+                } else if (weekstart_monday.isChecked()) {
+                    weekstart = "monday";
+                }
+            }
+        });
+
+        String weekstart = user.getWeek_start();
+        if (weekstart != null) {
+            if (weekstart.equals("monday")) {
+                weekstart_monday.performClick();
+            } else {
+                weekstart_sunday.performClick();
+            }
+        }
+
 
         // Display the profile picture
         String base64encoding = user.getProfilepic();
@@ -382,6 +414,7 @@ public class EditProfileFragment extends Fragment {
                             getContext(), R.color.black));
                 } else {
                     alumni = true;
+
                     if (alumni_member != null && alumni_member.getStatus().equals("accepted")) {
                         edit_profile_alumni.setBackgroundColor(ContextCompat.getColor(
                                 getContext(), R.color.stlawuRed));
@@ -395,6 +428,7 @@ public class EditProfileFragment extends Fragment {
         });
 
         List<GroupInfo> groups = user.getGroups();
+        Log.i(TAG, groups.toString());
         for (GroupInfo entry : groups) {
             clickGroup(entry);
         }
@@ -510,6 +544,8 @@ public class EditProfileFragment extends Fragment {
             user.setDescription(null);
         else
             user.setDescription(description);
+
+        user.setWeek_start(weekstart);
 
         // convert from bitmap to base 64 encoded string
         if (profile_picture_bitmap != null && editpicture) {
@@ -717,8 +753,8 @@ public class EditProfileFragment extends Fragment {
                 wmenstf_member = group;
                 break;
             case "alumni":
-                edit_profile_alumni.performClick();
                 alumni_member = group;
+                edit_profile_alumni.performClick();
                 break;
         }
     }
