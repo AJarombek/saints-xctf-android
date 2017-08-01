@@ -7,30 +7,30 @@
     <item
         android:id="@+id/action_log"
         android:icon="@drawable/newlog"
-        android:title="@string/newlog"
+        android:title="New Log"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_home"
         android:icon="@drawable/home"
-        android:title="@string/home"
+        android:title="Home"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_profile"
         android:icon="@drawable/profile"
-        android:title="@string/profile"
+        android:title="Profile"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_group"
         android:icon="@drawable/group"
-        android:title="@string/group"
+        android:title="Group"
         app:showAsAction="ifRoom"/>
 
     <item android:id="@+id/action_exit"
         android:icon="@drawable/exit"
-        android:title="@string/log_out"
+        android:title="Log Out"
         app:showAsAction="ifRoom"/>
 
 </menu>
