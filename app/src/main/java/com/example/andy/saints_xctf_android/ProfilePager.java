@@ -67,12 +67,16 @@ public class ProfilePager extends FragmentStatePagerAdapter {
                     throwable.printStackTrace();
                 }
 
-
                 MonthlyViewTab monthlyViewTab = new MonthlyViewTab();
                 monthlyViewTab.setArguments(data);
                 return monthlyViewTab;
             case 3:
                 data.putString("username", String.valueOf(user.getUsername()));
+                try {
+                    data.putString("user", JSONConverter.fromUser(user));
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
 
                 WeeklyViewTab weeklyViewTab = new WeeklyViewTab();
                 weeklyViewTab.setArguments(data);

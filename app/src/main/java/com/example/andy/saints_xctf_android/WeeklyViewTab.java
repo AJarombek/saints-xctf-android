@@ -226,6 +226,8 @@ public class WeeklyViewTab extends Fragment {
         start_date = start_date.minusDays(70);
 
         start_date_string = start_date.toString("yyyy-MM-dd");
+
+
         end_date_string = end_date.toString("yyyy-MM-dd");
 
         weeklyStartDate = new DateTime[10];
@@ -264,6 +266,9 @@ public class WeeklyViewTab extends Fragment {
         // Go through the range views and find which week the rangeview belongs to
         for (RangeView rangeViewItem : rangeView) {
             DateTime date = new DateTime(rangeViewItem.getDate());
+
+            //Must add a day to any date from the JDK Date API  - Unknown Bug
+            date = date.plusDays(1);
 
             for (int i = 0; i < 10; i++) {
                 if (!date.isBefore(weeklyStartDate[i]) && !date.isAfter(weeklyEndDate[i])) {
