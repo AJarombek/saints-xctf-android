@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="recyclerview_log_item_row" type="layout">@layout/recyclerview_log_item_row_large</item>
+    <item name="recyclerview_comments_item" type="layout">@layout/recyclerview_comments_large</item>
+    <item name="fragment_log" type="layout">@layout/log_input_large</item>
+    <item name="fragment_profile" type="layout">@layout/profile_large</item>
 </resources>

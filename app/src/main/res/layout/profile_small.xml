@@ -1,0 +1,248 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="50dp"
+    android:orientation="vertical"
+    tools:context="com.example.andy.saints_xctf_android.ProfileFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/profile_picture_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/profile_picture"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:background="@drawable/logo"/>
+
+            <Button
+                android:id="@+id/edit_profile_button"
+                android:layout_width="100sp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:textSize="12sp"
+                android:text="@string/edit_profile"/>
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/profile_info_progress"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="50dp"
+            android:layout_marginStart="10dp"
+            android:indeterminate="true"
+            android:visibility="gone"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_gravity="center_horizontal"/>
+
+        <LinearLayout
+            android:id="@+id/profile_info_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/first_last"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/profile_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/amp_username"
+                android:textStyle="bold"
+                android:textSize="14sp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/member_since"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:id="@+id/profile_member_since"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/_2016_12_23"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/profile_groups"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="@string/groups_debug"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp">
+
+                <TextView
+                    android:id="@+id/profile_class_year_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/class_year"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:id="@+id/profile_class_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/year_debug"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/profile_location_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/location_profile"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:id="@+id/profile_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/location_debug"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/profile_favorite_event_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/favorite_event"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:id="@+id/profile_favorite_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/fav_event_debug"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/profile_description_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/description_profile"
+                    android:textSize="12sp"/>
+
+                <TextView
+                    android:id="@+id/profile_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/description_debug"
+                    android:textSize="12sp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="5dp">
+
+        <android.support.design.widget.TabLayout
+            style="@style/MyTabLayout"
+            android:id="@+id/tab_layout"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent">
+
+            <android.support.design.widget.TabItem
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="@string/logs_tab"/>
+
+            <android.support.design.widget.TabItem
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="@string/statistics_tab"/>
+
+            <android.support.design.widget.TabItem
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Monthly"/>
+
+            <android.support.design.widget.TabItem
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Weekly"/>
+
+        </android.support.design.widget.TabLayout>
+
+        <!-- View pager to swipe views -->
+        <android.support.v4.view.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+</LinearLayout>
