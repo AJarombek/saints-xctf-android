@@ -4,4 +4,7 @@
     <item name="recyclerview_comments_item" type="layout">@layout/recyclerview_comments_small</item>
     <item name="fragment_log" type="layout">@layout/log_input_small</item>
     <item name="fragment_profile" type="layout">@layout/profile_small</item>
+    <item name="statistics_tab" type="layout">@layout/statistics_small</item>
+    <item name="monthly_view_tab" type="layout">@layout/monthly_view_small</item>
+    <item name="calendar_cell" type="layout">@layout/calendar_cell_small</item>
 </resources>
