@@ -8,4 +8,6 @@
     <item name="monthly_view_tab" type="layout">@layout/monthly_view_small</item>
     <item name="calendar_cell" type="layout">@layout/calendar_cell_small</item>
     <item name="weekly_view_tab" type="layout">@layout/weekly_view_small</item>
+    <item name="fragment_edit_profile" type="layout">@layout/edit_profile_small</item>
+    <item name="fragment_group" type="layout">@layout/group_small</item>
 </resources>
