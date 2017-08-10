@@ -69,9 +69,6 @@ public class MonthlyViewTab extends Fragment {
 
             TableRow tableRow = (TableRow) v.findViewById(CalendarArrays.CALENDAR_ROW_IDS[i-1]);
 
-            ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.temp_progress);
-            progressBar.setVisibility(View.GONE);
-
             // Create a table cell for each day and programmatically give it unique ids
             for (int j = 1; j <= 8; j++) {
                 int index = (((i - 1) * 8) + j) - 1;

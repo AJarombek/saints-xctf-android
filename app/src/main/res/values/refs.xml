@@ -7,4 +7,5 @@
     <item name="statistics_tab" type="layout">@layout/statistics_small</item>
     <item name="monthly_view_tab" type="layout">@layout/monthly_view_small</item>
     <item name="calendar_cell" type="layout">@layout/calendar_cell_small</item>
+    <item name="weekly_view_tab" type="layout">@layout/weekly_view_small</item>
 </resources>

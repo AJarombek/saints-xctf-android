@@ -10,30 +10,19 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp">
 
-        <GridLayout
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="7"
-            android:rowCount="1">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="Leaderboard Filters:"
-                android:textSize="12sp"
-                android:layout_column="1"
-                android:layout_row="0"
-                android:gravity="center_vertical">
-            </TextView>
+            android:gravity="center">
 
             <Button
                 android:id="@+id/filter_run"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="5dp"
                 android:text="Run"
-                android:layout_column="2"
-                android:layout_row="0"
+                android:textSize="12sp"
+                android:layout_weight="1"
                 android:background="@color/stlawuRed"
                 android:textColor="@color/white"
                 android:textAlignment="center"
@@ -42,11 +31,10 @@
             <Button
                 android:id="@+id/filter_bike"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="5dp"
                 android:text="Bike"
-                android:layout_column="3"
-                android:layout_row="0"
+                android:layout_weight="1"
                 android:background="@color/lightGrey"
                 android:textAlignment="center"
                 android:gravity="center_vertical"/>
@@ -54,11 +42,10 @@
             <Button
                 android:id="@+id/filter_swim"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="5dp"
                 android:text="Swim"
-                android:layout_column="4"
-                android:layout_row="0"
+                android:layout_weight="1"
                 android:background="@color/lightGrey"
                 android:textAlignment="center"
                 android:gravity="center_vertical"/>
@@ -66,16 +53,15 @@
             <Button
                 android:id="@+id/filter_other"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="5dp"
                 android:text="Other"
-                android:layout_column="5"
-                android:layout_row="0"
+                android:layout_weight="1"
                 android:background="@color/lightGrey"
                 android:textAlignment="center"
                 android:gravity="center_vertical"/>
 
-        </GridLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
