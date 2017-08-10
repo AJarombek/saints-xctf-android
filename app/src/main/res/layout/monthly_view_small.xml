@@ -15,58 +15,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center">
-
-                    <Button
-                        android:id="@+id/filter_run"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="5dp"
-                        android:text="Run"
-                        android:textSize="12sp"
-                        android:layout_weight="1"
-                        android:background="@color/stlawuRed"
-                        android:textColor="@color/white"
-                        android:textAlignment="center"
-                        android:gravity="center_vertical"/>
-
-                    <Button
-                        android:id="@+id/filter_bike"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="5dp"
-                        android:text="Bike"
-                        android:layout_weight="1"
-                        android:background="@color/lightGrey"
-                        android:textAlignment="center"
-                        android:gravity="center_vertical"/>
-
-                    <Button
-                        android:id="@+id/filter_swim"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="5dp"
-                        android:text="Swim"
-                        android:layout_weight="1"
-                        android:background="@color/lightGrey"
-                        android:textAlignment="center"
-                        android:gravity="center_vertical"/>
-
-                    <Button
-                        android:id="@+id/filter_other"
-                        android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_marginStart="5dp"
-                        android:text="Other"
-                        android:layout_weight="1"
-                        android:background="@color/lightGrey"
-                        android:textAlignment="center"
-                        android:gravity="center_vertical"/>
-
-            </LinearLayout>
+            <include layout="@layout/filter_small"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
