@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/adduserview"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:paddingTop="10dp"
+    android:layout_marginBottom="5dp">
+
+    <TextView
+        android:id="@+id/adduser_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:layout_marginTop="2dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
+        android:minWidth="100dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/first_last"/>
+
+    <Button
+        android:id="@+id/accept_user"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="5dp"
+        android:text="@string/accept"
+        android:textSize="12sp"
+        android:background="@color/lightGrey"
+        android:textAlignment="center"
+        android:gravity="center_vertical"/>
+
+    <Button
+        android:id="@+id/reject_user"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginStart="5dp"
+        android:text="@string/reject"
+        android:textSize="12sp"
+        android:background="@color/lightGrey"
+        android:textAlignment="center"
+        android:gravity="center_vertical"/>
+
+</LinearLayout>

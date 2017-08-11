@@ -4,6 +4,8 @@
     <item name="recyclerview_comments_item" type="layout">@layout/recyclerview_comments_small</item>
     <item name="recyclerview_leaderboard_item" type="layout">@layout/recyclerview_leaderboard_small</item>
     <item name="recyclerview_message_item" type="layout">@layout/recyclerview_message_small</item>
+    <item name="recyclerview_member_item" type="layout">@layout/recyclerview_member_small</item>
+    <item name="recyclerview_adduser_item" type="layout">@layout/recyclerview_adduser_small</item>
     <item name="fragment_log" type="layout">@layout/log_input_small</item>
     <item name="fragment_profile" type="layout">@layout/profile_small</item>
     <item name="statistics_tab" type="layout">@layout/statistics_small</item>
@@ -14,4 +16,7 @@
     <item name="fragment_group" type="layout">@layout/group_small</item>
     <item name="leaderboard_tab" type="layout">@layout/leaderboard_small</item>
     <item name="messages_tab" type="layout">@layout/messages_small</item>
+    <item name="admin_tab" type="layout">@layout/admin_small</item>
+    <item name="custom_spinner" type="layout">@layout/small_spinner</item>
+    <item name="custom_dropdown_spinner" type="layout">@layout/small_dropdown_spinner</item>
 </resources>

@@ -4,6 +4,8 @@
     <item name="recyclerview_comments_item" type="layout">@layout/recyclerview_comments_large</item>
     <item name="recyclerview_leaderboard_item" type="layout">@layout/recyclerview_leaderboard_large</item>
     <item name="recyclerview_message_item" type="layout">@layout/recyclerview_message_large</item>
+    <item name="recyclerview_member_item" type="layout">@layout/recyclerview_member_large</item>
+    <item name="recyclerview_adduser_item" type="layout">@layout/recyclerview_adduser_large</item>
     <item name="fragment_log" type="layout">@layout/log_input_large</item>
     <item name="fragment_profile" type="layout">@layout/profile_large</item>
     <item name="statistics_tab" type="layout">@layout/statistics_large</item>
@@ -14,4 +16,7 @@
     <item name="fragment_group" type="layout">@layout/group_large</item>
     <item name="leaderboard_tab" type="layout">@layout/leaderboard_large</item>
     <item name="messages_tab" type="layout">@layout/messages_large</item>
+    <item name="admin_tab" type="layout">@layout/admin_large</item>
+    <item name="custom_spinner" type="layout">@android:layout/simple_spinner_item</item>
+    <item name="custom_dropdown_spinner" type="layout">@android:layout/simple_spinner_dropdown_item</item>
 </resources>

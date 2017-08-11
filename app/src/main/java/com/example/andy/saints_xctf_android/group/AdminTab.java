@@ -118,9 +118,9 @@ public class AdminTab extends Fragment {
 
             // Populate the spinner with all the group members names
             ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(getContext(),
-                    android.R.layout.simple_spinner_dropdown_item, member_names);
+                    R.layout.custom_spinner, member_names);
 
-            typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            typeAdapter.setDropDownViewResource(R.layout.custom_dropdown_spinner);
             group_users_dropdown.setAdapter(typeAdapter);
 
             members = new ArrayList<>();
