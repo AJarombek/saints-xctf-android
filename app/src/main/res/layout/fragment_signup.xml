@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.andy.saints_xctf_android.SignupDialogFragment">
+    tools:context="com.example.andy.saints_xctf_android.home.SignupDialogFragment">
 
     <GridLayout
         android:id="@+id/signup_forms"

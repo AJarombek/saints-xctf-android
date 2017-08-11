@@ -11,6 +11,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 
+import com.example.andy.saints_xctf_android.group.GroupFragment;
+import com.example.andy.saints_xctf_android.home.HomeFragment;
+import com.example.andy.saints_xctf_android.home.PickGroupFragment;
+import com.example.andy.saints_xctf_android.main.MainFragment;
+import com.example.andy.saints_xctf_android.profile.EditProfileFragment;
+import com.example.andy.saints_xctf_android.profile.ProfileFragment;
+import com.example.andy.saints_xctf_android.shared.NoInternetFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity: ";
@@ -93,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Change fragments from the MainFragment to the HomeFragment
      */
-    protected void signIn() {
+    public void signIn() {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = new MainFragment();
         fm.beginTransaction().
@@ -101,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 commit();
     }
 
-    protected void signUp() {
+    public void signUp() {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = new PickGroupFragment();
         fm.beginTransaction().
@@ -109,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 commit();
     }
 
-    protected void viewMainPage() {
+    public void viewMainPage() {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = new MainFragment();
         fm.beginTransaction().
@@ -118,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                 commit();
     }
 
-    protected void signOut() {
+    public void signOut() {
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Fragment fragment = new HomeFragment();
@@ -127,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 commit();
     }
 
-    protected void noInternet() {
+    public void noInternet() {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = new NoInternetFragment();
         fm.beginTransaction().
@@ -136,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                 commit();
     }
 
-    protected void viewProfile(String username) {
+    public void viewProfile(String username) {
         Bundle data = new Bundle();
         data.putString("username", username);
 
@@ -149,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 commit();
     }
 
-    protected void viewGroup(String group) {
+    public void viewGroup(String group) {
         Bundle data = new Bundle();
         data.putString("group", group);
 
@@ -162,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 commit();
     }
 
-    protected void editProfile() {
+    public void editProfile() {
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = new EditProfileFragment();
         fm.beginTransaction().
