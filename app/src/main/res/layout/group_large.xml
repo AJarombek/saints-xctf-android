@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:layout_marginTop="50dp"
     android:orientation="vertical"
-    tools:context="com.example.andy.saints_xctf_android.group.GroupFragment">
+    tools:context="com.jarombek.andy.saints_xctf_android.group.GroupFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

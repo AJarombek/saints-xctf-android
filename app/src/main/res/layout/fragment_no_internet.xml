@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context="com.example.andy.saints_xctf_android.shared.NoInternetFragment">
+    tools:context="com.jarombek.andy.saints_xctf_android.shared.NoInternetFragment">
 
     <TextView
         android:layout_width="wrap_content"

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:clickable="true"
-    tools:context="com.example.andy.saints_xctf_android.log.LogDialogFragment">
+    tools:context="com.jarombek.andy.saints_xctf_android.log.LogDialogFragment">
 
     <LinearLayout
         android:id="@+id/log_forms"
