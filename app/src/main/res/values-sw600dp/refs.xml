@@ -19,4 +19,10 @@
     <item name="admin_tab" type="layout">@layout/admin_large</item>
     <item name="custom_spinner" type="layout">@android:layout/simple_spinner_item</item>
     <item name="custom_dropdown_spinner" type="layout">@android:layout/simple_spinner_dropdown_item</item>
+    <item name="home" type="layout">@layout/home_large</item>
+    <item name="fragment_login" type="layout">@layout/login_large</item>
+    <item name="fragment_signup" type="layout">@layout/signup_large</item>
+    <item name="forgot_password_changed" type="layout">@layout/forgot_password_changed_large</item>
+    <item name="forgot_password_create_new" type="layout">@layout/forgot_password_create_new_large</item>
+    <item name="forgot_password_enter_email" type="layout">@layout/forgot_password_enter_email_large</item>
 </resources>

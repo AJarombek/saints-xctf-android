@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Layout for the home fragment -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/home_fragment"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/background_image"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/saintsbackground" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical"
+            android:layout_centerInParent="true"
+            android:background="@color/transparentGrey"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textSize="28sp"
+                android:typeface="sans"
+                android:textStyle="bold"
+                android:textColor="@color/darkGrey"
+                android:layout_centerHorizontal="true"
+                android:layout_above="@+id/input_buttons"
+                android:layout_marginBottom="10dp"
+                android:text="@string/saintsxctf" />
+
+            <LinearLayout
+                android:id="@+id/input_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/login_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:width="200dp"
+                    android:textSize="12sp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@color/white"
+                    android:elevation="2dp"
+                    android:text="@string/log_in"/>
+
+                <Button
+                    android:id="@+id/signup_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:width="200dp"
+                    android:textSize="12sp"
+                    android:background="@color/white"
+                    android:elevation="2dp"
+                    android:text="@string/sign_up"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

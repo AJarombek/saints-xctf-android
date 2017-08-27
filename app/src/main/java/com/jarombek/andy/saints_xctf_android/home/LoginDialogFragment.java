@@ -172,6 +172,7 @@ public class LoginDialogFragment extends DialogFragment {
             progress = v.findViewById(R.id.progress_overlay);
             login_forms = (GridLayout) v.findViewById(R.id.login_forms);
             login_forms.setVisibility(View.GONE);
+            forgot_password.setVisibility(View.GONE);
             progress.setVisibility(View.VISIBLE);
             d.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(false);
             d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(false);
@@ -223,6 +224,7 @@ public class LoginDialogFragment extends DialogFragment {
             }
             progress.setVisibility(View.GONE);
             login_forms.setVisibility(View.VISIBLE);
+            forgot_password.setVisibility(View.VISIBLE);
             d.getButton(AlertDialog.BUTTON_NEGATIVE).setEnabled(true);
             d.getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
         }

@@ -19,4 +19,10 @@
     <item name="admin_tab" type="layout">@layout/admin_small</item>
     <item name="custom_spinner" type="layout">@layout/small_spinner</item>
     <item name="custom_dropdown_spinner" type="layout">@layout/small_dropdown_spinner</item>
+    <item name="home" type="layout">@layout/home_small</item>
+    <item name="fragment_login" type="layout">@layout/login_small</item>
+    <item name="fragment_signup" type="layout">@layout/signup_small</item>
+    <item name="forgot_password_changed" type="layout">@layout/forgot_password_changed_small</item>
+    <item name="forgot_password_create_new" type="layout">@layout/forgot_password_create_new_small</item>
+    <item name="forgot_password_enter_email" type="layout">@layout/forgot_password_enter_email_small</item>
 </resources>
