@@ -1,5 +1,9 @@
 # saints-xctf-android
 
+![Maintained Label](https://img.shields.io/badge/Maintained-No-red?style=for-the-badge)
+![Deprecated Label](https://img.shields.io/badge/Deprecated-Yes-lightgray?style=for-the-badge)
+![Archived Label](https://img.shields.io/badge/Archived-Yes-lightgray?style=for-the-badge)
+
 The SaintsXCTF Android App goes along with my website SaintsXCTF.com.  This is my first Android app to be released publicly.
 All development is done in Java.  The backend calls the REST API built on the website server (Written in PHP).
 
